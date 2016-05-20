@@ -23,7 +23,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.*;
-
+//todo - have an option to submit an answer and set off fireworks if it's correct
 /**
  * The view class that implements a JavaFX UI. This class represents both
  * the view and controller portions of the UI. It is connected to the model

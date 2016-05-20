@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
+//todo - make an isGoal method for submitting an answer
 /**
  * This is the model for the entire program, it holds all of the
  * functionality of the program. The different views each use the
@@ -71,6 +71,8 @@ public class SudokuModel extends Observable{
         ArrayList<Integer> neighbors = new ArrayList<>();
 
         //todo nine nested if statements
+        //todo - maybe change to checkInnerSquare and return a boolean instead
+        //todo - make other methods for checking rows and columns
 
         return neighbors;
     }

@@ -58,7 +58,7 @@ public class SudokuConfig implements Configuration{
     private ArrayList<Integer> getInnerSquare(int r, int c){
         ArrayList<Integer> neighbors = new ArrayList<>();
 
-        //todo - copy from model once done
+        //todo - change to checkInnerSquare, return boolean and make checkRow and CkeckCol methods
 
         return neighbors;
     }
@@ -113,11 +113,11 @@ public class SudokuConfig implements Configuration{
 
     @Override
     public boolean isValid(){
-        return false;//todo - copy from model once done
+        return false;//todo - different from model, just check the newly added spot
     }
 
     @Override
     public boolean isGoal(){
-        return false;//todo - copy from model once done
+        return false;//todo - must be valid so just check for no empty spots
     }
 }
