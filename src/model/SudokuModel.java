@@ -3,12 +3,13 @@ package model;
 import backtracking.Backtracker;
 import backtracking.Configuration;
 import backtracking.SudokuConfig;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-//todo - make an isGoal method for submitting an answer
+
 /**
  * This is the model for the entire program, it holds all of the
  * functionality of the program. The different views each use the
@@ -31,6 +32,7 @@ public class SudokuModel extends Observable{
                     "q|quit: Exits program \n" +
                     "r|remove r c: Removes number from (r,c) \n" +
                     "v|verify: Verifies safe correctness \n" +
+                    "g|guess: Guess the answer\n" +
                     "s|solve: Solves the sudoku puzzle";
 
     public SudokuModel(String difficulty) throws FileNotFoundException{
@@ -60,22 +62,6 @@ public class SudokuModel extends Observable{
     public void setHelpMsg() { this.textout = helpmsg; announceChange();}
 
     public void printIt() {this.textout = ""; announceChange();}
-
-    /**
-     * Utility method - takes (r, c) and returns its eight neighbors in the inner square
-     * @param r the row of the examined spot
-     * @param c the column of the examined spot
-     * @return array of inner cube neighbors
-     */
-    private ArrayList<Integer> getInnerSquare(int r, int c){
-        ArrayList<Integer> neighbors = new ArrayList<>();
-
-        //todo nine nested if statements
-        //todo - maybe change to checkInnerSquare and return a boolean instead
-        //todo - make other methods for checking rows and columns
-
-        return neighbors;
-    }
 
     /**
      * Adds a number at (row, col), overwriting an existing number if already there.
@@ -113,23 +99,239 @@ public class SudokuModel extends Observable{
         announceChange();
     }
 
+    /**
+     * Utility method - takes (r, c) and returns an array of the position of the
+     * first duplicate number therein, or [-1, -1] if there are no duplicates.
+     * @param r the row of the examined spot
+     * @param c the column of the examined spot
+     * @return array of two ints representing the (r, c) of the error, if there is one
+     */
+    private int[] checkInnerSquare(int r, int c){
+        Set<Integer> neighbors = new HashSet<>();
+        int[] errorSpot = new int[2];
+
+        if(r < 3){//top three squares
+            if(c < 3){//upper left corner
+                for(int i=0; i < 3; i++){
+                    for(int j=0; j < 3; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else if(c < 6){//upper middle
+                for(int i=0; i < 3; i++){
+                    for(int j=3; j < 6; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else{//upper right corner
+                for(int i=0; i < 3; i++){
+                    for(int j=6; j < 9; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }
+        }else if(r < 6){//center
+            if(c < 3){//middle left
+                for(int i=3; i < 6; i++){
+                    for(int j=0; j < 3; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else if(c < 6){//middle center, the eye of sauron
+                for(int i=3; i < 6; i++){
+                    for(int j=3; j < 6; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else{//middle right
+                for(int i=3; i < 6; i++){
+                    for(int j=6; j < 9; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }
+        }else{//bottom three squares
+            if(c < 3){//bottom left
+                for(int i=6; i < 9; i++){
+                    for(int j=0; j < 3; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else if(c < 6){//bottom center
+                for(int i=6; i < 9; i++){
+                    for(int j=3; j < 6; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else{//bottom right, finally done
+                for(int i=6; i < 9; i++){
+                    for(int j=6; j < 9; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }
+        }
+        //no errors so return impossible array
+        errorSpot[0] = -1;
+        errorSpot[1] = -1;
+        return errorSpot;
+    }
+
     /** Checks if SudokuModel is valid */
-    public void isValid(){
+    public boolean isValid(){
         for(int r = 0; r < 9; r++){
             for (int c = 0; c < 9; c++) {
                 //todo check inner squares and then each row/col
                 //todo check inner squares if added by row, vice versa
             }
-        }//todo - the spot that has an error is reported if existent
-        /**
-         * this.textout = "Error verifying at: ("+r+", "+c+")";
-         * this.pos[0] = r;
-         * this.pos[1] = c;
-         * announceChange();
-         * return;
-         */
+        }
         this.textout = "Puzzle is valid so far!";
         announceChange();
+        return true;
+    }
+
+    /** Checks if SudokuModel is valid and complete */
+    public void isGoal(){
+        if(isValid()){
+            for(int r=0; r < 9; r++){
+                for(int c=0; c < 9; c++){
+                    if(puzzle[r][c] == 0){
+                        this.textout = "This is not the solution";
+                    }
+                }
+            }
+            this.textout = "Congratulations, you've solved it!";
+        }else{
+            this.textout = "This is not the solution";
+        }
+        announceChange();
+    }
+
+    /**
+     * This function either solves the current puzzle and updates the 2d
+     * grid to reflect the answer or identifies there being no solution
+     */
+    public void solve() throws FileNotFoundException{
+        Backtracker bt = new Backtracker();
+        Optional<Configuration> result = bt.solve(new SudokuConfig(new SudokuModel(filename)));
+        Path path = Paths.get(filename);
+        String file = path.getFileName().toString();
+        if(result.isPresent()){
+            puzzle = new int[9][9];
+            for(int r = 0; r < 9; r++){
+                SudokuConfig solution = (SudokuConfig)result.get();
+                System.arraycopy(solution.puzzle[r], 0, puzzle[r], 0, 9);
+            }
+            textout = file + " solved!";
+        }else{
+            textout = file + " has no solution";
+        }
+        announceChange();
+    }
+
+    /** Adds a number if the model is currently valid or says that the safe isn't valid */
+    public void getHint(){
+        if(isValid()){
+            Backtracker bt = new Backtracker();
+            Optional<Configuration> result = bt.solve(new SudokuConfig(this));
+            if (result.isPresent()) {
+                SudokuConfig solution = (SudokuConfig) result.get();
+                Boolean found = false;
+                int ro = -1;
+                int co = -1;
+                int num = -1;
+                for (int r = 0; r < 9; r++) {
+                    for (int c = 0; c < 9; c++) {
+                        //todo - also get it to add a random hint
+                        //todo - you could pass 81-(a random number from 0 to 81; inclusive) other hints before adding
+                        if (solution.puzzle[r][c] != 0 && puzzle[r][c] == 0) {
+                            ro = r;
+                            co = c;
+                            num = solution.puzzle[r][c];
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) break;
+                }
+                if (ro != -1) {
+                    addNumber(ro, co, num);
+                    textout = "Hint: added " + num + " to (" + Integer.toString(ro) + ", " + Integer.toString(co) + ")";
+                } else {
+                    textout = "Hint: no next step!";
+                }
+            } else {
+                textout = "Hint: no next step!";
+            }
+            announceChange();
+        }else{
+            String errorPos = this.textout.substring(textout.indexOf('('), textout.indexOf(')')+1);
+            this.textout = "Number at " + errorPos + " is incorrect";
+            announceChange();
+        }
+    }
+
+    /**
+     * A utility method that indicates the model
+     * has changed and notifies the observers.
+     */
+    public void announceChange() {
+        setChanged();
+        notifyObservers();
     }
 
     @Override
@@ -153,72 +355,5 @@ public class SudokuModel extends Observable{
             result += "\n";
         }
         return result;
-    }
-
-    /**
-     * This function either solves the current puzzle and updates the 2d
-     *  grid to reflect the answer or identifies there being no solution
-     */
-    public void solve() throws FileNotFoundException{
-        Backtracker bt = new Backtracker();//todo finish after backtracking
-        /**Optional<Configuration> result = bt.solve(new SafeConfig(new LasersModel(filename)));
-        Path path = Paths.get(filename);
-        String file = path.getFileName().toString();
-        if(result.isPresent()){
-            puzzle = new int[row][col];
-            for(int r = 0; r < row; r++){
-                SafeConfig solution = (SafeConfig)result.get();
-                System.arraycopy(solution.safe[r], 0, model[r], 0, col);
-            }
-            textout = file + " solved!";
-        }else{
-            textout = file + " has no solution";
-        }*/
-        announceChange();
-    }
-
-    /**
-     * Adds a laser if the model is currently a subset of the solution
-     * configuration path or says that the safe isn't if it's not
-     */
-    public void getHint(){
-        Backtracker bt = new Backtracker();
-        //todo - also get it to add a random hint
-        //todo - you could pass 81-(a random number from 0 to 81; inclusive) other hints before adding
-        /**Optional<Configuration> result = bt.solve(new SudokuConfig(this));
-        if(result.isPresent()){
-            SudokuConfig solution = (SudokuConfig) result.get();
-            Boolean found = false;
-            int ro = row+20; int co = row+20;
-            for(int r=0; r<row; r++){
-                for(int c=0; c<col; c++){
-                    if(solution.get(r, c) == 'L' && get(r, c) != 'L'){
-                        ro = r;
-                        co = c;
-                        found = true;
-                        break;
-                    }
-                }
-                if(found) break;
-            }
-            if(ro != row+20){
-                addLaser(ro, co);
-                textout = "Hint: added laser to (" + Integer.toString(ro) + ", " + Integer.toString(co) + ")";
-            }else{
-                textout = "Hint: no next step!";
-            }
-        }else{
-            textout = "Hint: no next step!";
-        }*/
-        announceChange();
-    }
-
-    /**
-     * A utility method that indicates the model
-     * has changed and notifies the observers.
-     */
-    public void announceChange() {
-        setChanged();
-        notifyObservers();
     }
 }

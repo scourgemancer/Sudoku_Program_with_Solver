@@ -1,8 +1,9 @@
-import javafx.application.Application;
-import java.io.FileNotFoundException;
 import gui.SudokuGUI;
+import javafx.application.Application;
 import ptui.ControllerPTUI;
 import ptui.SudokuPTUI;
+
+import java.io.FileNotFoundException;
 
 /**
  * This is the main class for my Sudoku program. It can either be run with

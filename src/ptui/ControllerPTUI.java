@@ -1,6 +1,7 @@
 package ptui;
 
 import model.SudokuModel;
+
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
@@ -72,6 +73,9 @@ public class ControllerPTUI{
                         break;
                     case 'c': //clue
                         model.getHint();
+                        break;
+                    case 'g': //guess
+                        model.isGoal();
                         break;
                     case 'q': //quit
                         return;

@@ -1,9 +1,10 @@
 package ptui;
 
+import model.SudokuModel;
+
 import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
-import model.SudokuModel;
 
 /**
  * This is the plain text UI's view class, it displays what the

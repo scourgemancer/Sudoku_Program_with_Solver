@@ -2,11 +2,8 @@ package backtracking;
 
 import model.SudokuModel;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Scanner;
 
 /**
  * The class represents a single configuration of a sudoku puzzle and
@@ -117,7 +114,14 @@ public class SudokuConfig implements Configuration{
     }
 
     @Override
-    public boolean isGoal(){
-        return false;//todo - must be valid so just check for no empty spots
+    public boolean isGoal(){ //must be valid, so just check if it's filled
+        for(int r=0; r < 9; r++){
+            for(int c=0; c < 9; c++){
+                if(puzzle[r][c] == 0){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

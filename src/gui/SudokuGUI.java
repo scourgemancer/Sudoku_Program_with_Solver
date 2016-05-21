@@ -1,7 +1,5 @@
 package gui;
 
-import backtracking.Backtracker;
-import backtracking.SudokuConfig;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,8 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.SudokuModel;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,8 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
-
-import model.*;
 //todo - have an option to submit an answer and set off fireworks if it's correct
 /**
  * The view class that implements a JavaFX UI. This class represents both
