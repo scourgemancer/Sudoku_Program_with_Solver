@@ -2,8 +2,12 @@ package backtracking;
 
 import model.SudokuModel;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 
 /**
  * The class represents a single configuration of a sudoku puzzle and
@@ -21,7 +25,24 @@ public class SudokuConfig implements Configuration{
      * @throws FileNotFoundException
      */
     public SudokuConfig(String filename, int lineNumber) throws FileNotFoundException{
-        //todo - extremely important and mostly identical to the model's once finished
+        Scanner in = new Scanner( new File("puzzles/" + filename) );
+        puzzle = new int[9][9];
+
+        for(int i=0; i < lineNumber-1; i++){
+            in.nextLine();
+        }
+
+        String problemLine = in.nextLine();
+        for(int r = 0; r < 9; r++){
+            for(int c = 0; c < 9; c++){
+                puzzle[r][c] = Character.getNumericValue( problemLine.charAt(r*9 + c) );
+            }
+        }
+
+        in.close();
+        pos = new int[2];
+        pos[0] = 0;
+        pos[1] = 0;
     }
 
     /** Constructs a Sudokuconfig from an existing model */
@@ -47,17 +68,135 @@ public class SudokuConfig implements Configuration{
     }
 
     /**
-     * Utility method - takes (r, c) and returns its eight neighbors in the inner square
+     * Utility method - takes (r, c) and returns an array of the position of the
+     * first duplicate number therein, or [-1, -1] if there are no duplicates.
      * @param r the row of the examined spot
      * @param c the column of the examined spot
-     * @return array of inner cube neighbors
+     * @return array of two ints representing the (r, c) of the error, if there is one
      */
-    private ArrayList<Integer> getInnerSquare(int r, int c){
-        ArrayList<Integer> neighbors = new ArrayList<>();
+    private int[] checkInnerSquare(int r, int c){
+        Set<Integer> neighbors = new HashSet<>();
+        int[] errorSpot = new int[2];
 
-        //todo - change to checkInnerSquare, return boolean and make checkRow and CkeckCol methods
-
-        return neighbors;
+        if(r < 3){//top three squares
+            if(c < 3){//upper left corner
+                for(int i=0; i < 3; i++){
+                    for(int j=0; j < 3; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else if(c < 6){//upper middle
+                for(int i=0; i < 3; i++){
+                    for(int j=3; j < 6; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else{//upper right corner
+                for(int i=0; i < 3; i++){
+                    for(int j=6; j < 9; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }
+        }else if(r < 6){//center
+            if(c < 3){//middle left
+                for(int i=3; i < 6; i++){
+                    for(int j=0; j < 3; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else if(c < 6){//middle center, the eye of sauron
+                for(int i=3; i < 6; i++){
+                    for(int j=3; j < 6; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else{//middle right
+                for(int i=3; i < 6; i++){
+                    for(int j=6; j < 9; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }
+        }else{//bottom three squares
+            if(c < 3){//bottom left
+                for(int i=6; i < 9; i++){
+                    for(int j=0; j < 3; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else if(c < 6){//bottom center
+                for(int i=6; i < 9; i++){
+                    for(int j=3; j < 6; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }else{//bottom right, finally done
+                for(int i=6; i < 9; i++){
+                    for(int j=6; j < 9; j++){
+                        if(neighbors.contains(puzzle[i][j])){
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        }else{
+                            neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }
+        }
+        //no errors so return impossible array
+        errorSpot[0] = -1;
+        errorSpot[1] = -1;
+        return errorSpot;
     }
 
     @Override
@@ -110,7 +249,23 @@ public class SudokuConfig implements Configuration{
 
     @Override
     public boolean isValid(){
-        return false;//todo - different from model, just check the newly added spot
+        if(checkInnerSquare(pos[0], pos[1])[0] != -1) return false;
+
+        //check column for unique elements
+        Set<Integer> col = new HashSet<>();
+        for(int r=0; r < 9; r++){
+            if(col.contains(puzzle[r][pos[1]])) return false;
+            if(puzzle[r][pos[1]] != 0) col.add(puzzle[r][pos[1]]);
+        }
+
+        //check row for unique elements
+        Set<Integer> row = new HashSet<>();
+        for(int c=0; c < 9; c++){
+            if(col.contains(puzzle[pos[0]][c])) return false;
+            if(puzzle[pos[0]][c] != 0) row.add(puzzle[pos[0]][c]);
+        }
+
+        return true;
     }
 
     @Override

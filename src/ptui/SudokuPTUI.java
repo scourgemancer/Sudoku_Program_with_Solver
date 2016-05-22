@@ -35,6 +35,6 @@ public class SudokuPTUI implements Observer{
     public void update(Observable o, Object arg) {
         System.out.println(this.model.textout);
         System.out.print(this.model.toString());
-        System.out.print(">");
+        System.out.print("> ");
     }
 }

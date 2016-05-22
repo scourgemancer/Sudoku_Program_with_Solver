@@ -6,8 +6,6 @@ import backtracking.SudokuConfig;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -23,7 +21,7 @@ public class SudokuModel extends Observable{
     public int lineNumber;
     public int[] pos;
     public int[][] puzzle;
-    public String textout = "";
+    public String textout;
     private static String helpmsg =
             "a|add r c number: Adds number to (r,c)\n" +
                     "c|clue: Adds one number as a clue" +
@@ -72,9 +70,9 @@ public class SudokuModel extends Observable{
         if((r > -1 && c > -1 && r < 9 && c < 9)//in bounds
                 && (num > 0 && num <= 9)){//valid number
             this.puzzle[r][c] = num;
-            this.textout = num+" added at: ("+r+", "+c+")";
+            this.textout = num+" added at: ("+(int)(r+1)+", "+(int)(c+1)+")";
         }else{
-            this.textout = "Error adding "+num+" at: ("+r+", "+c+")";
+            this.textout = "Error adding "+num+" at: ("+(int)(r+1)+", "+(int)(c+1)+")";
         }
         this.pos[0] = r;
         this.pos[1] = c;
@@ -90,9 +88,9 @@ public class SudokuModel extends Observable{
         if((r > -1 && c > -1 && r < 9 && c < 9)//in bounds
                 && (puzzle[r][c] > 0) ){//is a guessed number
             this.puzzle[r][c] = 0;
-            this.textout = "Number removed from: ("+r+", "+c+")";
+            this.textout = "Number removed from: ("+(int)(r+1)+", "+(int)(c+1)+")";
         }else{
-            this.textout = "Error removing number from: ("+r+", "+c+")";
+            this.textout = "Error removing number from: ("+(int)(r+1)+", "+(int)(c+1)+")";
         }
         this.pos[0] = r;
         this.pos[1] = c;
@@ -119,7 +117,7 @@ public class SudokuModel extends Observable{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -131,7 +129,7 @@ public class SudokuModel extends Observable{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -143,7 +141,7 @@ public class SudokuModel extends Observable{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -157,7 +155,7 @@ public class SudokuModel extends Observable{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -169,7 +167,7 @@ public class SudokuModel extends Observable{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -181,7 +179,7 @@ public class SudokuModel extends Observable{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -195,7 +193,7 @@ public class SudokuModel extends Observable{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -207,7 +205,7 @@ public class SudokuModel extends Observable{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -219,7 +217,7 @@ public class SudokuModel extends Observable{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -233,12 +231,81 @@ public class SudokuModel extends Observable{
 
     /** Checks if SudokuModel is valid */
     public boolean isValid(){
-        for(int r = 0; r < 9; r++){
-            for (int c = 0; c < 9; c++) {
-                //todo check inner squares and then each row/col
-                //todo check inner squares if added by row, vice versa
+        //check that all of the inner squares have unique elements
+        if(checkInnerSquare(1, 1)[0] != -1){
+            textout = "Puzzle is not valid";
+            announceChange();
+            return false;
+        }
+        if(checkInnerSquare(1, 4)[0] != -1){
+            textout = "Puzzle is not valid";
+            announceChange();
+            return false;
+        }
+        if(checkInnerSquare(1, 7)[0] != -1){
+            textout = "Puzzle is not valid";
+            announceChange();
+            return false;
+        }
+        if(checkInnerSquare(4, 1)[0] != -1){
+            textout = "Puzzle is not valid";
+            announceChange();
+            return false;
+        }
+        if(checkInnerSquare(4, 4)[0] != -1){
+            textout = "Puzzle is not valid";
+            announceChange();
+            return false;
+        }
+        if(checkInnerSquare(4, 7)[0] != -1){
+            textout = "Puzzle is not valid";
+            announceChange();
+            return false;
+        }
+        if(checkInnerSquare(7, 1)[0] != -1){
+            textout = "Puzzle is not valid";
+            announceChange();
+            return false;
+        }
+        if(checkInnerSquare(7, 4)[0] != -1){
+            textout = "Puzzle is not valid";
+            announceChange();
+            return false;
+        }
+        if(checkInnerSquare(7, 7)[0] != -1){
+            textout = "Puzzle is not valid";
+            announceChange();
+            return false;
+        }
+
+        //check all of the rows for unique elements
+        for(int r=0; r < 9; r++){
+            Set<Integer> row = new HashSet<>();
+            for(int c=0; c < 9; c++){
+                if(row.contains(puzzle[r][c])){
+                    textout = "Puzzle is not valid";
+                    announceChange();
+                    return false;
+                }else{
+                    if(puzzle[r][c] != 0) row.add(puzzle[r][c]);
+                }
             }
         }
+
+        //check all of the columns for unique elements
+        for(int c=0; c < 9; c++){
+            Set<Integer> col = new HashSet<>();
+            for(int r=0; r < 9; r++){
+                if(col.contains(puzzle[r][c])){
+                    textout = "Puzzle is not valid";
+                    announceChange();
+                    return false;
+                }
+                if(puzzle[r][c] != 0) col.add(puzzle[r][c]);
+            }
+        }
+
+        //the puzzle must be valid to get this far
         this.textout = "Puzzle is valid so far!";
         announceChange();
         return true;
@@ -267,18 +334,16 @@ public class SudokuModel extends Observable{
      */
     public void solve() throws FileNotFoundException{
         Backtracker bt = new Backtracker();
-        Optional<Configuration> result = bt.solve(new SudokuConfig(new SudokuModel(filename)));
-        Path path = Paths.get(filename);
-        String file = path.getFileName().toString();
+        Optional<Configuration> result = bt.solve(new SudokuConfig(new SudokuModel(filename.replace(".txt", ""))));
         if(result.isPresent()){
             puzzle = new int[9][9];
             for(int r = 0; r < 9; r++){
                 SudokuConfig solution = (SudokuConfig)result.get();
                 System.arraycopy(solution.puzzle[r], 0, puzzle[r], 0, 9);
             }
-            textout = file + " solved!";
+            textout = filename + " solved!";
         }else{
-            textout = file + " has no solution";
+            textout = filename + " has no solution";
         }
         announceChange();
     }
@@ -310,7 +375,7 @@ public class SudokuModel extends Observable{
                 }
                 if (ro != -1) {
                     addNumber(ro, co, num);
-                    textout = "Hint: added " + num + " to (" + Integer.toString(ro) + ", " + Integer.toString(co) + ")";
+                    textout = "Hint: added " + num + " to (" + Integer.toString(ro+1) + ", " + Integer.toString(co+1) + ")";
                 } else {
                     textout = "Hint: no next step!";
                 }
@@ -336,12 +401,12 @@ public class SudokuModel extends Observable{
 
     @Override
     public String toString(){
-        String result = "   0 1 2   3 4 5   6 7 8\n";
+        String result = "   1 2 3   4 5 6   7 8 9\n";
         result +=       "   ---------------------\n";
         for(int r=0; r < 9; r++){
             if(r%3 == 0 && r!=0) result += "  |------+-------+------\n";
 
-            result += String.valueOf(r) + " |"; //row numbers
+            result += String.valueOf(r+1) + " |"; //row numbers
 
             for(int c = 0; c < 9; c++){
                 if(c%3 == 0 && c!=0) result += "| ";

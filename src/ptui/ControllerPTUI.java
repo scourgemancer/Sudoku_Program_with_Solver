@@ -43,8 +43,8 @@ public class ControllerPTUI{
                         break;
                     case 'a': //addNumber
                         if(input.length == 4){
-                            r = Integer.parseInt(input[1]);
-                            c = Integer.parseInt(input[2]);
+                            r = Integer.parseInt(input[1])-1;
+                            c = Integer.parseInt(input[2])-1;
                             num = Integer.parseInt(input[3]);
                         }else{
                             System.out.println("Incorrect usage, try 'h' for help");

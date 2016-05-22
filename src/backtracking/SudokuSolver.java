@@ -9,8 +9,8 @@ import java.util.Optional;
  */
 public class SudokuSolver{
     public static void main(String[] args) throws FileNotFoundException{
-        if(args.length != 1){
-            System.out.println("Usage: java SafeSolver sudokuFile.txt");
+        if(args.length != 2){
+            System.out.println("Usage: java SudokuSolver sudokuFile.txt line#");
         }else{
             Configuration init = new SudokuConfig(args[0], Integer.parseInt(args[1]));
             Backtracker bt = new Backtracker();
