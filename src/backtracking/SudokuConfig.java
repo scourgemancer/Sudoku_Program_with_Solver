@@ -87,7 +87,7 @@ public class SudokuConfig implements Configuration{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -99,7 +99,7 @@ public class SudokuConfig implements Configuration{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -111,7 +111,7 @@ public class SudokuConfig implements Configuration{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -125,7 +125,7 @@ public class SudokuConfig implements Configuration{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -137,7 +137,7 @@ public class SudokuConfig implements Configuration{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -149,7 +149,7 @@ public class SudokuConfig implements Configuration{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -163,7 +163,7 @@ public class SudokuConfig implements Configuration{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -175,7 +175,7 @@ public class SudokuConfig implements Configuration{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -187,7 +187,7 @@ public class SudokuConfig implements Configuration{
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            neighbors.add(puzzle[i][j]);
+                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -261,7 +261,7 @@ public class SudokuConfig implements Configuration{
         //check row for unique elements
         Set<Integer> row = new HashSet<>();
         for(int c=0; c < 9; c++){
-            if(col.contains(puzzle[pos[0]][c])) return false;
+            if(row.contains(puzzle[pos[0]][c])) return false;
             if(puzzle[pos[0]][c] != 0) row.add(puzzle[pos[0]][c]);
         }
 

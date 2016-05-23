@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
+//todo - also have the option of solving the user's own puzzles they input themselves
 //todo - have an option to submit an answer and set off fireworks if it's correct
 /**
  * The view class that implements a JavaFX UI. This class represents both

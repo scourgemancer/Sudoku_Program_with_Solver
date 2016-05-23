@@ -54,8 +54,8 @@ public class ControllerPTUI{
                         break;
                     case 'r': //removeNumber
                         if(input.length == 3){
-                            r = Integer.parseInt(input[1]);
-                            c = Integer.parseInt(input[2]);
+                            r = Integer.parseInt(input[1])-1;
+                            c = Integer.parseInt(input[2])-1;
                         }else{
                             System.out.println("Incorrect usage, try 'h' for help");
                             break;

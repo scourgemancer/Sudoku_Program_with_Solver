@@ -24,12 +24,12 @@ public class SudokuModel extends Observable{
     public String textout;
     private static String helpmsg =
             "a|add r c number: Adds number to (r,c)\n" +
-                    "c|clue: Adds one number as a clue" +
-                    "d|display: Displays safe\n" +
+                    "c|clue: Adds one number as a clue\n" +
+                    "d|display: Displays puzzle\n" +
                     "h|help: Prints this help message \n" +
                     "q|quit: Exits program \n" +
                     "r|remove r c: Removes number from (r,c) \n" +
-                    "v|verify: Verifies safe correctness \n" +
+                    "v|verify: Verifies puzzle's correctness \n" +
                     "g|guess: Guess the answer\n" +
                     "s|solve: Solves the sudoku puzzle";
 
@@ -318,6 +318,8 @@ public class SudokuModel extends Observable{
                 for(int c=0; c < 9; c++){
                     if(puzzle[r][c] == 0){
                         this.textout = "This is not the solution";
+                        announceChange();
+                        return;
                     }
                 }
             }
@@ -348,22 +350,22 @@ public class SudokuModel extends Observable{
         announceChange();
     }
 
-    /** Adds a number if the model is currently valid or says that the safe isn't valid */
+    /** Adds a number if the model is currently valid or mentions the first wrong square */
     public void getHint(){
         if(isValid()){
             Backtracker bt = new Backtracker();
             Optional<Configuration> result = bt.solve(new SudokuConfig(this));
-            if (result.isPresent()) {
+            if(result.isPresent()){
                 SudokuConfig solution = (SudokuConfig) result.get();
                 Boolean found = false;
                 int ro = -1;
                 int co = -1;
                 int num = -1;
-                for (int r = 0; r < 9; r++) {
-                    for (int c = 0; c < 9; c++) {
+                for(int r = 0; r < 9; r++){
+                    for(int c = 0; c < 9; c++){
                         //todo - also get it to add a random hint
                         //todo - you could pass 81-(a random number from 0 to 81; inclusive) other hints before adding
-                        if (solution.puzzle[r][c] != 0 && puzzle[r][c] == 0) {
+                        if(solution.puzzle[r][c] != 0 && puzzle[r][c] == 0){
                             ro = r;
                             co = c;
                             num = solution.puzzle[r][c];
@@ -373,13 +375,13 @@ public class SudokuModel extends Observable{
                     }
                     if (found) break;
                 }
-                if (ro != -1) {
+                if(ro != -1){
                     addNumber(ro, co, num);
                     textout = "Hint: added " + num + " to (" + Integer.toString(ro+1) + ", " + Integer.toString(co+1) + ")";
-                } else {
+                }else{
                     textout = "Hint: no next step!";
                 }
-            } else {
+            }else{
                 textout = "Hint: no next step!";
             }
             announceChange();
