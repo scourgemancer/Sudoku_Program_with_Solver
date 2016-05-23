@@ -18,7 +18,7 @@ public class Backtracker{
         if(config.isGoal()){
             return Optional.of(config);
         }else{
-            for(Configuration child : config.getSuccessors()){//todo try implementing this with threads
+            for(Configuration child : config.getSuccessors()){
                 if(child.isValid()){
                     Optional<Configuration> sol = solve(child);
                     if(sol.isPresent()){

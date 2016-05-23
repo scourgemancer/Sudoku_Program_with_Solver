@@ -361,19 +361,23 @@ public class SudokuModel extends Observable{
                 int ro = -1;
                 int co = -1;
                 int num = -1;
-                for(int r = 0; r < 9; r++){
-                    for(int c = 0; c < 9; c++){
-                        //todo - also get it to add a random hint
-                        //todo - you could pass 81-(a random number from 0 to 81; inclusive) other hints before adding
-                        if(solution.puzzle[r][c] != 0 && puzzle[r][c] == 0){
-                            ro = r;
-                            co = c;
-                            num = solution.puzzle[r][c];
-                            found = true;
-                            break;
+
+                int hints = (int)(Math.random() * 81) + 1; //the number of hints to skip before adding
+                while(hints > 0){
+                    for(int r = 0; r < 9; r++){
+                        for(int c = 0; c < 9; c++){
+                            if(solution.puzzle[r][c] != 0 && puzzle[r][c] == 0){
+                                ro = r;
+                                co = c;
+                                num = solution.puzzle[r][c];
+                                found = true;
+                                hints--;
+                                break;
+                            }
                         }
+                        if(found) break;
                     }
-                    if (found) break;
+                    if(found) break;
                 }
                 if(ro != -1){
                     addNumber(ro, co, num);
