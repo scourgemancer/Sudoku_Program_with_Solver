@@ -74,120 +74,120 @@ public class SudokuConfig implements Configuration{
      * @param c the column of the examined spot
      * @return array of two ints representing the (r, c) of the error, if there is one
      */
-    private int[] checkInnerSquare(int r, int c){
+    private int[] checkInnerSquare(int r, int c) {
         Set<Integer> neighbors = new HashSet<>();
         int[] errorSpot = new int[2];
 
-        if(r < 3){//top three squares
-            if(c < 3){//upper left corner
-                for(int i=0; i < 3; i++){
-                    for(int j=0; j < 3; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+        if (r < 3) {//top three squares
+            if (c < 3) {//upper left corner
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (neighbors.contains(puzzle[i][j])) {
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
-                        }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                        } else {
+                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
-            }else if(c < 6){//upper middle
-                for(int i=0; i < 3; i++){
-                    for(int j=3; j < 6; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+            } else if (c < 6) {//upper middle
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 3; j < 6; j++) {
+                        if (neighbors.contains(puzzle[i][j])) {
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
-                        }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                        } else {
+                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
-            }else{//upper right corner
-                for(int i=0; i < 3; i++){
-                    for(int j=6; j < 9; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+            } else {//upper right corner
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 6; j < 9; j++) {
+                        if (neighbors.contains(puzzle[i][j])) {
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
-                        }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
-                        }
-                    }
-                }
-            }
-        }else if(r < 6){//center
-            if(c < 3){//middle left
-                for(int i=3; i < 6; i++){
-                    for(int j=0; j < 3; j++){
-                        if(neighbors.contains(puzzle[i][j])){
-                            errorSpot[0] = i;
-                            errorSpot[1] = j;
-                            return errorSpot;
-                        }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
-                        }
-                    }
-                }
-            }else if(c < 6){//middle center, the eye of sauron
-                for(int i=3; i < 6; i++){
-                    for(int j=3; j < 6; j++){
-                        if(neighbors.contains(puzzle[i][j])){
-                            errorSpot[0] = i;
-                            errorSpot[1] = j;
-                            return errorSpot;
-                        }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
-                        }
-                    }
-                }
-            }else{//middle right
-                for(int i=3; i < 6; i++){
-                    for(int j=6; j < 9; j++){
-                        if(neighbors.contains(puzzle[i][j])){
-                            errorSpot[0] = i;
-                            errorSpot[1] = j;
-                            return errorSpot;
-                        }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                        } else {
+                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
             }
-        }else{//bottom three squares
-            if(c < 3){//bottom left
-                for(int i=6; i < 9; i++){
-                    for(int j=0; j < 3; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+        } else if (r < 6) {//center
+            if (c < 3) {//middle left
+                for (int i = 3; i < 6; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (neighbors.contains(puzzle[i][j])) {
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
-                        }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                        } else {
+                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
-            }else if(c < 6){//bottom center
-                for(int i=6; i < 9; i++){
-                    for(int j=3; j < 6; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+            } else if (c < 6) {//middle center, the eye of sauron
+                for (int i = 3; i < 6; i++) {
+                    for (int j = 3; j < 6; j++) {
+                        if (neighbors.contains(puzzle[i][j])) {
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
-                        }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                        } else {
+                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
-            }else{//bottom right, finally done
-                for(int i=6; i < 9; i++){
-                    for(int j=6; j < 9; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+            } else {//middle right
+                for (int i = 3; i < 6; i++) {
+                    for (int j = 6; j < 9; j++) {
+                        if (neighbors.contains(puzzle[i][j])) {
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
-                        }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                        } else {
+                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            }
+        } else {//bottom three squares
+            if (c < 3) {//bottom left
+                for (int i = 6; i < 9; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (neighbors.contains(puzzle[i][j])) {
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        } else {
+                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            } else if (c < 6) {//bottom center
+                for (int i = 6; i < 9; i++) {
+                    for (int j = 3; j < 6; j++) {
+                        if (neighbors.contains(puzzle[i][j])) {
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        } else {
+                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                        }
+                    }
+                }
+            } else {//bottom right, finally done
+                for (int i = 6; i < 9; i++) {
+                    for (int j = 6; j < 9; j++) {
+                        if (neighbors.contains(puzzle[i][j])) {
+                            errorSpot[0] = i;
+                            errorSpot[1] = j;
+                            return errorSpot;
+                        } else {
+                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
                         }
                     }
                 }
@@ -270,6 +270,67 @@ public class SudokuConfig implements Configuration{
 
     @Override
     public boolean isGoal(){ //must be valid, so just check if it's filled
+        // <optimize>
+        //This optimizes by filling in partially complete areas
+        boolean optimized;
+        do{//this loop continues for as long as new numbers are added to the puzzle
+            optimized = false;
+            //check columns for partial completeness
+            for(int r=0; r < 9; r++){
+                Set<Integer> nums = new HashSet<>();
+                for(int c=0; c < 9; c++){
+                    nums.add(puzzle[r][c]);
+                }
+                switch(nums.size()){
+                    case 8:
+                        int missing = 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9;
+                        for(int present : nums){
+                            missing -= present;
+                        }
+                        for(int c=0; c < 9; c++){
+                            if(puzzle[r][c] == 0) puzzle[r][c] = missing;
+                        }
+                        optimized = true;
+                        break;
+                    case 7:
+                        //todo
+                        break;
+                    case 6:
+                        //todo
+                        break;
+                }
+            }
+            //check rows for partial completeness
+            for(int c=0; c < 9; c++){
+                Set<Integer> nums = new HashSet<>();
+                for(int r=0; r < 9; r++){
+                    nums.add(puzzle[r][c]);
+                }
+                switch(nums.size()){
+                    case 8:
+                        int missing = 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9;
+                        for(int present : nums){
+                            missing -= present;
+                        }
+                        for(int r=0; r < 9; r++){
+                            if(puzzle[r][c] == 0) puzzle[r][c] = missing;
+                        }
+                        optimized = true;
+                        break;
+                    case 7:
+                        //todo
+                        break;
+                    case 6:
+                        //todo
+                        break;
+                }
+            }
+            //check inner squares for partial completeness
+
+            //todo
+
+        }while(optimized);//todo - set it so that optimized = true if an integer was added
+        // </optimize>
         for(int r=0; r < 9; r++){
             for(int c=0; c < 9; c++){
                 if(puzzle[r][c] == 0){

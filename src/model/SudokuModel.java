@@ -343,9 +343,9 @@ public class SudokuModel extends Observable{
                 SudokuConfig solution = (SudokuConfig)result.get();
                 System.arraycopy(solution.puzzle[r], 0, puzzle[r], 0, 9);
             }
-            textout = filename + " solved!";
+            textout = "The puzzle's been solved!";
         }else{
-            textout = filename + " has no solution";
+            textout = "The current puzzle has no solution";
         }
         announceChange();
     }
