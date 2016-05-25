@@ -15,6 +15,8 @@ import java.util.*;
  * the model-view-control design pattern.
  * @author Timothy Geary
  */
+
+//todo - add undo and redo functionality
 public class SudokuModel extends Observable{
     //states
     public String filename;

@@ -19,9 +19,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
+//todo - have the given numbers be grayed out and not be instantiated as the private class (make a gray.png)
 //todo - also have the option of solving the user's own puzzles they input themselves
 //todo - have an option to submit an answer and set off fireworks if it's correct
 //todo - have solve and a show solution button, solve starts from current puzzle, show solution starts from beginning
+//todo - allow scrawling small ints as personal reminders, 1 in top left, 9 bottom right, 4 middle left style
 /**
  * The view class that implements a JavaFX UI. This class represents both
  * the view and controller portions of the UI. It is connected to the model

@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.Optional;
 
 /**
- * This times how long it takes for the program to solve the puzzle.
+ * This times how long it takes for the program to solve a puzzle.
  * @author Timothy Geary
  */
 public class SudokuSolver{
@@ -12,10 +12,10 @@ public class SudokuSolver{
         if(args.length != 2){
             System.out.println("Usage: java SudokuSolver sudokuFile.txt line#");
         }else{
+            double start = System.currentTimeMillis();
+
             Configuration init = new SudokuConfig(args[0], Integer.parseInt(args[1]));
             Backtracker bt = new Backtracker();
-
-            double start = System.currentTimeMillis();
 
             Optional<Configuration> sol = bt.solve(init);
 

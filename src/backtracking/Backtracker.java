@@ -16,8 +16,8 @@ public class Backtracker{
      */
     public Optional<Configuration> solve(Configuration config){
         if(config.isGoal()){
-            return Optional.of(config);
-        }else{
+            return Optional.of(config);                 //TODO - FIGURE OUT WHY IT USED TO MAKE 'DONUT HOLES'
+        }else{                                          //TODO - THEN GET RID OF THE CHECK FOR ZEROES IN isValid()
             for(Configuration child : config.getSuccessors()){
                 if(child.isValid()){
                     Optional<Configuration> sol = solve(child);
