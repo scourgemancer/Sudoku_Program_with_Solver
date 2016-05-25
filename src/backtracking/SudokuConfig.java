@@ -304,7 +304,7 @@ public class SudokuConfig implements Configuration{
             for(int c=0; c < 9; c++){
                 Set<Integer> nums = new HashSet<>();
                 for(int r=0; r < 9; r++){
-                    nums.add(puzzle[r][c]);
+                    if(puzzle[r][c] != 0) nums.add(puzzle[r][c]);
                 }
                 switch(nums.size()){
                     case 8:
@@ -327,7 +327,7 @@ public class SudokuConfig implements Configuration{
             }
             //check inner squares for partial completeness
 
-            //todo
+            //todo - use the modulus weird method to 'simplify' code
 
         }while(optimized);//todo - set it so that optimized = true if an integer was added
         // </optimize>
