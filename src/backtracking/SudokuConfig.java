@@ -68,6 +68,80 @@ public class SudokuConfig implements Configuration{
     }
 
     /**
+     * Finds the numbers already within an inner square contiaining the given (r, c) point
+     * @param r the row of the point being observed
+     * @param c the column of the point being observed
+     * @return a hashset of the integers already in the inner square
+     */
+    private HashSet<Integer> getInnerSquare( int r, int c){
+        HashSet<Integer> neighbors = new HashSet<>();
+
+        if(r < 3){//top three squares
+            if(c < 3){//upper left corner
+                for(int i = 0; i < 3; i++){
+                    for(int j = 0; j < 3; j++){
+                        neighbors.add(puzzle[i][j]);
+                    }
+                }
+            }else if(c < 6){//upper middle
+                for(int i = 0; i < 3; i++){
+                    for(int j = 3; j < 6; j++){
+                        neighbors.add(puzzle[i][j]);
+                    }
+                }
+            }else{//upper right corner
+                for(int i = 0; i < 3; i++){
+                    for(int j = 6; j < 9; j++){
+                        neighbors.add(puzzle[i][j]);
+                    }
+                }
+            }
+        }else if(r < 6){//center
+            if(c < 3){//middle left
+                for(int i = 3; i < 6; i++){
+                    for(int j = 0; j < 3; j++){
+                        neighbors.add(puzzle[i][j]);
+                    }
+                }
+            }else if(c < 6){//middle center, the eye of sauron
+                for(int i = 3; i < 6; i++){
+                    for(int j = 3; j < 6; j++){
+                        neighbors.add(puzzle[i][j]);
+                    }
+                }
+            }else{//middle right
+                for(int i = 3; i < 6; i++){
+                    for(int j = 6; j < 9; j++){
+                        neighbors.add(puzzle[i][j]);
+                    }
+                }
+            }
+        }else{//bottom three squares
+            if(c < 3){//bottom left
+                for(int i = 6; i < 9; i++){
+                    for(int j = 0; j < 3; j++){
+                        neighbors.add(puzzle[i][j]);
+                    }
+                }
+            }else if(c < 6){//bottom center
+                for(int i = 6; i < 9; i++){
+                    for(int j = 3; j < 6; j++){
+                        neighbors.add(puzzle[i][j]);
+                    }
+                }
+            }else{//bottom right, finally done
+                for(int i = 6; i < 9; i++){
+                    for(int j = 6; j < 9; j++){
+                        neighbors.add(puzzle[i][j]);
+                    }
+                }
+            }
+        }
+        neighbors.remove(0);//remove the zeroes that were added
+        return neighbors;
+    }
+
+    /**
      * Utility method - takes (r, c) and returns an array of the position of the
      * first duplicate number therein, or [-1, -1] if there are no duplicates.
      * @param r the row of the examined spot
@@ -199,27 +273,71 @@ public class SudokuConfig implements Configuration{
         return errorSpot;
     }
 
+    /**
+     * Fills in any spaces on the sudoku that harbor hints from partially
+     * completed rows, columns, inner squares, or a combination thereof.
+     * It does so by giving each space all nine possibilities and whittles
+     * those down using available information and fills them if they yield
+     * only one possibility. Makes the brute force attempt slightly intelligent.
+     */
+    public void optimize(){
+        //initialize the possibilities 2d array
+        ArrayList<ArrayList<HashSet<Integer>>> possibilities = new ArrayList<>();
+        for(int r=0; r < 9; r++){
+            possibilities.add( r, new ArrayList<>() );
+            for(int c=0; c < 9; c++){
+                possibilities.get(r).add( c, new HashSet<>() );
+                if(puzzle[r][c] == 0){
+                    for (int i = 1; i < 10; i++) {
+                        possibilities.get(r).get(c).add(i);
+                    }
+                }else{
+                    possibilities.get(r).get(c).add(puzzle[r][c]);
+                }
+            }
+        }
+
+        //begin whittling down possibilities for each space
+        boolean optimized;
+        do{//keep looping if numbers were added from the last loop since they could provide more clues
+            optimized = false;
+            for(int r=0; r < 9; r++){
+                for(int c=0; c < 9; c++){
+                    if(possibilities.get(r).get(c).size() > 1){//isn't already decided
+                        for(int i=0; i < 9; i++){//check the row
+                            possibilities.get(r).get(c).remove(puzzle[r][i]);
+                        }
+                        for(int i=0; i < 9; i++){//check the column
+                            possibilities.get(r).get(c).remove(puzzle[i][c]);
+                        }
+                        possibilities.get(r).get(c).removeAll(getInnerSquare(r, c));//check the inner square
+
+                        if(possibilities.get(r).get(c).size() == 1) {//only one possibility, so fill it
+                            optimized = true;
+                            for(int i=0; i < 9; i++){
+                                if(possibilities.get(r).get(c).contains(i)) puzzle[r][c] = i;
+                            }
+                        }else{//check if the space is the only option for a value in their row/col/square
+                            //todo
+                        }
+                    }
+                }
+            }
+        }while(optimized);
+    }
+
     @Override
     public ArrayList<Configuration> getSuccessors(){
+        optimize(); //this was the optimal place to put this without restructuring anything
         ArrayList<Configuration> successors = new ArrayList<>();
         pos[1]++;
         if(pos[1] >= 9){
             pos[1] = 0;
             pos[0]++;
-            //System.out.println(this); //todo - remove this
         }
         if(pos[0] >= 9){
             return successors;
         }
-
-        // <optimize>
-        //TODO - TRY HAVING IT ONLY RETURN THE TRUE SUCCESSORS, START WITH A SET OF ALL NINE POSSIBILITIES,
-        //TODO - AND THEN WITTHLE IT DOWN BY ALL OF THE NUMS ALREADY PRESENT INT ROW, COL, SQUARE AND THEN
-        //TODO - CHECK IF IT CAN BE FURTHER WHITTLED BY THE OTHER BOX'S POSSIBILITES. IF THOSE WHITTLE IT
-        //TODO - DOWN TO ONE THEN IT MUST BE THAT ONE (LONE RANGER STRATEGY)
-        //This optimizes by filling in partially complete areas
-        // </optimize>
-
 
         switch (puzzle[pos[0]][pos[1]]) {
             case 0:
@@ -296,27 +414,4 @@ public class SudokuConfig implements Configuration{
         }
         return true;
     }
-
-    /**@Override
-    public String toString(){ //todo - remove this
-        String result = "   1 2 3   4 5 6   7 8 9\n";
-        result +=       "   ---------------------\n";
-        for(int r=0; r < 9; r++){
-            if(r%3 == 0 && r!=0) result += "  |------+-------+------\n";
-
-            result += String.valueOf(r+1) + " |"; //row numbers
-
-            for(int c = 0; c < 9; c++){
-                if(c%3 == 0 && c!=0) result += "| ";
-                if(puzzle[r][c] != 0){
-                    result += String.valueOf(puzzle[r][c]);
-                }else{
-                    result += " ";
-                }
-                if (c != 8) result += " ";
-            }
-            result += "\n";
-        }
-        return result;
-    }*/
 }
