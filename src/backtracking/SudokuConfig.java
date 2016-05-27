@@ -18,6 +18,7 @@ public class SudokuConfig implements Configuration{
     //states
     private int[] pos;
     public int[][] puzzle;
+    private ArrayList<ArrayList<HashSet<Integer>>> possibilities;
 
     /**
      * Constructs a new SudokuConfig from a provided filename
@@ -314,21 +315,47 @@ public class SudokuConfig implements Configuration{
 
                         if(possibilities.get(r).get(c).size() == 1) {//only one possibility, so fill it
                             optimized = true;
-                            for(int i=0; i < 9; i++){
+                            for(int i=0; i < 9; i++)
                                 if(possibilities.get(r).get(c).contains(i)) puzzle[r][c] = i;
-                            }
-                        }else{//check if the space is the only option for a value in their row/col/square
-                            //todo
                         }
                     }
                 }
             }
         }while(optimized);
+        do{//check if the space is the only option for a value in their row/col/square
+            optimized = false;
+            for(int r=0; r < 9; r++){
+                for(int c=0; c < 9; c++){
+                    if(possibilities.get(r).get(c).size() > 1){
+                        HashSet<Integer> copy = new HashSet<>( possibilities.get(r).get(c) );
+                        for(int i=0; i < 9; i++){//check the row
+                            copy.removeAll(possibilities.get(r).get(i));
+                        }
+                        for(int i=0; i < 9; i++){//check the column
+                            copy.removeAll(possibilities.get(i).get(c));
+                        }
+                        //todo - check the inner square
+
+                        if(copy.size() == 1) {//only one possibility, so fill it
+                            optimized = true;
+                            for(int i=0; i < 9; i++){
+                                possibilities.get(r).get(c).clear();
+                                possibilities.get(r).get(c).addAll(copy);
+                                if(copy.contains(i)){
+                                    puzzle[r][c] = i;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }while(optimized);
+        this.possibilities = possibilities;
     }
 
     @Override
     public ArrayList<Configuration> getSuccessors(){
-        optimize(); //this was the optimal place to put this without restructuring anything
+        //optimize(); //this was the optimal place to put this without restructuring anything
         ArrayList<Configuration> successors = new ArrayList<>();
         pos[1]++;
         if(pos[1] >= 9){
@@ -340,7 +367,7 @@ public class SudokuConfig implements Configuration{
         }
 
         switch (puzzle[pos[0]][pos[1]]) {
-            case 0:
+            case 0:/**
                 SudokuConfig addOne = new SudokuConfig(this);
                 addOne.puzzle[pos[0]][pos[1]] = 1;
                 successors.add(addOne);
@@ -367,7 +394,12 @@ public class SudokuConfig implements Configuration{
                 successors.add(addEight);
                 SudokuConfig addNine = new SudokuConfig(this);
                 addNine.puzzle[pos[0]][pos[1]] = 9;
-                successors.add(addNine);
+                successors.add(addNine);*/
+                for(Integer number : possibilities.get(pos[0]).get(pos[1])){
+                    SudokuConfig addNum = new SudokuConfig(this);
+                    addNum.puzzle[pos[0]][pos[1]] = number;
+                    successors.add(addNum);
+                }
             default:
                 SudokuConfig skip = new SudokuConfig(this);
                 successors.add(skip);
@@ -394,7 +426,7 @@ public class SudokuConfig implements Configuration{
         }
 
         //check for zeroes above the last placed position
-        for(int r=0; r < pos[0]; r++){
+        for(int r=0; r < pos[0]; r++){//todo - this shouldn't be necessary
             for(int c=0; c < 9; c++){
                 if(puzzle[r][c] == 0) return false;
             }

@@ -120,7 +120,7 @@ public class AverageTimeFinder{
         double worstHard = 0;
         System.out.println("Hard:");
         for(int line=1; line < 10001; line++){
-            if(line%1000 == 0 && line != 10000){
+            if(line%100 == 0 && line != 10000){
                 System.out.println("\t" + line / 100 + "% done");
                 System.out.println("\t\t" + hardTime / line + " seconds each so far");
                 System.out.println("\t\t" + bestHard + " seconds is best so far");
@@ -153,7 +153,7 @@ public class AverageTimeFinder{
         double worstExtreme = 0;
         System.out.println("Extreme:");
         for(int line=1; line < 10001; line++){ //strap yourselves in folks
-            if(line%1000 == 0 && line != 10000) {
+            if(line%100 == 0 && line != 10000) {
                 System.out.println("\t" + line / 100 + "% done");
                 System.out.println("\t\t" + extremeTime / line + " seconds each so far");
                 System.out.println("\t\t" + bestExtreme + " seconds is best so far");
