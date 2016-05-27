@@ -2,6 +2,7 @@ package model;
 
 import backtracking.Backtracker;
 import backtracking.Configuration;
+import backtracking.FasterSolver;
 import backtracking.SudokuConfig;
 
 import java.io.File;
@@ -41,6 +42,29 @@ public class SudokuModel extends Observable{
         puzzle = new int[9][9];
 
         lineNumber = (int)(Math.random() * 10000) + 1;
+        for(int i=0; i < lineNumber-1; i++){
+            in.nextLine();
+        }
+
+        String problemLine = in.nextLine();
+        for(int r = 0; r < 9; r++){
+            for(int c = 0; c < 9; c++){
+                puzzle[r][c] = Character.getNumericValue( problemLine.charAt(r*9 + c) );
+            }
+        }
+
+        in.close();
+        pos = new int[2];
+        pos[0] = 0;
+        pos[1] = 0;
+    }
+
+    public SudokuModel(String difficulty, int line) throws FileNotFoundException{
+        filename = difficulty.toLowerCase() + ".txt";
+        Scanner in = new Scanner( new File("puzzles/" + filename) );
+        puzzle = new int[9][9];
+
+        lineNumber = line;
         for(int i=0; i < lineNumber-1; i++){
             in.nextLine();
         }
@@ -335,8 +359,9 @@ public class SudokuModel extends Observable{
     /**
      * This function either solves the current puzzle and updates the 2d
      * grid to reflect the answer or identifies there being no solution
+     * @throws FileNotFoundException
      */
-    public void solve() throws FileNotFoundException{
+    public void backtrack() throws FileNotFoundException{
         Backtracker bt = new Backtracker();
         Optional<Configuration> result = bt.solve(new SudokuConfig(new SudokuModel(filename.replace(".txt", ""))));
         if(result.isPresent()){
@@ -349,11 +374,70 @@ public class SudokuModel extends Observable{
         }else{
             textout = "The current puzzle has no solution";
         }
+
+        announceChange();
+    }
+
+    /**
+     * Solves the sudoku much faster than backtracking does but can't cope
+     * with unsolvable puzzles which matters when the user inputs their own.
+     * @throws FileNotFoundException
+     */
+    public void solve() throws FileNotFoundException{
+        SudokuModel originalBoard = new SudokuModel(filename.replace(".txt", ""), lineNumber);
+
+        puzzle = FasterSolver.solveBoard( originalBoard.puzzle );
+
+        textout = "The puzzle's been solved!";
+
         announceChange();
     }
 
     /** Adds a number if the model is currently valid or mentions the first wrong square */
     public void getHint(){
+        if(isValid()){
+            try{
+                SudokuConfig copy = new SudokuConfig(filename, lineNumber);
+                int[][] solved = FasterSolver.solveBoard( copy.puzzle );
+                Boolean found = false;
+                int ro = -1;
+                int co = -1;
+                int num = -1;
+
+                int hints = (int)(Math.random() * 81) + 1; //the number of hints to skip before adding
+                while(hints > 0){
+                    for(int r = 0; r < 9; r++){
+                        for(int c = 0; c < 9; c++){
+                            if(puzzle[r][c] == 0){
+                                ro = r;
+                                co = c;
+                                num = solved[r][c];
+                                found = true;
+                                hints--;
+                                if(hints == 0) break;
+                            }
+                        }
+                        if(found && hints == 0) break;
+                    }
+                    if(found && hints == 0) break;
+                }
+                if(ro != -1){
+                    addNumber(ro, co, num);
+                    textout = "Hint: added " + num + " to (" + Integer.toString(ro+1) + ", " + Integer.toString(co+1) + ")";
+                }else{
+                    textout = "Hint: no next step!";
+                }
+                announceChange();
+            }catch(FileNotFoundException fnfe){ System.out.println("Internal files were removed"); }
+        }else{
+            String errorPos = this.textout.substring(textout.indexOf('('), textout.indexOf(')')+1);
+            this.textout = "Number at " + errorPos + " is incorrect";
+            announceChange();
+        }
+    }
+
+    /** Does getHint() but with backtracking to deal with uncertainty of solvability */
+    public void backtrackHint(){
         if(isValid()){
             Backtracker bt = new Backtracker();
             Optional<Configuration> result = bt.solve(new SudokuConfig(this));
@@ -402,7 +486,7 @@ public class SudokuModel extends Observable{
      * A utility method that indicates the model
      * has changed and notifies the observers.
      */
-    public void announceChange() {
+    public void announceChange(){
         setChanged();
         notifyObservers();
     }

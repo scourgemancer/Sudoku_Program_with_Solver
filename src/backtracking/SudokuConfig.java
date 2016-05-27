@@ -10,15 +10,15 @@ import java.util.Scanner;
 import java.util.Set;
 
 /**
- * The class represents a single configuration of a sudoku puzzle and
- * is used in the backtracking algorithm to solve the puzzle.
+ * The class represents a single configuration of a sudoku puzzle
+ * and is used in the backtracking algorithm to solve the puzzle.
  * @author Timothy Geary
  */
 public class SudokuConfig implements Configuration{
     //states
     private int[] pos;
     public int[][] puzzle;
-    private ArrayList<ArrayList<HashSet<Integer>>> possibilities;
+    //private ArrayList<ArrayList<HashSet<Integer>>> possibilities;
 
     /**
      * Constructs a new SudokuConfig from a provided filename
@@ -281,7 +281,7 @@ public class SudokuConfig implements Configuration{
      * those down using available information and fills them if they yield
      * only one possibility. Makes the brute force attempt slightly intelligent.
      */
-    public void optimize(){
+   public void optimize(){
         //initialize the possibilities 2d array
         ArrayList<ArrayList<HashSet<Integer>>> possibilities = new ArrayList<>();
         for(int r=0; r < 9; r++){
@@ -350,7 +350,7 @@ public class SudokuConfig implements Configuration{
                 }
             }
         }while(optimized);
-        this.possibilities = possibilities;
+        //this.possibilities = possibilities;
     }
 
     @Override
@@ -367,7 +367,7 @@ public class SudokuConfig implements Configuration{
         }
 
         switch (puzzle[pos[0]][pos[1]]) {
-            case 0:/**
+            case 0:
                 SudokuConfig addOne = new SudokuConfig(this);
                 addOne.puzzle[pos[0]][pos[1]] = 1;
                 successors.add(addOne);
@@ -394,12 +394,13 @@ public class SudokuConfig implements Configuration{
                 successors.add(addEight);
                 SudokuConfig addNine = new SudokuConfig(this);
                 addNine.puzzle[pos[0]][pos[1]] = 9;
-                successors.add(addNine);*/
+                successors.add(addNine);
+                /** //this is for when attempting optimization of backtracking
                 for(Integer number : possibilities.get(pos[0]).get(pos[1])){
                     SudokuConfig addNum = new SudokuConfig(this);
                     addNum.puzzle[pos[0]][pos[1]] = number;
                     successors.add(addNum);
-                }
+                }*/
             default:
                 SudokuConfig skip = new SudokuConfig(this);
                 successors.add(skip);
