@@ -170,7 +170,7 @@ public class SudokuGUI extends Application implements Observer{
 
         FlowPane options = new FlowPane();
         Button verify = new Button("Verify");
-        verify.setOnAction(e -> model.isValid());
+        verify.setOnAction(e -> model.isValid(true));
         Button hint = new Button("Hint");
         hint.setOnAction(e -> model.getHint());
         Button solve = new Button("Solve");

@@ -91,8 +91,10 @@ public class SudokuModel extends Observable{
      * Adds a number at (row, col), overwriting an existing number if already there.
      * @param r the row to add the number to
      * @param c the column to add the number to
+     * @param num the number to be added
+     * @param visible whether or not to display the operation
      */
-    public void addNumber(int r, int c, int num){
+    public void addNumber(int r, int c, int num, boolean visible){
         if((r > -1 && c > -1 && r < 9 && c < 9)//in bounds
                 && (num > 0 && num <= 9)){//valid number
             this.puzzle[r][c] = num;
@@ -102,7 +104,7 @@ public class SudokuModel extends Observable{
         }
         this.pos[0] = r;
         this.pos[1] = c;
-        announceChange();
+        if(visible) announceChange();
     }
 
     /**
@@ -255,52 +257,55 @@ public class SudokuModel extends Observable{
         return errorSpot;
     }
 
-    /** Checks if SudokuModel is valid */
-    public boolean isValid(){
+    /**
+     * Checks if SudokuModel is valid
+     * @param visible whether or not to display the operation
+     */
+    public boolean isValid( boolean visible ){
         //check that all of the inner squares have unique elements
         if(checkInnerSquare(1, 1)[0] != -1){
             textout = "Puzzle is not valid";
-            announceChange();
+            if(visible) announceChange();
             return false;
         }
         if(checkInnerSquare(1, 4)[0] != -1){
             textout = "Puzzle is not valid";
-            announceChange();
+            if(visible) announceChange();
             return false;
         }
         if(checkInnerSquare(1, 7)[0] != -1){
             textout = "Puzzle is not valid";
-            announceChange();
+            if(visible) announceChange();
             return false;
         }
         if(checkInnerSquare(4, 1)[0] != -1){
             textout = "Puzzle is not valid";
-            announceChange();
+            if(visible) announceChange();
             return false;
         }
         if(checkInnerSquare(4, 4)[0] != -1){
             textout = "Puzzle is not valid";
-            announceChange();
+            if(visible) announceChange();
             return false;
         }
         if(checkInnerSquare(4, 7)[0] != -1){
             textout = "Puzzle is not valid";
-            announceChange();
+            if(visible) announceChange();
             return false;
         }
         if(checkInnerSquare(7, 1)[0] != -1){
             textout = "Puzzle is not valid";
-            announceChange();
+            if(visible) announceChange();
             return false;
         }
         if(checkInnerSquare(7, 4)[0] != -1){
             textout = "Puzzle is not valid";
-            announceChange();
+            if(visible) announceChange();
             return false;
         }
         if(checkInnerSquare(7, 7)[0] != -1){
             textout = "Puzzle is not valid";
-            announceChange();
+            if(visible) announceChange();
             return false;
         }
 
@@ -310,7 +315,7 @@ public class SudokuModel extends Observable{
             for(int c=0; c < 9; c++){
                 if(row.contains(puzzle[r][c])){
                     textout = "Puzzle is not valid";
-                    announceChange();
+                    if(visible) announceChange();
                     return false;
                 }else{
                     if(puzzle[r][c] != 0) row.add(puzzle[r][c]);
@@ -324,7 +329,7 @@ public class SudokuModel extends Observable{
             for(int r=0; r < 9; r++){
                 if(col.contains(puzzle[r][c])){
                     textout = "Puzzle is not valid";
-                    announceChange();
+                    if(visible) announceChange();
                     return false;
                 }
                 if(puzzle[r][c] != 0) col.add(puzzle[r][c]);
@@ -333,27 +338,33 @@ public class SudokuModel extends Observable{
 
         //the puzzle must be valid to get this far
         this.textout = "Puzzle is valid so far!";
-        announceChange();
+        if(visible) announceChange();
         return true;
     }
 
-    /** Checks if SudokuModel is valid and complete */
-    public void isGoal(){
-        if(isValid()){
+    /**
+     * Checks if SudokuModel is valid and complete
+     * @param visible whether or not to display the operation
+     */
+    public boolean isGoal( boolean visible ){
+        if(isValid(false)){
             for(int r=0; r < 9; r++){
                 for(int c=0; c < 9; c++){
                     if(puzzle[r][c] == 0){
                         this.textout = "This is not the solution";
-                        announceChange();
-                        return;
+                        if(visible) announceChange();
+                        return false;
                     }
                 }
             }
             this.textout = "Congratulations, you've solved it!";
+            if(visible) announceChange();
+            return true;
         }else{
             this.textout = "This is not the solution";
+            if(visible) announceChange();
+            return false;
         }
-        announceChange();
     }
 
     /**
@@ -395,40 +406,48 @@ public class SudokuModel extends Observable{
 
     /** Adds a number if the model is currently valid or mentions the first wrong square */
     public void getHint(){
-        if(isValid()){
-            try{
-                SudokuConfig copy = new SudokuConfig(filename, lineNumber);
-                int[][] solved = FasterSolver.solveBoard( copy.puzzle );
-                Boolean found = false;
-                int ro = -1;
-                int co = -1;
-                int num = -1;
+        if(isValid(false)){
+            if(isGoal(false)){
+                this.textout = "You've already finished, congratulations!";
+                announceChange();
+                return;
+            }else{
+                try{
+                    SudokuConfig copy = new SudokuConfig(filename, lineNumber);
+                    int[][] solved = FasterSolver.solveBoard(copy.puzzle);
+                    Boolean found = false;
+                    int ro = -1;
+                    int co = -1;
+                    int num = -1;
 
-                int hints = (int)(Math.random() * 81) + 1; //the number of hints to skip before adding
-                while(hints > 0){
-                    for(int r = 0; r < 9; r++){
-                        for(int c = 0; c < 9; c++){
-                            if(puzzle[r][c] == 0){
-                                ro = r;
-                                co = c;
-                                num = solved[r][c];
-                                found = true;
-                                hints--;
-                                if(hints == 0) break;
+                    int hints = (int)(Math.random()*81) + 1; //the number of hints to skip before adding
+                    while(hints > 0){
+                        for(int r=0; r < 9; r++){
+                            for(int c=0; c < 9; c++){
+                                if(puzzle[r][c] == 0){
+                                    ro = r;
+                                    co = c;
+                                    num = solved[r][c];
+                                    found = true;
+                                    hints--;
+                                    if(hints == 0) break;
+                                }
                             }
+                            if(found && hints == 0) break;
                         }
                         if(found && hints == 0) break;
                     }
-                    if(found && hints == 0) break;
+                    if(ro != -1){
+                        addNumber(ro, co, num, false);
+                        textout = "Hint: added "+num+" to ("+Integer.toString(ro+1)+", "+Integer.toString(co+1)+")";
+                    }else{
+                        textout = "Hint: no next step!";
+                    }
+                    announceChange();
+                }catch(FileNotFoundException fnfe){
+                    System.out.println("Internal files were removed");
                 }
-                if(ro != -1){
-                    addNumber(ro, co, num);
-                    textout = "Hint: added " + num + " to (" + Integer.toString(ro+1) + ", " + Integer.toString(co+1) + ")";
-                }else{
-                    textout = "Hint: no next step!";
-                }
-                announceChange();
-            }catch(FileNotFoundException fnfe){ System.out.println("Internal files were removed"); }
+            }
         }else{
             String errorPos = this.textout.substring(textout.indexOf('('), textout.indexOf(')')+1);
             this.textout = "Number at " + errorPos + " is incorrect";
@@ -438,7 +457,7 @@ public class SudokuModel extends Observable{
 
     /** Does getHint() but with backtracking to deal with uncertainty of solvability */
     public void backtrackHint(){
-        if(isValid()){
+        if(isValid(false)){
             Backtracker bt = new Backtracker();
             Optional<Configuration> result = bt.solve(new SudokuConfig(this));
             if(result.isPresent()){
@@ -466,7 +485,7 @@ public class SudokuModel extends Observable{
                     if(found) break;
                 }
                 if(ro != -1){
-                    addNumber(ro, co, num);
+                    addNumber(ro, co, num, false);
                     textout = "Hint: added " + num + " to (" + Integer.toString(ro+1) + ", " + Integer.toString(co+1) + ")";
                 }else{
                     textout = "Hint: no next step!";

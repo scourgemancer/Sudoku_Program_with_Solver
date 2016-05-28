@@ -33,7 +33,7 @@ public class SudokuPTUI implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println(this.model.textout);
+        System.out.println("\n" + this.model.textout);
         System.out.print(this.model.toString());
         System.out.print("> ");
     }

@@ -39,7 +39,7 @@ public class ControllerPTUI{
             if(input[0].length() != 0){
                 switch(input[0].charAt(0)){
                     case 'v': //verify
-                        model.isValid();
+                        model.isValid(true);
                         break;
                     case 'a': //addNumber
                         if(input.length == 4){
@@ -50,7 +50,7 @@ public class ControllerPTUI{
                             System.out.println("Incorrect usage, try 'h' for help");
                             break;
                         }
-                        model.addNumber(r, c, num);
+                        model.addNumber(r, c, num, true);
                         break;
                     case 'r': //removeNumber
                         if(input.length == 3){
@@ -75,7 +75,7 @@ public class ControllerPTUI{
                         model.getHint();
                         break;
                     case 'g': //guess
-                        model.isGoal();
+                        model.isGoal(true);
                         break;
                     case 'q': //quit
                         return;
