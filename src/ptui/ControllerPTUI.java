@@ -50,9 +50,9 @@ public class ControllerPTUI{
                             System.out.println("Incorrect usage, try 'h' for help");
                             break;
                         }
-                        model.addNumber(r, c, num, true);
+                        model.addNumber(r, c, num, true, true);
                         break;
-                    case 'r': //removeNumber
+                    case 'd': //delete
                         if(input.length == 3){
                             r = Integer.parseInt(input[1])-1;
                             c = Integer.parseInt(input[2])-1;
@@ -60,22 +60,25 @@ public class ControllerPTUI{
                             System.out.println("Incorrect usage, try 'h' for help");
                             break;
                         }
-                        model.removeNumber(r, c);
+                        model.deleteNumber(r, c, true, true);
                         break;
                     case 'h': //print help
                         model.setHelpMsg();
                         break;
-                    case 'd': //display puzzle
-                        model.printIt();
-                        break;
                     case 's': //solve
-                        model.solve();
+                        model.solve(true);
                         break;
                     case 'c': //clue
                         model.getHint();
                         break;
                     case 'g': //guess
                         model.isGoal(true);
+                        break;
+                    case 'u': //undo
+                        model.undo();
+                        break;
+                    case 'r': //redo
+                        model.redo();
                         break;
                     case 'q': //quit
                         return;

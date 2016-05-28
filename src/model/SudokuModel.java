@@ -17,29 +17,32 @@ import java.util.*;
  * @author Timothy Geary
  */
 
-//todo - add undo and redo functionality
 public class SudokuModel extends Observable{
-    //states
     public String filename;
     public int lineNumber;
     public int[] pos;
     public int[][] puzzle;
+    private Stack<Integer> undoStack;
+    private Stack<Integer> redoStack;
     public String textout;
     private static String helpmsg =
             "a|add r c number: Adds number to (r,c)\n" +
-                    "c|clue: Adds one number as a clue\n" +
-                    "d|display: Displays puzzle\n" +
+                    "d|delete r c: Deletes number from (r,c) \n" +
                     "h|help: Prints this help message \n" +
                     "q|quit: Exits program \n" +
-                    "r|remove r c: Removes number from (r,c) \n" +
                     "v|verify: Verifies puzzle's correctness \n" +
-                    "g|guess: Guess the answer\n" +
-                    "s|solve: Solves the sudoku puzzle";
+                    "g|guess: Guess the answer \n" +
+                    "c|clue: Adds one number as a clue\n" +
+                    "s|solve: Solves the sudoku puzzle \n" +
+                    "u|undo: Undoes the last add, delete, clue, or solve action \n" +
+                    "r|redo: Redoes the last action that was undone";
 
     public SudokuModel(String difficulty) throws FileNotFoundException{
         filename = difficulty.toLowerCase() + ".txt";
         Scanner in = new Scanner( new File("puzzles/" + filename) );
         puzzle = new int[9][9];
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
 
         lineNumber = (int)(Math.random() * 10000) + 1;
         for(int i=0; i < lineNumber-1; i++){
@@ -63,6 +66,8 @@ public class SudokuModel extends Observable{
         filename = difficulty.toLowerCase() + ".txt";
         Scanner in = new Scanner( new File("puzzles/" + filename) );
         puzzle = new int[9][9];
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
 
         lineNumber = line;
         for(int i=0; i < lineNumber-1; i++){
@@ -94,11 +99,16 @@ public class SudokuModel extends Observable{
      * @param num the number to be added
      * @param visible whether or not to display the operation
      */
-    public void addNumber(int r, int c, int num, boolean visible){
+    public void addNumber(int r, int c, int num, boolean visible, boolean recorded){
         if((r > -1 && c > -1 && r < 9 && c < 9)//in bounds
                 && (num > 0 && num <= 9)){//valid number
             this.puzzle[r][c] = num;
             this.textout = num+" added at: ("+(int)(r+1)+", "+(int)(c+1)+")";
+            if(recorded){
+                undoStack.push(c);
+                undoStack.push(r);
+                undoStack.push(0);
+            }
         }else{
             this.textout = "Error adding "+num+" at: ("+(int)(r+1)+", "+(int)(c+1)+")";
         }
@@ -108,21 +118,28 @@ public class SudokuModel extends Observable{
     }
 
     /**
-     * Removes a number from (row, col).
-     * @param r the row to remove the number from
-     * @param c the column to remove the number from
+     * Deletes a number from (row, col).
+     * @param r the row to delete the number from
+     * @param c the column to delete the number from
+     * @param visible whether or not to display the operation
      */
-    public void removeNumber(int r, int c){
+    public void deleteNumber(int r, int c, boolean visible, boolean recorded){
         if((r > -1 && c > -1 && r < 9 && c < 9)//in bounds
                 && (puzzle[r][c] > 0) ){//is a guessed number
+            if(recorded){
+                undoStack.push(puzzle[r][c]);
+                undoStack.push(c);
+                undoStack.push(r);
+                undoStack.push(1);
+            }
             this.puzzle[r][c] = 0;
-            this.textout = "Number removed from: ("+(int)(r+1)+", "+(int)(c+1)+")";
+            this.textout = "Number deleted from: ("+(int)(r+1)+", "+(int)(c+1)+")";
         }else{
-            this.textout = "Error removing number from: ("+(int)(r+1)+", "+(int)(c+1)+")";
+            this.textout = "Error deleting number from: ("+(int)(r+1)+", "+(int)(c+1)+")";
         }
         this.pos[0] = r;
         this.pos[1] = c;
-        announceChange();
+        if(visible) announceChange();
     }
 
     /**
@@ -370,38 +387,55 @@ public class SudokuModel extends Observable{
     /**
      * This function either solves the current puzzle and updates the 2d
      * grid to reflect the answer or identifies there being no solution
+     * @param visible whether or not to display the operation
      * @throws FileNotFoundException
      */
-    public void backtrack() throws FileNotFoundException{
+    public void backtrack( boolean visible ) throws FileNotFoundException{
         Backtracker bt = new Backtracker();
         Optional<Configuration> result = bt.solve(new SudokuConfig(new SudokuModel(filename.replace(".txt", ""))));
         if(result.isPresent()){
-            puzzle = new int[9][9];
+            //pushing to undoStack
+            for(int r=8; r >= 0; r--){ //pushing right to left, down to up
+                for(int c=8; c >= 0; c--){
+                    undoStack.push( puzzle[r][c] );
+                }
+            }
+            undoStack.push(2);
+
+            //updating puzzle to the solution
+            SudokuConfig solution = (SudokuConfig)result.get();
             for(int r = 0; r < 9; r++){
-                SudokuConfig solution = (SudokuConfig)result.get();
                 System.arraycopy(solution.puzzle[r], 0, puzzle[r], 0, 9);
             }
             textout = "The puzzle's been solved!";
         }else{
             textout = "The current puzzle has no solution";
         }
-
-        announceChange();
+        if(visible) announceChange();
     }
 
     /**
      * Solves the sudoku much faster than backtracking does but can't cope
      * with unsolvable puzzles which matters when the user inputs their own.
+     * @param visible whether or not to display the operation
      * @throws FileNotFoundException
      */
-    public void solve() throws FileNotFoundException{
+    public void solve( boolean visible ) throws FileNotFoundException{
+        //pushing to undoStack
+        for(int r=8; r >= 0; r--){ //pushing right to left, down to up
+            for(int c=8; c >= 0; c--){
+                undoStack.push( puzzle[r][c] );
+            }
+        }
+        undoStack.push(2);
+
         SudokuModel originalBoard = new SudokuModel(filename.replace(".txt", ""), lineNumber);
 
         puzzle = FasterSolver.solveBoard( originalBoard.puzzle );
 
         textout = "The puzzle's been solved!";
 
-        announceChange();
+        if(visible) announceChange();
     }
 
     /** Adds a number if the model is currently valid or mentions the first wrong square */
@@ -438,7 +472,7 @@ public class SudokuModel extends Observable{
                         if(found && hints == 0) break;
                     }
                     if(ro != -1){
-                        addNumber(ro, co, num, false);
+                        addNumber(ro, co, num, false, true);
                         textout = "Hint: added "+num+" to ("+Integer.toString(ro+1)+", "+Integer.toString(co+1)+")";
                     }else{
                         textout = "Hint: no next step!";
@@ -485,7 +519,7 @@ public class SudokuModel extends Observable{
                     if(found) break;
                 }
                 if(ro != -1){
-                    addNumber(ro, co, num, false);
+                    addNumber(ro, co, num, false, true);
                     textout = "Hint: added " + num + " to (" + Integer.toString(ro+1) + ", " + Integer.toString(co+1) + ")";
                 }else{
                     textout = "Hint: no next step!";
@@ -499,6 +533,76 @@ public class SudokuModel extends Observable{
             this.textout = "Number at " + errorPos + " is incorrect";
             announceChange();
         }
+    }
+
+    /** Undoes the last action that was pushed to the undoStack */
+    public void undo(){
+        if(undoStack.empty()){
+            textout = "Nothing to undo!";
+        }else{
+            switch(undoStack.pop()){
+                case 0: //undoing an add
+                    int r = undoStack.pop();
+                    int c = undoStack.pop();
+                    redoStack.push(puzzle[r][c]);
+                    redoStack.push(c);
+                    redoStack.push(r);
+                    redoStack.push(0);
+                    deleteNumber(r, c, false, false);
+                    textout = "Undid an addition!";
+                    break;
+                case 1: //undoing a delete
+                    int row = undoStack.pop();
+                    int col = undoStack.pop();
+                    redoStack.push(col);
+                    redoStack.push(row);
+                    redoStack.push(1);
+                    addNumber(row, col, undoStack.pop(), false, false);
+                    textout = "Undid a deletion!";
+                    break;
+                case 2: //undoing a solve
+                    redoStack.push(2);
+                    for(int ro=0; ro < 9; ro++){//remake the old puzzle
+                        for(int co=0; co < 9; co++) {
+                            puzzle[ro][co] = undoStack.pop();
+                        }
+                    }
+                    textout = "Undid a solving command!";
+                    break;
+                default:
+                    textout = "Error: Unknown command";
+            }
+        }
+        announceChange();
+    }
+
+    /** Redoes the last action that pushed to the redoStack */
+    public void redo(){
+        if(redoStack.empty()){
+            textout = "Nothing to redo!";
+        }else{
+            switch(redoStack.pop()){
+                case 0: //redoing an add
+                    addNumber(redoStack.pop(), redoStack.pop(), redoStack.pop(), false, true);
+                    textout = "Redo: " + textout;
+                    break;
+                case 1: //redoing a delete
+                    deleteNumber(redoStack.pop(), redoStack.pop(), false, true);
+                    textout = "Redo: " + textout;
+                    break;
+                case 2: //redoing a solve
+                    try{
+                        solve(false);
+                    }catch(FileNotFoundException fnfe){
+                        System.out.println("Internal files were deleted");
+                    }
+                    textout = "Redid a solving command";
+                    break;
+                default:
+                    textout = "Error: Unknown command";
+            }
+        }
+        announceChange();
     }
 
     /**

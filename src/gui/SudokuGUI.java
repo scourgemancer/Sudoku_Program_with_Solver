@@ -176,7 +176,7 @@ public class SudokuGUI extends Application implements Observer{
         Button solve = new Button("Solve");
         solve.setOnAction(e -> {
             try {
-                model.solve();// todo - Platform.runLater(Runnable r), runs operation as a thread in the background
+                model.solve(true);// todo - Platform.runLater(Runnable r), runs operation as a thread in the background
             }catch(FileNotFoundException fnfe){ model.textout = "The file was deleted"; }});
         Button restart = new Button("Restart");
         restart.setOnAction(e -> {
