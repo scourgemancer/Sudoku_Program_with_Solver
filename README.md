@@ -4,7 +4,7 @@ A simple sudoku program written in Java that has a Plain Text UI(from the termin
 The program also comes with 10,000 puzzles for each of the five difficulty levels!
 The five levels of difficulty are super easy, easy, normal, hard, and extreme!
 
-The graphical UI was done using JavaFX and the solver utilizes the backtracking algorithm.
+The graphical UI was done in JavaFX and the solver utilized the backtracking algorithm, which was replaced by a much faster logical solver.
 
 When using the Plain Text UI, the sudoku is represented like this:
 <pre>
