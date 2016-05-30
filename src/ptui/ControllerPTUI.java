@@ -30,7 +30,7 @@ public class ControllerPTUI{
         int c;
         int num;
 
-        model.printIt();
+        model.setHelpMsg();
 
         in = new Scanner(System.in);
 
