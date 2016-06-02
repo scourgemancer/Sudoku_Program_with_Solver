@@ -10,10 +10,9 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
- * This is the model for the entire program, it holds all of the
- * functionality of the program. The different views each use the
- * same model and display the content in different ways, as per
- * the model-view-control design pattern.
+ * This is the model for the entire program, it holds all of the functionality
+ * of the program. The different views each use the same model and display the
+ * content in different ways, as per the model-view-control design pattern.
  * @author Timothy Geary
  */
 
@@ -35,7 +34,7 @@ public class SudokuModel extends Observable{
                     "c|clue: Adds one number as a clue\n" +
                     "s|solve: Solves the sudoku puzzle \n" +
                     "u|undo: Undoes the last add, delete, clue, or solve action \n" +
-                    "r|redo: Redoes the last action that was undone";
+                    "r|redo: Redoes the last action that was undone\n";
 
     public SudokuModel(String difficulty) throws FileNotFoundException{
         filename = difficulty.toLowerCase() + ".txt";

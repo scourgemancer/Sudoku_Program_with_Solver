@@ -25,5 +25,3 @@ When using the Plain Text UI, the sudoku is represented like this:
 with commands asking for the row and column numbers to perform operations.
 
 The program takes one argument, gui or ptui, depending on if you want to use the graphical UI or the plain text UI.
-If running the plain text UI, an additional argument must be provided with the desired difficulty option.
-The difficulty options should be provided as either super_easy, easy, normal, hard, or extreme.

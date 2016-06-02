@@ -15,9 +15,6 @@ public class Sudoku{
     /** The 2 modes are GUI and PTUI */
     private enum Views{GUI, PTUI, UNKNOWN}
 
-    /** The 5 difficulty levels */
-    private enum Diffs{SUPER_EASY, EASY, NORMAL, HARD, EXTREME, UNKNOWN}
-
     /** Displays the usage message and exits the program. */
     private static void usageError(){
         System.err.println("Usage: java Sudoku (gui | ptui (super_easy | easy | normal | hard | extreme))");
@@ -32,19 +29,11 @@ public class Sudoku{
     public static void main(String[] args){
         //get the preferred view from the command line
         Views view = Views.UNKNOWN;
-        Diffs difficulty = Diffs.UNKNOWN;
-        if(args.length == 1 || args.length == 2){
+        if(args.length == 1){
             try{
                 view = Views.valueOf(args[0].toUpperCase());
             }catch(IllegalArgumentException iae){
                 usageError();
-            }
-            if(args.length == 2){
-                try{
-                    difficulty = Diffs.valueOf(args[1].toUpperCase());
-                }catch(IllegalArgumentException iae){
-                    usageError();
-                }
             }
         }else{
             usageError();
@@ -58,7 +47,7 @@ public class Sudoku{
                     Application.launch(SudokuGUI.class);
                     break;
                 case PTUI:
-                    SudokuPTUI ptui = new SudokuPTUI(difficulty.toString());
+                    SudokuPTUI ptui = new SudokuPTUI();
                     ControllerPTUI ctrlr = new ControllerPTUI(ptui.getModel());
                     //now pass control to the run method of the controller
                     ctrlr.run();

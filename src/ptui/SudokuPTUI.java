@@ -5,6 +5,7 @@ import model.SudokuModel;
 import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 
 /**
  * This is the plain text UI's view class, it displays what the
@@ -19,7 +20,21 @@ public class SudokuPTUI implements Observer{
      * Creates the model and initializes the view.
      * @throws FileNotFoundException if file not found
      */
-    public SudokuPTUI(String difficulty) throws FileNotFoundException{
+    public SudokuPTUI() throws FileNotFoundException{
+        Scanner in = new Scanner(System.in);
+        String difficulty;
+        boolean chosen = false;
+        do{
+            System.out.println("Difficulty options are super_easy, easy, normal, hard, and extreme");
+            System.out.print("\nChoose one to play: ");
+            difficulty = in.nextLine().toLowerCase();
+            if(difficulty.equals("super_easy") || difficulty.equals("easy") || difficulty.equals("normal") ||
+                    difficulty.equals("hard") || difficulty.equals("extreme")){
+                chosen = true;
+            }else{
+                System.out.println("Error: Not a valid option, try again");
+            }
+        }while(!chosen);
         try{
             this.model = new SudokuModel(difficulty);
         }catch (FileNotFoundException fnfe){

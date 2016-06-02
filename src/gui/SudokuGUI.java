@@ -19,7 +19,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
-//todo - how am i doing? button that solves it, checks if a subset and counts how many spaces left to fill
+//todo - experiment with making menus and selection screens
+//todo - bamboo color background with mild texture
+//todo - select puzzle before playing it, let them cycle through all 10000 and keep count
+//todo - original numbers are black and placed numbers are blue
+//todo - selecting a number option highlights all squares of that option (if all filled make the num option green)
+//todo - difficulty selection highlight animates it's movement between difficulties
+//todo - 'Select a number' band with pencil and eraser next to it
+//todo - bamboo chutes between inner squares
+//todo - make a home menu (have it resemble an inner square)
+//todo - highlighting a numbered square will make simliar numbered squares have yellow text and all boxes that matter to it get highlightedish
+//todo - fix the textout, don't change it for adding or removing numbers
+//todo - combine isGoal and isValid into Check and it says how many are left if isValid but not isGoal
 //todo - have the given numbers be grayed out and not be instantiated as the private class (make a gray.png)
 //todo - also have the option of solving the user's own puzzles they input themselves (backtrack for these)
 //todo - have an option to submit an answer and set off fireworks if it's correct
