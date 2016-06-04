@@ -140,10 +140,9 @@ public class SudokuGUI extends Application implements Observer{
     @Override
     public void init() throws Exception{
         try{
-            Parameters params = getParameters();
-            this.filename = params.getRaw().get(0);
             //todo - choose dificulty window here
-            this.model = new SudokuModel(this.filename);
+            //this.model = new SudokuModel(this.filename);
+            this.model = new SudokuModel("easy");
         }catch(FileNotFoundException fnfe){
             System.out.println(fnfe.getMessage());
             System.exit(-1);
@@ -224,19 +223,19 @@ public class SudokuGUI extends Application implements Observer{
         stage.setMaxHeight(500);
         stage.setResizable(false);
         switch(model.filename){
-            case "super_easy.txt":
+            case "super_easy":
                 stage.setTitle("Super Easy Sudoku puzzle #" + model.lineNumber);
                 break;
-            case "easy.txt":
+            case "easy":
                 stage.setTitle("Easy Sudoku puzzle #" + model.lineNumber);
                 break;
-            case "normal.txt":
+            case "normal":
                 stage.setTitle("Normal Sudoku puzzle #" + model.lineNumber);
                 break;
-            case "hard.txt":
+            case "hard":
                 stage.setTitle("Hard Sudoku puzzle #" + model.lineNumber);
                 break;
-            case "extreme.txt":
+            case "extreme":
                 stage.setTitle("I'm sorry, it's Sudoku puzzle #" + model.lineNumber + ", good luck");
                 break;
         }
