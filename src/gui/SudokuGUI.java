@@ -2,6 +2,7 @@ package gui;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
 import model.SudokuModel;
 
 import javafx.application.Application;
@@ -181,21 +182,26 @@ public class SudokuGUI extends Application implements Observer{
         Button help = new Button("Help");
         help.setOnAction(e -> setHelpScreen(stage));
         setButtonBackground( help, "white.png" );
+        help.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
 
         Button start = new Button("Play");
         start.setOnAction(e -> setDifficultySelectionScreen(stage));
         setButtonBackground( start, "white.png" );
+        start.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
 
         Button about = new Button("About");
         about.setOnAction(e -> setAboutScreen(stage));
         setButtonBackground( about, "white.png" );
+        about.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
 
         Button donate = new Button("Donate");
         setButtonBackground( donate, "white.png" );
+        donate.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
 
         Button quit = new Button("Quit");
         quit.setOnAction(e -> System.exit(0));
         setButtonBackground( quit, "white.png" );
+        quit.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
 
         options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
 
@@ -344,6 +350,7 @@ public class SudokuGUI extends Application implements Observer{
     @Override
     public void start(Stage stage) throws Exception{
         setMenuScreen(stage);
+        stage.setTitle("Sudoku");
         stage.show();
     }
 
