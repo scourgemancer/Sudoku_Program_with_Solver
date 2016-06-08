@@ -139,35 +139,57 @@ public class SudokuGUI extends Application implements Observer{
      * @param stage - The stage to set up
      */
     private void setMenuScreen(Stage stage){
-        VBox window = new VBox();
-        Scene scene = new Scene(window);
+        HBox horizontalWindowSpacing = new HBox();
+        horizontalWindowSpacing.setSpacing( 20 );
+        Label leftWindowSpacing = new Label();
+        Label rightWindowSpacing = new Label();
         Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
-        window.setBackground( new Background(BI) );
-        window.setSpacing( 70 );
+        horizontalWindowSpacing.setBackground( new Background(BI) );
 
-        Label spacing = new Label();
-        window.getChildren().add( spacing );
+        VBox window = new VBox();
+        window.setSpacing( 25 );
+
+        horizontalWindowSpacing.getChildren().addAll( leftWindowSpacing, window, rightWindowSpacing );
+        Scene scene = new Scene( horizontalWindowSpacing );
+
+        Label topWindowSpacing = new Label();
+        Label centerSpacing = new Label();
+        Label centerSpacing2 = new Label();
+        Label bottomWindowSpacing = new Label();
 
         Image titleImage = new Image( getClass().getResourceAsStream("resources/sudoku_title.png") );
         ImageView title = new ImageView( titleImage );
         title.setPreserveRatio( true );
         title.setFitWidth( 500 );
-        window.getChildren().add(title);
 
         TilePane options = new TilePane();
-        options.setPrefColumns(3);
-        options.setPrefRows(3);
+        options.setPrefColumns( 3 );
+        options.setPrefRows( 3 );
+
+        HBox horizontalOptionSpacing = new HBox();
+        horizontalOptionSpacing.setSpacing( 50 );
+        Label leftOptionSpacing = new Label();
+        Label rightOptionSpacing = new Label();
         Image image = new Image( getClass().getResourceAsStream("resources/frame.png") );
         BackgroundImage optionsBackground = new BackgroundImage( image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,
-                new BackgroundSize( 500, 500, false, false, true, true ) );
-        options.setBackground( new Background( optionsBackground ) );
-        window.getChildren().add(options);
+                new BackgroundSize( 490, 490, false, false, true, true ) );
+        horizontalOptionSpacing.setBackground( new Background( optionsBackground ) );
+
+        VBox verticalOptionSpacing = new VBox();
+        verticalOptionSpacing.setSpacing( 35 );
+        Label topOptionSpacing = new Label();
+        Label bottomOptionSpacing = new Label();
+        verticalOptionSpacing.getChildren().addAll( topOptionSpacing, options, bottomOptionSpacing );
+
+        horizontalOptionSpacing.getChildren().addAll( leftOptionSpacing, verticalOptionSpacing, rightOptionSpacing );
+        window.getChildren().addAll( topWindowSpacing, title, centerSpacing, centerSpacing2,
+                horizontalOptionSpacing, bottomWindowSpacing );
 
         //blank squares
         Button option2 = new Button();
@@ -179,29 +201,29 @@ public class SudokuGUI extends Application implements Observer{
         setButtonBackground( option6, "gray.png" );
         setButtonBackground( option8, "gray.png" );
 
+        Button about = new Button("About");
+        about.setOnAction(e -> setAboutScreen(stage));
+        setButtonBackground( about, "white.png" );
+        about.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+
         Button help = new Button("Help");
         help.setOnAction(e -> setHelpScreen(stage));
         setButtonBackground( help, "white.png" );
-        help.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
+        help.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
 
         Button start = new Button("Play");
         start.setOnAction(e -> setDifficultySelectionScreen(stage));
         setButtonBackground( start, "white.png" );
-        start.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
-
-        Button about = new Button("About");
-        about.setOnAction(e -> setAboutScreen(stage));
-        setButtonBackground( about, "white.png" );
-        about.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
+        start.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
 
         Button donate = new Button("Donate");
         setButtonBackground( donate, "white.png" );
-        donate.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
+        donate.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
 
         Button quit = new Button("Quit");
         quit.setOnAction(e -> System.exit(0));
         setButtonBackground( quit, "white.png" );
-        quit.setFont( Font.loadFont("file:src/gui/resources/bonzai.ttf", 30) );
+        quit.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
 
         options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
 
@@ -352,6 +374,7 @@ public class SudokuGUI extends Application implements Observer{
         setMenuScreen(stage);
         stage.setTitle("Sudoku");
         stage.show();
+        stage.setResizable( false );
     }
 
     @Override
