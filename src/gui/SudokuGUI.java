@@ -139,21 +139,32 @@ public class SudokuGUI extends Application implements Observer{
      * @param stage - The stage to set up
      */
     private void setMenuScreen(Stage stage){
-        HBox horizontalWindowSpacing = new HBox();
-        horizontalWindowSpacing.setSpacing( 20 );
-        Label leftWindowSpacing = new Label();
-        Label rightWindowSpacing = new Label();
+
+
+
+
+
+
+
+        //todo - unhardcode all 'spacing' attempts
+
+
+
+
+
+
+
+
+        VBox window = new VBox();
+        window.setSpacing( 25 );
+        window.setAlignment( Pos.CENTER );
         Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
-        horizontalWindowSpacing.setBackground( new Background(BI) );
+        window.setBackground( new Background(BI) );
+        Scene scene = new Scene( window );
 
-        VBox window = new VBox();
-        window.setSpacing( 25 );
-
-        horizontalWindowSpacing.getChildren().addAll( leftWindowSpacing, window, rightWindowSpacing );
-        Scene scene = new Scene( horizontalWindowSpacing );
 
         Label topWindowSpacing = new Label();
         Label centerSpacing = new Label();
@@ -173,7 +184,7 @@ public class SudokuGUI extends Application implements Observer{
         horizontalOptionSpacing.setSpacing( 50 );
         Label leftOptionSpacing = new Label();
         Label rightOptionSpacing = new Label();
-        Image image = new Image( getClass().getResourceAsStream("resources/frame.png") );
+        Image image = new Image( getClass().getResourceAsStream("resources/grid.png") );
         BackgroundImage optionsBackground = new BackgroundImage( image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
@@ -251,16 +262,87 @@ public class SudokuGUI extends Application implements Observer{
      * @param stage - The stage to set the selection screen on
      */
     private void setDifficultySelectionScreen(Stage stage){
-        try{
-            //todo - choose dificulty window here
-            this.filename = "easy";
-            this.model = new SudokuModel(this.filename);
-        }catch(FileNotFoundException fnfe){
-            System.out.println(fnfe.getMessage());
-            System.exit(-1);
-        }
-        this.model.addObserver(this);
-        setPuzzleSelectionScreen(stage);
+        VBox difficulties = new VBox();
+        difficulties.setSpacing( 44 );
+        difficulties.setAlignment( Pos.CENTER );
+        Scene scene = new Scene( difficulties );
+
+        Label topSpacing = new Label();
+        Label bottomSpacing = new Label();
+
+        Button superEasy = new Button("Super Easy");
+        superEasy.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+        superEasy.setOnAction(e -> {
+            try{
+                this.filename = "super_easy";
+                this.model = new SudokuModel(this.filename);
+            }catch(FileNotFoundException fnfe){
+                System.out.println(fnfe.getMessage());
+                System.exit(-1);
+            }
+            this.model.addObserver(this);
+            setPuzzleSelectionScreen(stage);
+        });
+
+        Button easy = new Button("Easy");
+        easy.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+        easy.setOnAction(e -> {
+            try{
+                this.filename = "easy";
+                this.model = new SudokuModel(this.filename);
+            }catch(FileNotFoundException fnfe){
+                System.out.println(fnfe.getMessage());
+                System.exit(-1);
+            }
+            this.model.addObserver(this);
+            setPuzzleSelectionScreen(stage);
+        });
+
+        Button normal = new Button("Normal");
+        normal.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+        normal.setOnAction(e -> {
+            try{
+                this.filename = "normal";
+                this.model = new SudokuModel(this.filename);
+            }catch(FileNotFoundException fnfe){
+                System.out.println(fnfe.getMessage());
+                System.exit(-1);
+            }
+            this.model.addObserver(this);
+            setPuzzleSelectionScreen(stage);
+        });
+
+        Button hard = new Button("Hard");
+        hard.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+        hard.setOnAction(e -> {
+            try{
+                this.filename = "hard";
+                this.model = new SudokuModel(this.filename);
+            }catch(FileNotFoundException fnfe){
+                System.out.println(fnfe.getMessage());
+                System.exit(-1);
+            }
+            this.model.addObserver(this);
+            setPuzzleSelectionScreen(stage);
+        });
+
+        Button extreme = new Button("Extreme");
+        extreme.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+        extreme.setOnAction(e -> {
+            try{
+                this.filename = "extreme";
+                this.model = new SudokuModel(this.filename);
+            }catch(FileNotFoundException fnfe){
+                System.out.println(fnfe.getMessage());
+                System.exit(-1);
+            }
+            this.model.addObserver(this);
+            setPuzzleSelectionScreen(stage);
+        });
+
+        difficulties.getChildren().addAll( topSpacing, superEasy, easy, normal, hard, extreme, bottomSpacing );
+
+        stage.setScene( scene );
     }
 
     /**
@@ -375,6 +457,7 @@ public class SudokuGUI extends Application implements Observer{
         stage.setTitle("Sudoku");
         stage.show();
         stage.setResizable( false );
+        stage.getIcons().add( new Image( getClass().getResourceAsStream("resources/icon.png") ) );//todo - decide
     }
 
     @Override
