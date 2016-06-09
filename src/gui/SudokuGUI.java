@@ -123,7 +123,7 @@ public class SudokuGUI extends Application implements Observer{
      * @param button the button who's background will be set
      * @param bgImgName the name of the image file to be used as a background
      */
-    private void setButtonBackground(Button button, String bgImgName){
+    private void setButtonBackground(Button button, String bgImgName){//
         BackgroundImage backgroundImage = new BackgroundImage(
                 new Image( getClass().getResourceAsStream("resources/" + bgImgName) ),
                 BackgroundRepeat.NO_REPEAT,
@@ -131,7 +131,7 @@ public class SudokuGUI extends Application implements Observer{
                 BackgroundPosition.CENTER,
                 new BackgroundSize(100, 100, true, true, true, true) );
         Background background = new Background(backgroundImage);
-        button.setBackground(background);
+        button.setBackground(background); //todo - remove this function and it's dependents
     }
 
     /**
@@ -147,6 +147,7 @@ public class SudokuGUI extends Application implements Observer{
 
 
         //todo - unhardcode all 'spacing' attempts
+        //todo - crop one bamboo stalk from horizontal length to squarify it all and redraw lines
 
 
 
@@ -154,10 +155,7 @@ public class SudokuGUI extends Application implements Observer{
 
 
 
-
-        VBox window = new VBox();
-        window.setSpacing( 25 );
-        window.setAlignment( Pos.CENTER );
+        BorderPane window = new BorderPane();
         Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
@@ -165,42 +163,28 @@ public class SudokuGUI extends Application implements Observer{
         window.setBackground( new Background(BI) );
         Scene scene = new Scene( window );
 
-
-        Label topWindowSpacing = new Label();
-        Label centerSpacing = new Label();
-        Label centerSpacing2 = new Label();
-        Label bottomWindowSpacing = new Label();
-
         Image titleImage = new Image( getClass().getResourceAsStream("resources/sudoku_title.png") );
         ImageView title = new ImageView( titleImage );
         title.setPreserveRatio( true );
         title.setFitWidth( 500 );
+        window.setTop( title );
+        BorderPane.setAlignment( title, Pos.CENTER );
+        BorderPane.setMargin( title, new Insets( 35, 35, 35, 35 ) );
 
         TilePane options = new TilePane();
         options.setPrefColumns( 3 );
         options.setPrefRows( 3 );
+        BorderPane.setAlignment( options, Pos.CENTER );
+        BorderPane.setMargin( options, new Insets( 35, 35, 35, 35 ) );
 
-        HBox horizontalOptionSpacing = new HBox();
-        horizontalOptionSpacing.setSpacing( 50 );
-        Label leftOptionSpacing = new Label();
-        Label rightOptionSpacing = new Label();
         Image image = new Image( getClass().getResourceAsStream("resources/grid.png") );
         BackgroundImage optionsBackground = new BackgroundImage( image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,
                 new BackgroundSize( 490, 490, false, false, true, true ) );
-        horizontalOptionSpacing.setBackground( new Background( optionsBackground ) );
-
-        VBox verticalOptionSpacing = new VBox();
-        verticalOptionSpacing.setSpacing( 35 );
-        Label topOptionSpacing = new Label();
-        Label bottomOptionSpacing = new Label();
-        verticalOptionSpacing.getChildren().addAll( topOptionSpacing, options, bottomOptionSpacing );
-
-        horizontalOptionSpacing.getChildren().addAll( leftOptionSpacing, verticalOptionSpacing, rightOptionSpacing );
-        window.getChildren().addAll( topWindowSpacing, title, centerSpacing, centerSpacing2,
-                horizontalOptionSpacing, bottomWindowSpacing );
+        options.setBackground( new Background( optionsBackground ) );
+        window.setBottom( options );
 
         //blank squares
         Button option2 = new Button();
@@ -238,6 +222,8 @@ public class SudokuGUI extends Application implements Observer{
 
         options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
 
+        stage.setHeight(500);
+        stage.setWidth(700);
         stage.setScene(scene);
     }
 
@@ -455,9 +441,8 @@ public class SudokuGUI extends Application implements Observer{
     public void start(Stage stage) throws Exception{
         setMenuScreen(stage);
         stage.setTitle("Sudoku");
+        stage.getIcons().add( new Image( getClass().getResourceAsStream("resources/icon.png") ) );
         stage.show();
-        stage.setResizable( false );
-        stage.getIcons().add( new Image( getClass().getResourceAsStream("resources/icon.png") ) );//todo - decide
     }
 
     @Override
