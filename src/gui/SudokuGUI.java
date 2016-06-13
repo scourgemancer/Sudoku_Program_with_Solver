@@ -1,10 +1,20 @@
 package gui;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.util.Duration;
+import model.SudokuModel;
+
+import com.sun.glass.ui.Screen;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
-import model.SudokuModel;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,7 +35,6 @@ import java.util.Observer;
 //todo - original numbers are black and placed numbers are blue
 //todo - selecting a number option highlights all squares of that option (if all filled make the num option green)
 //todo - difficulty selection highlight animates it's movement between difficulties
-//todo - make a home menu (have it resemble an inner square)
 //todo - highlighting a numbered square will make simliar numbered squares have yellow text and all boxes that matter to it get highlightedish
 //todo - combine isGoal and isValid into Check and it says how many are left if isValid but not isGoal
 //todo - have the given numbers be grayed out and not be instantiated as the private class (make a gray.png)
@@ -134,27 +143,26 @@ public class SudokuGUI extends Application implements Observer{
         button.setBackground(background); //todo - remove this function and it's dependents
     }
 
+    /** Utility function to set the size of a button */
+    private void setSize( Region reg, double width, double height ){
+        reg.setMaxSize( width, height );
+        reg.setMinSize( width, height );
+        reg.setPrefSize( width, height );
+    }
+
+    /** Utility function to set the style of a button */
+    private void styleButton( Button button ){
+        button.setStyle("-fx-background-color: transparent;");
+        button.setOnMouseEntered(e ->  button.setStyle("-fx-background-color: grey;") );
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: transparent;") );
+        button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+    }
+
     /**
      * Sets up the starting menu screen
      * @param stage - The stage to set up
      */
     private void setMenuScreen(Stage stage){
-
-
-
-
-
-
-
-        //todo - unhardcode all 'spacing' attempts
-        //todo - crop one bamboo stalk from horizontal length to squarify it all and redraw lines
-
-
-
-
-
-
-
         BorderPane window = new BorderPane();
         Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
         BackgroundImage BI = new BackgroundImage(img,
@@ -166,64 +174,72 @@ public class SudokuGUI extends Application implements Observer{
         Image titleImage = new Image( getClass().getResourceAsStream("resources/sudoku_title.png") );
         ImageView title = new ImageView( titleImage );
         title.setPreserveRatio( true );
-        title.setFitWidth( 500 );
+        title.setFitWidth( 2.0 * stage.getWidth() / 3.0 );
+        BorderPane.setMargin( title, new Insets( 0.05 * stage.getHeight(), 0, 0, 0 ) );
         window.setTop( title );
         BorderPane.setAlignment( title, Pos.CENTER );
-        BorderPane.setMargin( title, new Insets( 35, 35, 35, 35 ) );
 
         TilePane options = new TilePane();
         options.setPrefColumns( 3 );
-        options.setPrefRows( 3 );
-        BorderPane.setAlignment( options, Pos.CENTER );
-        BorderPane.setMargin( options, new Insets( 35, 35, 35, 35 ) );
+        double squareDim = stage.getWidth() * 17.0 / 22.0 ;
+        setSize( options, squareDim, squareDim );
+
+        //the sizes for each of the option buttons
+        //todo - bamboo widths: 59left 57right 53top 52bottom 456horizontal 402vertical
+        double width = ( squareDim - options.getHgap()*3.0 - squareDim*((59.0 + 57.0) / 456.0) ) / 3.0;
+        double height = ( squareDim - options.getVgap()*3.0 - squareDim*((53.0 + 52.0) / 402.0) ) / 3.0;
+
+        //blank squares
+        Label option2 = new Label();
+        Label option4 = new Label();
+        Label option6 = new Label();
+        Label option8 = new Label();
+        setSize( option2, width, height );
+        setSize( option4, width, height );
+        setSize( option6, width, height );
+        setSize( option8, width, height );
+
+        Button about = new Button("About");
+        about.setOnAction(e -> setAboutScreen(stage));
+        styleButton( about );
+        setSize( about, width, height );
+
+        Button help = new Button("Help");
+        help.setOnAction(e -> setHelpScreen(stage));
+        styleButton( help );
+        setSize( help, width, height );
+
+        Button start = new Button("Play");
+        start.setOnAction(e -> setDifficultySelectionScreen(stage));
+        styleButton( start );
+        setSize( start, width, height );
+
+        Button donate = new Button("Donate");
+        //todo
+        styleButton( donate );
+        setSize( donate, width, height );
+
+        Button quit = new Button("Quit");
+        quit.setOnAction(e -> Platform.exit());
+        styleButton( quit );
+        setSize( quit, width, height );
 
         Image image = new Image( getClass().getResourceAsStream("resources/grid.png") );
         BackgroundImage optionsBackground = new BackgroundImage( image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,
-                new BackgroundSize( 490, 490, false, false, true, true ) );
+                new BackgroundSize( 100, 100, true, true, true, false ) );
         options.setBackground( new Background( optionsBackground ) );
-        window.setBottom( options );
 
-        //blank squares
-        Button option2 = new Button();
-        Button option4 = new Button();
-        Button option6 = new Button();
-        Button option8 = new Button();
-        setButtonBackground( option2, "gray.png" );
-        setButtonBackground( option4, "gray.png" );
-        setButtonBackground( option6, "gray.png" );
-        setButtonBackground( option8, "gray.png" );
-
-        Button about = new Button("About");
-        about.setOnAction(e -> setAboutScreen(stage));
-        setButtonBackground( about, "white.png" );
-        about.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-
-        Button help = new Button("Help");
-        help.setOnAction(e -> setHelpScreen(stage));
-        setButtonBackground( help, "white.png" );
-        help.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-
-        Button start = new Button("Play");
-        start.setOnAction(e -> setDifficultySelectionScreen(stage));
-        setButtonBackground( start, "white.png" );
-        start.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-
-        Button donate = new Button("Donate");
-        setButtonBackground( donate, "white.png" );
-        donate.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-
-        Button quit = new Button("Quit");
-        quit.setOnAction(e -> System.exit(0));
-        setButtonBackground( quit, "white.png" );
-        quit.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+        options.setPadding( new Insets( //so the buttons don't go over the bamboo stalks
+                (53.0 / 402.0) * options.getPrefHeight(), (57.0 / 456.0) * options.getPrefWidth(),
+                (52.0 / 402.0) * options.getPrefHeight(), (59.0 / 456.0) * options.getPrefWidth() ) );
 
         options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
+        window.setBottom( options );
+        BorderPane.setAlignment( options, Pos.CENTER );
 
-        stage.setHeight(500);
-        stage.setWidth(700);
         stage.setScene(scene);
     }
 
@@ -439,6 +455,9 @@ public class SudokuGUI extends Application implements Observer{
 
     @Override
     public void start(Stage stage) throws Exception{
+        stage.setHeight( Screen.getMainScreen().getHeight() * 7 / 8 );
+        stage.setWidth( Screen.getMainScreen().getWidth() / 2 );
+        stage.setResizable( false ); //todo - takes too much time for now, and would only be for desktop anyway
         setMenuScreen(stage);
         stage.setTitle("Sudoku");
         stage.getIcons().add( new Image( getClass().getResourceAsStream("resources/icon.png") ) );
