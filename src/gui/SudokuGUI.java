@@ -1,18 +1,12 @@
 package gui;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.scene.paint.Paint;
-import javafx.util.Duration;
+import javafx.scene.Cursor;
+import javafx.scene.paint.Color;
 import model.SudokuModel;
 
 import com.sun.glass.ui.Screen;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
@@ -152,11 +146,33 @@ public class SudokuGUI extends Application implements Observer{
     }
 
     /** Utility function to set the style of a button */
-    private void styleButton( Button button, double width ){
-        button.setStyle("-fx-background-color: transparent;");
-        button.setOnMouseEntered(e ->  button.setStyle("-fx-background-color: grey;") );
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: transparent;") );
-        button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 5 ) );
+    private void styleButton( Button button, double width, Stage stage ){
+        button.setBackground( new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)) );
+        button.setOnMouseEntered(e -> {
+            button.setBackground( new Background(
+                    new BackgroundFill(Color.valueOf("#c6ac60"), new CornerRadii(5.0), Insets.EMPTY)) );
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    stage.getScene().setCursor( Cursor.HAND );
+                }
+            });
+        });
+        button.setOnMouseExited(e -> {
+            button.setBackground(new Background(
+                    new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    stage.getScene().setCursor(Cursor.DEFAULT);
+                }
+            });
+        });
+        if(button.getText().length() > 5){
+            button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 5 ) );
+        }else{
+            button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 4 ) );
+        }
         button.setEllipsisString("");
     }
 
@@ -187,9 +203,8 @@ public class SudokuGUI extends Application implements Observer{
         setSize( options, squareDim, squareDim );
 
         //the sizes for each of the option buttons
-        //todo - bamboo widths: 59left 57right 53top 52bottom 456horizontal 402vertical
-        double width = ( squareDim -  squareDim*((59.0 + 57.0) / 456.0) ) / 3.0 - 1;
-        double height = ( squareDim - squareDim*((53.0 + 52.0) / 402.0) ) / 3.0;
+        double width = squareDim * (340.0 / 456.0) / 3.0;
+        double height = squareDim * ( (297.0 / 402.0) / 3.0 ) - (stage.getHeight() / 100)*3 + 2;
 
         //blank squares
         Label option2 = new Label();
@@ -203,27 +218,27 @@ public class SudokuGUI extends Application implements Observer{
 
         Button about = new Button("About");
         about.setOnAction(e -> setAboutScreen(stage));
-        styleButton( about, width );
+        styleButton( about, width, stage );
         setSize( about, width, height );
 
         Button help = new Button("Help");
         help.setOnAction(e -> setHelpScreen(stage));
-        styleButton( help, width );
+        styleButton( help, width, stage );
         setSize( help, width, height );
 
         Button start = new Button("Play");
         start.setOnAction(e -> setDifficultySelectionScreen(stage));
-        styleButton( start, width );
+        styleButton( start, width, stage );
         setSize( start, width, height );
 
         Button donate = new Button("Donate");
         //todo
-        styleButton( donate, width );
+        styleButton( donate, width, stage );
         setSize( donate, width, height );
 
         Button quit = new Button("Quit");
         quit.setOnAction(e -> Platform.exit());
-        styleButton( quit, width );
+        styleButton( quit, width, stage );
         setSize( quit, width, height );
 
         Image image = new Image( getClass().getResourceAsStream("resources/frame.png") );
@@ -231,11 +246,11 @@ public class SudokuGUI extends Application implements Observer{
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.DEFAULT,
-                new BackgroundSize( 100, 100, true, true, true, false ) );  
+                new BackgroundSize( 100, 100, true, true, true, false ) );
         options.setBackground( new Background( optionsBackground ) );
 
         options.setPadding( new Insets( //so the buttons don't go over the bamboo stalks
-                (53.0 / 402.0) * squareDim, (57.0 / 456.0) * squareDim,
+                (51.0 / 402.0) * squareDim, (57.0 / 456.0) * squareDim,
                 (52.0 / 402.0) * squareDim, (59.0 / 456.0) * squareDim ) );
 
         options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
@@ -437,10 +452,6 @@ public class SudokuGUI extends Application implements Observer{
         BorderPane.setMargin(centering, new Insets(0, 11.25, 0, 0));
 
         stage.setScene(scene);
-        stage.setMaxWidth(450);
-        stage.setMinHeight(440);
-        stage.setMaxHeight(500);
-        stage.setResizable(false);
         switch(model.filename){
             case "super_easy":
                 stage.setTitle("Super Easy Sudoku puzzle #" + model.lineNumber);
