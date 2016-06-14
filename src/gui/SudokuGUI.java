@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import model.SudokuModel;
 
@@ -151,11 +152,12 @@ public class SudokuGUI extends Application implements Observer{
     }
 
     /** Utility function to set the style of a button */
-    private void styleButton( Button button ){
+    private void styleButton( Button button, double width ){
         button.setStyle("-fx-background-color: transparent;");
         button.setOnMouseEntered(e ->  button.setStyle("-fx-background-color: grey;") );
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: transparent;") );
-        button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+        button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 5 ) );
+        button.setEllipsisString("");
     }
 
     /**
@@ -181,13 +183,13 @@ public class SudokuGUI extends Application implements Observer{
 
         TilePane options = new TilePane();
         options.setPrefColumns( 3 );
-        double squareDim = stage.getWidth() * 17.0 / 22.0 ;
+        double squareDim = ( stage.getHeight() - title.getFitHeight() ) * (35.0/48.0);
         setSize( options, squareDim, squareDim );
 
         //the sizes for each of the option buttons
         //todo - bamboo widths: 59left 57right 53top 52bottom 456horizontal 402vertical
-        double width = ( squareDim - options.getHgap()*3.0 - squareDim*((59.0 + 57.0) / 456.0) ) / 3.0;
-        double height = ( squareDim - options.getVgap()*3.0 - squareDim*((53.0 + 52.0) / 402.0) ) / 3.0;
+        double width = ( squareDim -  squareDim*((59.0 + 57.0) / 456.0) ) / 3.0 - 1;
+        double height = ( squareDim - squareDim*((53.0 + 52.0) / 402.0) ) / 3.0;
 
         //blank squares
         Label option2 = new Label();
@@ -201,44 +203,46 @@ public class SudokuGUI extends Application implements Observer{
 
         Button about = new Button("About");
         about.setOnAction(e -> setAboutScreen(stage));
-        styleButton( about );
+        styleButton( about, width );
         setSize( about, width, height );
 
         Button help = new Button("Help");
         help.setOnAction(e -> setHelpScreen(stage));
-        styleButton( help );
+        styleButton( help, width );
         setSize( help, width, height );
 
         Button start = new Button("Play");
         start.setOnAction(e -> setDifficultySelectionScreen(stage));
-        styleButton( start );
+        styleButton( start, width );
         setSize( start, width, height );
 
         Button donate = new Button("Donate");
         //todo
-        styleButton( donate );
+        styleButton( donate, width );
         setSize( donate, width, height );
 
         Button quit = new Button("Quit");
         quit.setOnAction(e -> Platform.exit());
-        styleButton( quit );
+        styleButton( quit, width );
         setSize( quit, width, height );
 
-        Image image = new Image( getClass().getResourceAsStream("resources/grid.png") );
+        Image image = new Image( getClass().getResourceAsStream("resources/frame.png") );
         BackgroundImage optionsBackground = new BackgroundImage( image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                new BackgroundSize( 100, 100, true, true, true, false ) );
+                BackgroundPosition.DEFAULT,
+                new BackgroundSize( 100, 100, true, true, true, false ) );  
         options.setBackground( new Background( optionsBackground ) );
 
         options.setPadding( new Insets( //so the buttons don't go over the bamboo stalks
-                (53.0 / 402.0) * options.getPrefHeight(), (57.0 / 456.0) * options.getPrefWidth(),
-                (52.0 / 402.0) * options.getPrefHeight(), (59.0 / 456.0) * options.getPrefWidth() ) );
+                (53.0 / 402.0) * squareDim, (57.0 / 456.0) * squareDim,
+                (52.0 / 402.0) * squareDim, (59.0 / 456.0) * squareDim ) );
 
         options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
         window.setBottom( options );
         BorderPane.setAlignment( options, Pos.CENTER );
+        BorderPane.setMargin( options, new Insets(
+                ( stage.getHeight() - squareDim - title.getFitHeight() ) / 8, 0, 0, 0 ) );
 
         stage.setScene(scene);
     }
@@ -249,6 +253,8 @@ public class SudokuGUI extends Application implements Observer{
      */
     private void setHelpScreen(Stage stage){
         //todo
+        //stage.minWidthProperty().bind(scene.heightProperty());
+        //stage.minHeightProperty().bind(scene.widthProperty());
     }
 
     /**
@@ -257,6 +263,8 @@ public class SudokuGUI extends Application implements Observer{
      */
     private void setAboutScreen(Stage stage){
         //todo
+        //stage.minWidthProperty().bind(scene.heightProperty());
+        //stage.minHeightProperty().bind(scene.widthProperty());
     }
 
     /**
@@ -344,6 +352,8 @@ public class SudokuGUI extends Application implements Observer{
 
         difficulties.getChildren().addAll( topSpacing, superEasy, easy, normal, hard, extreme, bottomSpacing );
 
+        stage.minWidthProperty().bind(scene.heightProperty());
+        stage.minHeightProperty().bind(scene.widthProperty());
         stage.setScene( scene );
     }
 
@@ -353,6 +363,8 @@ public class SudokuGUI extends Application implements Observer{
      */
     private void setPuzzleSelectionScreen(Stage stage){
         //todo
+        //stage.minWidthProperty().bind(scene.heightProperty());
+        //stage.minHeightProperty().bind(scene.widthProperty());
         setGameScreen(stage);
     }
 
@@ -451,13 +463,15 @@ public class SudokuGUI extends Application implements Observer{
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
         window.setBackground( new Background(BI) );
+
+        stage.minWidthProperty().bind(scene.heightProperty());
+        stage.minHeightProperty().bind(scene.widthProperty());
     }
 
     @Override
     public void start(Stage stage) throws Exception{
         stage.setHeight( Screen.getMainScreen().getHeight() * 7 / 8 );
         stage.setWidth( Screen.getMainScreen().getWidth() / 2 );
-        stage.setResizable( false ); //todo - takes too much time for now, and would only be for desktop anyway
         setMenuScreen(stage);
         stage.setTitle("Sudoku");
         stage.getIcons().add( new Image( getClass().getResourceAsStream("resources/icon.png") ) );
