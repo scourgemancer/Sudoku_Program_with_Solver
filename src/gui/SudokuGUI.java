@@ -145,12 +145,20 @@ public class SudokuGUI extends Application implements Observer{
         reg.setPrefSize( width, height );
     }
 
-    /** Utility function to set the style of a button */
-    private void styleButton( Button button, double width, Stage stage ){
+    /** Utility function to set the style of a main menu option button */
+    private void styleOptionButton( Button button, double width, Stage stage ){
+        if(button.getText().length() > 5){
+            button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 5 ) );
+        }else{
+            button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 4 ) );
+        }
+        button.setEllipsisString("");
+
+        //the rest is all for a 'hover-over' background color change
         button.setBackground( new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)) );
         button.setOnMouseEntered(e -> {
             button.setBackground( new Background(
-                    new BackgroundFill(Color.valueOf("#c6ac60"), new CornerRadii(5.0), Insets.EMPTY)) );
+                    new BackgroundFill(Color.valueOf("#F4F9FF"), new CornerRadii(5.0), Insets.EMPTY)) );
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -168,12 +176,38 @@ public class SudokuGUI extends Application implements Observer{
                 }
             });
         });
-        if(button.getText().length() > 5){
-            button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 5 ) );
-        }else{
-            button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 4 ) );
-        }
-        button.setEllipsisString("");
+    }
+
+    /** Utility function to set the style of a difficulty selection button */
+    private void styleDifficultyButton( Button button, String difficulty, Stage stage ){
+        button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+        button.setOnAction(e -> {
+            try{
+                this.filename = difficulty;
+                this.model = new SudokuModel(this.filename);
+            }catch(FileNotFoundException fnfe){
+                System.out.println(fnfe.getMessage());
+                System.exit(-1);
+            }
+            this.model.addObserver(this);
+            setPuzzleSelectionScreen(stage);
+        });
+        button.setOnMouseEntered(e -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    stage.getScene().setCursor( Cursor.HAND );
+                }
+            });
+        });
+        button.setOnMouseExited(e -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    stage.getScene().setCursor(Cursor.DEFAULT);
+                }
+            });
+        });
     }
 
     /**
@@ -218,27 +252,27 @@ public class SudokuGUI extends Application implements Observer{
 
         Button about = new Button("About");
         about.setOnAction(e -> setAboutScreen(stage));
-        styleButton( about, width, stage );
+        styleOptionButton( about, width, stage );
         setSize( about, width, height );
 
         Button help = new Button("Help");
         help.setOnAction(e -> setHelpScreen(stage));
-        styleButton( help, width, stage );
+        styleOptionButton( help, width, stage );
         setSize( help, width, height );
 
         Button start = new Button("Play");
         start.setOnAction(e -> setDifficultySelectionScreen(stage));
-        styleButton( start, width, stage );
+        styleOptionButton( start, width, stage );
         setSize( start, width, height );
 
         Button donate = new Button("Donate");
-        //todo
-        styleButton( donate, width, stage );
+        donate.setOnAction(e -> getHostServices().showDocument( "https://www.paypal.me/TimGeary" ) );
+        styleOptionButton( donate, width, stage );
         setSize( donate, width, height );
 
         Button quit = new Button("Quit");
         quit.setOnAction(e -> Platform.exit());
-        styleButton( quit, width, stage );
+        styleOptionButton( quit, width, stage );
         setSize( quit, width, height );
 
         Image image = new Image( getClass().getResourceAsStream("resources/frame.png") );
@@ -268,8 +302,6 @@ public class SudokuGUI extends Application implements Observer{
      */
     private void setHelpScreen(Stage stage){
         //todo
-        //stage.minWidthProperty().bind(scene.heightProperty());
-        //stage.minHeightProperty().bind(scene.widthProperty());
     }
 
     /**
@@ -278,8 +310,6 @@ public class SudokuGUI extends Application implements Observer{
      */
     private void setAboutScreen(Stage stage){
         //todo
-        //stage.minWidthProperty().bind(scene.heightProperty());
-        //stage.minHeightProperty().bind(scene.widthProperty());
     }
 
     /**
@@ -292,83 +322,32 @@ public class SudokuGUI extends Application implements Observer{
         difficulties.setAlignment( Pos.CENTER );
         Scene scene = new Scene( difficulties );
 
+        Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
+        BackgroundImage BI = new BackgroundImage(img,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
+                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
+        difficulties.setBackground( new Background(BI) );
+
         Label topSpacing = new Label();
         Label bottomSpacing = new Label();
 
         Button superEasy = new Button("Super Easy");
-        superEasy.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-        superEasy.setOnAction(e -> {
-            try{
-                this.filename = "super_easy";
-                this.model = new SudokuModel(this.filename);
-            }catch(FileNotFoundException fnfe){
-                System.out.println(fnfe.getMessage());
-                System.exit(-1);
-            }
-            this.model.addObserver(this);
-            setPuzzleSelectionScreen(stage);
-        });
+        styleDifficultyButton( superEasy, "super_easy", stage );
 
         Button easy = new Button("Easy");
-        easy.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-        easy.setOnAction(e -> {
-            try{
-                this.filename = "easy";
-                this.model = new SudokuModel(this.filename);
-            }catch(FileNotFoundException fnfe){
-                System.out.println(fnfe.getMessage());
-                System.exit(-1);
-            }
-            this.model.addObserver(this);
-            setPuzzleSelectionScreen(stage);
-        });
+        styleDifficultyButton( easy, "easy", stage );
 
         Button normal = new Button("Normal");
-        normal.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-        normal.setOnAction(e -> {
-            try{
-                this.filename = "normal";
-                this.model = new SudokuModel(this.filename);
-            }catch(FileNotFoundException fnfe){
-                System.out.println(fnfe.getMessage());
-                System.exit(-1);
-            }
-            this.model.addObserver(this);
-            setPuzzleSelectionScreen(stage);
-        });
+        styleDifficultyButton( normal, "normal", stage );
 
         Button hard = new Button("Hard");
-        hard.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-        hard.setOnAction(e -> {
-            try{
-                this.filename = "hard";
-                this.model = new SudokuModel(this.filename);
-            }catch(FileNotFoundException fnfe){
-                System.out.println(fnfe.getMessage());
-                System.exit(-1);
-            }
-            this.model.addObserver(this);
-            setPuzzleSelectionScreen(stage);
-        });
+        styleDifficultyButton( hard, "hard", stage );
 
         Button extreme = new Button("Extreme");
-        extreme.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-        extreme.setOnAction(e -> {
-            try{
-                this.filename = "extreme";
-                this.model = new SudokuModel(this.filename);
-            }catch(FileNotFoundException fnfe){
-                System.out.println(fnfe.getMessage());
-                System.exit(-1);
-            }
-            this.model.addObserver(this);
-            setPuzzleSelectionScreen(stage);
-        });
+        styleDifficultyButton( extreme, "extreme", stage );
 
         difficulties.getChildren().addAll( topSpacing, superEasy, easy, normal, hard, extreme, bottomSpacing );
 
-        stage.minWidthProperty().bind(scene.heightProperty());
-        stage.minHeightProperty().bind(scene.widthProperty());
         stage.setScene( scene );
     }
 
@@ -378,8 +357,6 @@ public class SudokuGUI extends Application implements Observer{
      */
     private void setPuzzleSelectionScreen(Stage stage){
         //todo
-        //stage.minWidthProperty().bind(scene.heightProperty());
-        //stage.minHeightProperty().bind(scene.widthProperty());
         setGameScreen(stage);
     }
 
@@ -474,9 +451,6 @@ public class SudokuGUI extends Application implements Observer{
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
         window.setBackground( new Background(BI) );
-
-        stage.minWidthProperty().bind(scene.heightProperty());
-        stage.minHeightProperty().bind(scene.widthProperty());
     }
 
     @Override
