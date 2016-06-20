@@ -235,8 +235,8 @@ public class SudokuGUI extends Application implements Observer{
         options.setPrefColumns( 3 );
         double squareDim = ( stage.getHeight() - title.getFitHeight() ) * (35.0/48.0);
         setSize( options, squareDim, squareDim );
-        options.setHgap( 5.5 );
-        options.setVgap( 5.5 );
+        options.setHgap( stage.getHeight() / 110.0 );
+        options.setVgap( stage.getWidth() / 110.0 );
 
         //the sizes for each of the option buttons
         double width = squareDim * (340.0 / 456.0) / 3.1;
