@@ -235,10 +235,12 @@ public class SudokuGUI extends Application implements Observer{
         options.setPrefColumns( 3 );
         double squareDim = ( stage.getHeight() - title.getFitHeight() ) * (35.0/48.0);
         setSize( options, squareDim, squareDim );
+        options.setHgap( 5.5 );
+        options.setVgap( 5.5 );
 
         //the sizes for each of the option buttons
-        double width = squareDim * (340.0 / 456.0) / 3.0;
-        double height = squareDim * ( (297.0 / 402.0) / 3.0 ) - (stage.getHeight() / 100)*3 + 2;
+        double width = squareDim * (340.0 / 456.0) / 3.1;
+        double height = squareDim * ( (297.0 / 402.0) / 3.1 ) - (stage.getHeight() / 100)*3 + 2;
 
         //blank squares
         Label option2 = new Label();
@@ -284,8 +286,10 @@ public class SudokuGUI extends Application implements Observer{
         options.setBackground( new Background( optionsBackground ) );
 
         options.setPadding( new Insets( //so the buttons don't go over the bamboo stalks
-                (51.0 / 402.0) * squareDim, (57.0 / 456.0) * squareDim,
-                (52.0 / 402.0) * squareDim, (59.0 / 456.0) * squareDim ) );
+                (51.0 / 402.0) * squareDim, //top
+                (57.0 / 456.0) * squareDim, //right
+                (52.0 / 402.0) * squareDim, //bottom
+                (59.0 / 456.0) * squareDim ) ); //left
 
         options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
         window.setBottom( options );
