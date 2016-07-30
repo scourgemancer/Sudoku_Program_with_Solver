@@ -1,7 +1,10 @@
 package gui;
 
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import model.SudokuModel;
 
@@ -37,6 +40,7 @@ import java.util.Observer;
 //todo - have an option to submit an answer and set off fireworks if it's correct
 //todo - allow scrawling small ints as personal reminders, 1 in top left, 9 bottom right, 4 middle left style
 //todo - play fireworks from ensemble upon successful solving, one firework if solved was used
+//todo: undo redo check hint solve, then restart newGame home; check is isValid and isGoal restart can keep calling undo
 
 /**
  * The view class that implements a JavaFX UI. This class represents both
@@ -54,8 +58,8 @@ public class SudokuGUI extends Application implements Observer{
     /** A 2d button matrix for the update method */
     private HashMap<Integer, ArrayList<numButton>> puzzle;
 
-    /** The provided filename */
-    private String filename;
+    /** The selected difficulty formatted as a filename */
+    private String difficulty;
 
     /** Lets the update function know if there's error highlighting to undo */
     private boolean recentError;
@@ -138,11 +142,31 @@ public class SudokuGUI extends Application implements Observer{
         button.setBackground(background); //todo - remove this function and it's dependents
     }
 
-    /** Utility function to set the size of a button */
+    /** Utility function to set the size of a region */
     private void setSize( Region reg, double width, double height ){
         reg.setMaxSize( width, height );
         reg.setMinSize( width, height );
         reg.setPrefSize( width, height );
+    }
+
+    /** Sets the mouse to close its hand over the region */
+    private void setMouseHover(Node node, Stage stage ){
+        node.setOnMouseEntered(e -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    stage.getScene().setCursor( Cursor.HAND );
+                }
+            });
+        });
+        node.setOnMouseExited(e -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    stage.getScene().setCursor(Cursor.DEFAULT);
+                }
+            });
+        });
     }
 
     /** Utility function to set the style of a main menu option button */
@@ -181,33 +205,16 @@ public class SudokuGUI extends Application implements Observer{
     /** Utility function to set the style of a difficulty selection button */
     private void styleDifficultyButton( Button button, String difficulty, Stage stage ){
         button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-        button.setOnAction(e -> {
-            try{
-                this.filename = difficulty;
-                this.model = new SudokuModel(this.filename);
-            }catch(FileNotFoundException fnfe){
-                System.out.println(fnfe.getMessage());
-                System.exit(-1);
-            }
-            this.model.addObserver(this);
-            setPuzzleSelectionScreen(stage);
-        });
-        button.setOnMouseEntered(e -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    stage.getScene().setCursor( Cursor.HAND );
-                }
-            });
-        });
-        button.setOnMouseExited(e -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    stage.getScene().setCursor(Cursor.DEFAULT);
-                }
-            });
-        });
+        button.setOnAction(e -> this.difficulty = difficulty);
+        button.setBackground( new Background(
+                new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+        setMouseHover( button, stage );
+    }
+
+    /** Animates a surrounding pane to move between two panes */
+    private void animateSelection(){
+        TranslateTransition animation = new TranslateTransition();
+        animation.setInterpolator( Interpolator.EASE_BOTH );
     }
 
     /**
@@ -321,8 +328,11 @@ public class SudokuGUI extends Application implements Observer{
      * @param stage - The stage to set the selection screen on
      */
     private void setDifficultySelectionScreen(Stage stage){
+        this.difficulty = "normal";
+
         VBox difficulties = new VBox();
-        difficulties.setSpacing( 44 );
+        difficulties.setSpacing( stage.getHeight() / 20 );
+        difficulties.setPadding( new Insets( stage.getHeight()/45, 0, 0, 0 ) );
         difficulties.setAlignment( Pos.CENTER );
         Scene scene = new Scene( difficulties );
 
@@ -331,9 +341,6 @@ public class SudokuGUI extends Application implements Observer{
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
         difficulties.setBackground( new Background(BI) );
-
-        Label topSpacing = new Label();
-        Label bottomSpacing = new Label();
 
         Button superEasy = new Button("Super Easy");
         styleDifficultyButton( superEasy, "super_easy", stage );
@@ -350,7 +357,37 @@ public class SudokuGUI extends Application implements Observer{
         Button extreme = new Button("Extreme");
         styleDifficultyButton( extreme, "extreme", stage );
 
-        difficulties.getChildren().addAll( topSpacing, superEasy, easy, normal, hard, extreme, bottomSpacing );
+        HBox options = new HBox();
+        options.setPadding( new Insets( 0, 0, 0, stage.getWidth()/20 ) );
+        options.setSpacing( 5*stage.getWidth()/8 );
+
+        Image backImage = new Image( getClass().getResourceAsStream("resources/back.png") );
+        ImageView back = new ImageView( backImage );
+        back.setPreserveRatio( true );
+        back.setFitHeight( stage.getHeight()/9 );
+        setMouseHover( back, stage );
+        back.setOnMouseClicked(e -> setMenuScreen(stage) );
+
+        Button select = new Button("Select");
+        setMouseHover( select, stage );
+        setSize( select, stage.getHeight()/8, stage.getHeight()/8 );
+        Image selectImage = new Image( getClass().getResourceAsStream("resources/frameSquarish.png") );
+        select.setBackground( new Background( new BackgroundImage( selectImage, BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize( 100, 100, true, true, true, false ) ) ) );
+        select.setOnAction(e -> {
+            try{
+                this.model = new SudokuModel(this.difficulty);
+            }catch(FileNotFoundException fnfe){
+                System.out.println(fnfe.getMessage());
+                System.exit(-1);
+            }
+            this.model.addObserver(this);
+            setPuzzleSelectionScreen(stage);
+        });
+
+        options.getChildren().addAll( back, select );
+        difficulties.getChildren().addAll( superEasy, easy, normal, hard, extreme, options );
 
         stage.setScene( scene );
     }
@@ -376,7 +413,7 @@ public class SudokuGUI extends Application implements Observer{
         BorderPane window = new BorderPane();
         Scene scene = new Scene(window);
 
-        Text status = new Text( filename.substring(0, 1).toUpperCase() + filename.substring(1) + " selected");
+        Text status = new Text( difficulty.substring(0, 1).toUpperCase() + difficulty.substring(1) + " selected");
         this.status = status;
         window.setTop(status);
         BorderPane.setAlignment(status, Pos.CENTER);
@@ -408,7 +445,7 @@ public class SudokuGUI extends Application implements Observer{
         Button restart = new Button("Restart");
         restart.setOnAction(e -> {
             //todo - do this
-            this.model.textout = filename + " has been reset";
+            this.model.textout = difficulty + " has been reset";
             this.model.announceChange();
         });
         Button newGame = new Button("New Game");
