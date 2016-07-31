@@ -6,6 +6,8 @@ import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
+
 import model.SudokuModel;
 
 import com.sun.glass.ui.Screen;
@@ -203,18 +205,23 @@ public class SudokuGUI extends Application implements Observer{
     }
 
     /** Utility function to set the style of a difficulty selection button */
-    private void styleDifficultyButton( Button button, String difficulty, Stage stage ){
+    private void styleDifficultyButton( Button button, String difficulty, Button target, Stage stage, ImageView frame ){
         button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
-        button.setOnAction(e -> this.difficulty = difficulty);
+        button.setOnAction(e -> {
+            this.difficulty = difficulty;
+            animateSelection( target, frame );
+        });
         button.setBackground( new Background(
                 new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         setMouseHover( button, stage );
     }
 
     /** Animates a surrounding pane to move between two panes */
-    private void animateSelection(){
-        TranslateTransition animation = new TranslateTransition();
+    private void animateSelection( Button target, ImageView frame ){
+        TranslateTransition animation = new TranslateTransition( Duration.seconds(5), frame );
         animation.setInterpolator( Interpolator.EASE_BOTH );
+        animation.setByY(20); //????????????????????????
+        animation.play();
     }
 
     /**
@@ -328,13 +335,12 @@ public class SudokuGUI extends Application implements Observer{
      * @param stage - The stage to set the selection screen on
      */
     private void setDifficultySelectionScreen(Stage stage){
-        this.difficulty = "normal";
-
         VBox difficulties = new VBox();
         difficulties.setSpacing( stage.getHeight() / 20 );
         difficulties.setPadding( new Insets( stage.getHeight()/45, 0, 0, 0 ) );
         difficulties.setAlignment( Pos.CENTER );
-        Scene scene = new Scene( difficulties );
+        StackPane holder = new StackPane( difficulties );
+        Scene scene = new Scene( holder );
 
         Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
         BackgroundImage BI = new BackgroundImage(img,
@@ -343,19 +349,23 @@ public class SudokuGUI extends Application implements Observer{
         difficulties.setBackground( new Background(BI) );
 
         Button superEasy = new Button("Super Easy");
-        styleDifficultyButton( superEasy, "super_easy", stage );
-
         Button easy = new Button("Easy");
-        styleDifficultyButton( easy, "easy", stage );
-
         Button normal = new Button("Normal");
-        styleDifficultyButton( normal, "normal", stage );
-
         Button hard = new Button("Hard");
-        styleDifficultyButton( hard, "hard", stage );
-
         Button extreme = new Button("Extreme");
-        styleDifficultyButton( extreme, "extreme", stage );
+
+        Image frameImage = new Image( getClass().getResourceAsStream("resources/transparentFrame.png") );
+        ImageView frame = new ImageView( frameImage );
+        holder.getChildren().add( frame );
+        frame.setFitHeight( stage.getHeight()/10 );
+        frame.setFitWidth( stage.getHeight()/3 );
+        this.difficulty = "normal";
+
+        styleDifficultyButton( superEasy, "super_easy", superEasy, stage, frame );
+        styleDifficultyButton( easy, "easy", easy, stage, frame );
+        styleDifficultyButton( normal, "normal", normal, stage, frame );
+        styleDifficultyButton( hard, "hard", hard, stage, frame );
+        styleDifficultyButton( extreme, "extreme", extreme, stage, frame );
 
         HBox options = new HBox();
         options.setPadding( new Insets( 0, 0, 0, stage.getWidth()/20 ) );
