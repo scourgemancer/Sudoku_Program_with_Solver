@@ -86,9 +86,8 @@ public class SudokuModel extends Observable{
         pos[1] = 0;
     }
 
-    /** Utility functions for help and display messages */
+    /** Utility functions for the help and display messages */
     public void setHelpMsg() { this.textout = helpmsg; announceChange();}
-
     public void printIt() {this.textout = ""; announceChange();}
 
     /**
