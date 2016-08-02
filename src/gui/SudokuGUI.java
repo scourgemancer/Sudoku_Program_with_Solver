@@ -218,7 +218,7 @@ public class SudokuGUI extends Application implements Observer{
 
     /** Animates a surrounding pane to move between two panes */
     private void animateSelection( Button target, ImageView frame ){
-        TranslateTransition animation = new TranslateTransition( Duration.millis(500), frame );
+        TranslateTransition animation = new TranslateTransition( Duration.millis(600), frame );
         animation.setInterpolator( Interpolator.EASE_BOTH );
         animation.setByY( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() -
                 frame.localToScene( frame.getBoundsInLocal(), false ).getMaxY() );
@@ -376,6 +376,7 @@ public class SudokuGUI extends Application implements Observer{
         ImageView back = new ImageView( backImage );
         back.setPreserveRatio( true );
         back.setFitHeight( stage.getHeight()/9 );
+        back.setPickOnBounds(true);
         setMouseHover( back, stage );
         back.setOnMouseClicked(e -> setMenuScreen(stage) );
 
