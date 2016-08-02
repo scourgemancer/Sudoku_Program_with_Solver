@@ -361,6 +361,7 @@ public class SudokuGUI extends Application implements Observer{
         frame.setFitHeight( stage.getHeight()/9 );
         frame.setFitWidth( stage.getHeight()/3 );
         this.difficulty = "normal";
+        frame.setTranslateY( - stage.getHeight() / 15 ); //this centers it on the normal difficulty
 
         styleDifficultyButton( superEasy, "super_easy", superEasy, stage, frame );
         styleDifficultyButton( easy, "easy", easy, stage, frame );
