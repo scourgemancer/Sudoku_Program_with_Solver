@@ -209,7 +209,7 @@ public class SudokuGUI extends Application implements Observer{
         button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
         button.setOnAction(e -> {
             this.difficulty = difficulty;
-            animateSelection( target, frame );
+            animateSelection( target, frame, stage );
         });
         button.setBackground( new Background(
                 new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -217,11 +217,11 @@ public class SudokuGUI extends Application implements Observer{
     }
 
     /** Animates a surrounding pane to move between two panes */
-    private void animateSelection( Button target, ImageView frame ){
+    private void animateSelection( Button target, ImageView frame, Stage stage ){
         TranslateTransition animation = new TranslateTransition( Duration.millis(600), frame );
         animation.setInterpolator( Interpolator.EASE_BOTH );
         animation.setByY( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() -
-                frame.localToScene( frame.getBoundsInLocal(), false ).getMaxY() );
+                frame.localToScene( frame.getBoundsInLocal(), false ).getMaxY() + stage.getHeight() / 100 );
         animation.play();
     }
 
@@ -358,7 +358,7 @@ public class SudokuGUI extends Application implements Observer{
         Image frameImage = new Image( getClass().getResourceAsStream("resources/transparentFrame.png") );
         ImageView frame = new ImageView( frameImage );
         holder.getChildren().add( frame );
-        frame.setFitHeight( stage.getHeight()/10 );
+        frame.setFitHeight( stage.getHeight()/9 );
         frame.setFitWidth( stage.getHeight()/3 );
         this.difficulty = "normal";
 
