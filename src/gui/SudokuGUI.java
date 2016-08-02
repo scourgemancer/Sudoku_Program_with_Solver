@@ -34,7 +34,6 @@ import java.util.Observer;
 //todo - select puzzle before playing it, let them cycle through all 10000 and keep count
 //todo - original numbers are black and placed numbers are blue
 //todo - selecting a number option highlights all squares of that option (if all filled make the num option green)
-//todo - difficulty selection highlight animates it's movement between difficulties
 //todo - highlighting a numbered square will make simliar numbered squares have yellow text and all boxes that matter to it get highlightedish
 //todo - combine isGoal and isValid into Check and it says how many are left if isValid but not isGoal
 //todo - have the given numbers be grayed out and not be instantiated as the private class (make a gray.png)
@@ -220,8 +219,14 @@ public class SudokuGUI extends Application implements Observer{
     private void animateSelection( Button target, ImageView frame, Stage stage ){
         TranslateTransition animation = new TranslateTransition( Duration.millis(600), frame );
         animation.setInterpolator( Interpolator.EASE_BOTH );
-        animation.setByY( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() -
-                frame.localToScene( frame.getBoundsInLocal(), false ).getMaxY() + stage.getHeight() / 100 );
+        //centers the difficulties with and without 'y' in them within the frame properly
+        if( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() < stage.getHeight() * 0.4 ){
+            animation.setByY( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() -
+                    frame.localToScene( frame.getBoundsInLocal(), false ).getMaxY() + stage.getHeight() / 100 );
+        }else{
+            animation.setByY( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() -
+                    frame.localToScene( frame.getBoundsInLocal(), false ).getMaxY() + stage.getHeight() / 150 );
+        }
         animation.play();
     }
 
@@ -282,7 +287,7 @@ public class SudokuGUI extends Application implements Observer{
         styleOptionButton( start, width, stage );
         setSize( start, width, height );
 
-        Button donate = new Button("Donate");
+        Button donate = new Button("Donate"); //TODO - Allow for GooglePay, Bitcoin, Dogecoin, etc
         donate.setOnAction(e -> getHostServices().showDocument( "https://www.paypal.me/TimGeary" ) );
         styleOptionButton( donate, width, stage );
         setSize( donate, width, height );
@@ -361,7 +366,7 @@ public class SudokuGUI extends Application implements Observer{
         frame.setFitHeight( stage.getHeight()/9 );
         frame.setFitWidth( stage.getHeight()/3 );
         this.difficulty = "normal";
-        frame.setTranslateY( - stage.getHeight() / 15 ); //this centers it on the normal difficulty
+        frame.setTranslateY( - stage.getHeight() / 14 ); //this centers it on the normal difficulty
 
         styleDifficultyButton( superEasy, "super_easy", superEasy, stage, frame );
         styleDifficultyButton( easy, "easy", easy, stage, frame );
