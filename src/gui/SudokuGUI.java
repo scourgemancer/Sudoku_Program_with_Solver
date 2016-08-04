@@ -42,6 +42,7 @@ import java.util.Observer;
 //todo - allow scrawling small ints as personal reminders, 1 in top left, 9 bottom right, 4 middle left style
 //todo - play fireworks from ensemble upon successful solving, one firework if solved was used
 //todo - remember to reset the stage's title after playing a game
+//todo - allow user to input their own puzzles
 //todo: undo redo check hint solve, then restart newGame home; check is isValid and isGoal restart can keep calling undo
 
 /**
@@ -411,10 +412,6 @@ public class SudokuGUI extends Application implements Observer{
         this.errorPos[0] = 0;
         this.errorPos[1] = 0;
 
-        VBox page = new VBox();
-        Scene scene = new Scene(page);
-        setBackground( page );
-
         Text status = new Text( difficulty.substring(0, 1).toUpperCase() + difficulty.substring(1) + " selected");
         this.status = status;
 
@@ -431,7 +428,6 @@ public class SudokuGUI extends Application implements Observer{
         }
         this.grid = puzzle;
 
-        FlowPane options = new FlowPane();
         Button undo = new Button("Undo");
         Button redo = new Button("Redo");
         Button check = new Button("Check");
@@ -442,6 +438,7 @@ public class SudokuGUI extends Application implements Observer{
                 model.solve(true);
             }catch(FileNotFoundException fnfe){ model.textout = "The file was deleted"; }
         });
+        HBox features = new HBox( undo, redo, check, hint, solve );
 
         Button restart = new Button("Restart");
         restart.setOnAction(e -> {
@@ -457,10 +454,13 @@ public class SudokuGUI extends Application implements Observer{
             this.model.announceChange();
         });
         Button menu = new Button("Menu");
+        menu.setOnAction(e -> setMenuScreen(stage));
+        HBox functions = new HBox( restart, newGame, menu );
 
-        options.getChildren().addAll( undo, redo, check, hint, solve, restart, newGame, menu );
+        VBox page = new VBox( status, puzzle, features, functions );
+        Scene scene = new Scene(page);
+        setBackground( page );
 
-        stage.setScene(scene);
         switch(model.filename){
             case "super_easy":
                 stage.setTitle( stage.getTitle() + " - Super Easy Puzzle #" + model.lineNumber);
@@ -479,7 +479,7 @@ public class SudokuGUI extends Application implements Observer{
                 break;
         }
 
-        page.getChildren().addAll( status, puzzle, options );
+        stage.setScene(scene);
     }
 
     @Override
