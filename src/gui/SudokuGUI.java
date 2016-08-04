@@ -41,6 +41,7 @@ import java.util.Observer;
 //todo - have an option to submit an answer and set off fireworks if it's correct
 //todo - allow scrawling small ints as personal reminders, 1 in top left, 9 bottom right, 4 middle left style
 //todo - play fireworks from ensemble upon successful solving, one firework if solved was used
+//todo - remember to reset the stage's title after playing a game
 //todo: undo redo check hint solve, then restart newGame home; check is isValid and isGoal restart can keep calling undo
 
 /**
@@ -143,6 +144,15 @@ public class SudokuGUI extends Application implements Observer{
         button.setBackground(background); //todo - remove this function and it's dependents
     }
 
+    /** Utility function to set the background for all of the pages */
+    private void setBackground( Region region ){
+        Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
+        BackgroundImage BI = new BackgroundImage(img,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
+                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
+        region.setBackground( new Background(BI) );
+    }
+
     /** Utility function to set the size of a region */
     private void setSize( Region reg, double width, double height ){
         reg.setMaxSize( width, height );
@@ -215,10 +225,10 @@ public class SudokuGUI extends Application implements Observer{
         setMouseHover( button, stage );
     }
 
-    /** Animates a surrounding pane to move between two panes */
-    private void animateSelection( Button target, ImageView frame, Stage stage ){
-        TranslateTransition animation = new TranslateTransition( Duration.millis(600), frame );
-        animation.setInterpolator( Interpolator.EASE_BOTH );
+    /** Animates the surrounding frame to move between two difficulty selections */
+    private void animateSelection( Node target, Node frame, Stage stage ){
+        TranslateTransition animation = new TranslateTransition( Duration.millis(550), frame );
+        animation.setInterpolator( Interpolator.EASE_IN );
         //centers the difficulties with and without 'y' in them within the frame properly
         if( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() < stage.getHeight() * 0.4 ){
             animation.setByY( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() -
@@ -230,18 +240,11 @@ public class SudokuGUI extends Application implements Observer{
         animation.play();
     }
 
-    /**
-     * Sets up the starting menu screen
-     * @param stage - The stage to set up
-     */
+    /** Sets up the starting menu stage */
     private void setMenuScreen(Stage stage){
         BorderPane window = new BorderPane();
-        Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
-        BackgroundImage BI = new BackgroundImage(img,
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
-        window.setBackground( new Background(BI) );
         Scene scene = new Scene( window );
+        setBackground( window );
 
         Image titleImage = new Image( getClass().getResourceAsStream("resources/sudoku_title.png") );
         ImageView title = new ImageView( titleImage );
@@ -320,26 +323,17 @@ public class SudokuGUI extends Application implements Observer{
         stage.setScene(scene);
     }
 
-    /**
-     * Sets up the help screen
-     * @param stage - The screen to set up
-     */
+    /** Sets up the help stage */
     private void setHelpScreen(Stage stage){
         //todo
     }
 
-    /**
-     * Sets up the about screen
-     * @param stage - The screen to set up
-     */
+    /** Sets up the about stage */
     private void setAboutScreen(Stage stage){
         //todo
     }
 
-    /**
-     * Selects a difficulty and sets filename based on that
-     * @param stage - The stage to set the selection screen on
-     */
+    /** Sets up a stage to select a difficulty and set a filename based on that */
     private void setDifficultySelectionScreen(Stage stage){
         VBox difficulties = new VBox();
         difficulties.setSpacing( stage.getHeight() / 20 );
@@ -347,12 +341,7 @@ public class SudokuGUI extends Application implements Observer{
         difficulties.setAlignment( Pos.CENTER );
         StackPane holder = new StackPane( difficulties );
         Scene scene = new Scene( holder );
-
-        Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
-        BackgroundImage BI = new BackgroundImage(img,
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
-        difficulties.setBackground( new Background(BI) );
+        setBackground( holder );
 
         Button superEasy = new Button("Super Easy");
         Button easy = new Button("Easy");
@@ -410,31 +399,24 @@ public class SudokuGUI extends Application implements Observer{
         stage.setScene( scene );
     }
 
-    /**
-     * Selects a specific sudoku puzzle from the selected difficulty
-     * @param stage - The stage to set the puzzle selection screen on
-     */
+    /** Sets up a stage to select a specific sudoku puzzle from the selected difficulty */
     private void setPuzzleSelectionScreen(Stage stage){
         //todo
         setGameScreen(stage);
     }
 
-    /**
-     * Sets up the sudoku game once a file and linenumber are selected
-     * @param stage - The stage to set the game screen on
-     */
+    /** Sets up the sudoku game's stage once a file and linenumber are selected */
     private void setGameScreen(Stage stage){
         this.errorPos = new int[2];
         this.errorPos[0] = 0;
         this.errorPos[1] = 0;
 
-        BorderPane window = new BorderPane();
-        Scene scene = new Scene(window);
+        VBox page = new VBox();
+        Scene scene = new Scene(page);
+        setBackground( page );
 
         Text status = new Text( difficulty.substring(0, 1).toUpperCase() + difficulty.substring(1) + " selected");
         this.status = status;
-        window.setTop(status);
-        BorderPane.setAlignment(status, Pos.CENTER);
 
         TilePane puzzle = new TilePane();
         puzzle.setPrefColumns(9);
@@ -448,18 +430,19 @@ public class SudokuGUI extends Application implements Observer{
             }
         }
         this.grid = puzzle;
-        window.setCenter(puzzle);
 
         FlowPane options = new FlowPane();
-        Button verify = new Button("Verify");
-        verify.setOnAction(e -> model.isValid(true));
+        Button undo = new Button("Undo");
+        Button redo = new Button("Redo");
+        Button check = new Button("Check");
         Button hint = new Button("Hint");
-        hint.setOnAction(e -> model.getHint());
         Button solve = new Button("Solve");
         solve.setOnAction(e -> {
             try {
                 model.solve(true);
-            }catch(FileNotFoundException fnfe){ model.textout = "The file was deleted"; }});
+            }catch(FileNotFoundException fnfe){ model.textout = "The file was deleted"; }
+        });
+
         Button restart = new Button("Restart");
         restart.setOnAction(e -> {
             //todo - do this
@@ -473,24 +456,14 @@ public class SudokuGUI extends Application implements Observer{
             this.model.textout = ""; //todo - make this be something
             this.model.announceChange();
         });
-        Button newDifficulty = new Button("New Difficulty");
-        newDifficulty.setOnAction(e -> {
-            //todo - do this as well, maybe open the window from init
-            this.model.textout = ""; //todo - make this be something
-            this.model.announceChange();
-        });
-        options.getChildren().addAll(verify, hint, solve, restart, newGame, newDifficulty);
-        window.setBottom(options);
-        BorderPane.setAlignment(options, Pos.CENTER);
+        Button menu = new Button("Menu");
 
-        Text centering = new Text();
-        window.setLeft(centering);
-        BorderPane.setMargin(centering, new Insets(0, 11.25, 0, 0));
+        options.getChildren().addAll( undo, redo, check, hint, solve, restart, newGame, menu );
 
         stage.setScene(scene);
         switch(model.filename){
             case "super_easy":
-                stage.setTitle("Super Easy Sudoku puzzle #" + model.lineNumber);
+                stage.setTitle( stage.getTitle() + " - Super Easy Puzzle #" + model.lineNumber);
                 break;
             case "easy":
                 stage.setTitle("Easy Sudoku puzzle #" + model.lineNumber);
@@ -505,11 +478,8 @@ public class SudokuGUI extends Application implements Observer{
                 stage.setTitle("I'm sorry, it's Sudoku puzzle #" + model.lineNumber + ", good luck");
                 break;
         }
-        Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
-        BackgroundImage BI = new BackgroundImage(img,
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
-        window.setBackground( new Background(BI) );
+
+        page.getChildren().addAll( status, puzzle, options );
     }
 
     @Override
