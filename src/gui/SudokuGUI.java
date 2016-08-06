@@ -437,7 +437,6 @@ public class SudokuGUI extends Application implements Observer{
             try {
                 model.solve(true);
             }catch(FileNotFoundException fnfe){ model.textout = "The file was deleted"; }
-            this.model.announceChange();
         });
         HBox features = new HBox( undo, redo, check, hint, solve );
 
@@ -445,7 +444,7 @@ public class SudokuGUI extends Application implements Observer{
         restart.setOnAction(e -> {
             //todo - do this
             this.model.textout = difficulty + " has been reset";
-            this.model.announceChange();
+            this.model.announceChange();                                                    //anounced in model?
         });
         Button newGame = new Button("New Game");
         newGame.setOnAction(e -> {
