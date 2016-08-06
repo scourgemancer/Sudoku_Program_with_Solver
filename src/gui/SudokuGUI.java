@@ -437,6 +437,7 @@ public class SudokuGUI extends Application implements Observer{
             try {
                 model.solve(true);
             }catch(FileNotFoundException fnfe){ model.textout = "The file was deleted"; }
+            this.model.announceChange();
         });
         HBox features = new HBox( undo, redo, check, hint, solve );
 
