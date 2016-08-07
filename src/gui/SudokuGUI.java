@@ -427,6 +427,11 @@ public class SudokuGUI extends Application implements Observer{
             }
         }
         this.grid = puzzle;
+        Image img = new Image( getClass().getResourceAsStream("resources/frame.png") );
+        BackgroundImage BI = new BackgroundImage(img,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                new BackgroundSize( stage.getWidth()/3, stage.getWidth()/3, false, false, true, false ) );
+        puzzle.setBackground( new Background(BI) );
 
         Button undo = new Button("Undo");
         Button redo = new Button("Redo");
@@ -444,7 +449,7 @@ public class SudokuGUI extends Application implements Observer{
         restart.setOnAction(e -> {
             //todo - do this
             this.model.textout = difficulty + " has been reset";
-            this.model.announceChange();                                                    //anounced in model?
+            this.model.announceChange();
         });
         Button newGame = new Button("New Game");
         newGame.setOnAction(e -> {
