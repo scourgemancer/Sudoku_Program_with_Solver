@@ -59,7 +59,7 @@ public class SudokuGUI extends Application implements Observer{
     private Text status;
 
     /** A 2d button matrix for the update method */
-    private HashMap<Integer, ArrayList<numButton>> puzzle;
+    private ArrayList< ArrayList<numButton> > puzzle;
 
     /** The selected difficulty formatted as a filename */
     private String difficulty;
@@ -417,9 +417,9 @@ public class SudokuGUI extends Application implements Observer{
 
         TilePane puzzle = new TilePane();
         puzzle.setPrefColumns(9);
-        this.puzzle = new HashMap<>();
+        this.puzzle = new ArrayList<>();
         for(int r=0; r < 9; r++){
-            this.puzzle.put(r, new ArrayList<>());
+            this.puzzle.add( new ArrayList<>() );
             for(int c=0; c < 9; c++){
                 numButton newButton = new numButton(r, c, model.puzzle[r][c], model);
                 puzzle.getChildren().add( newButton );
