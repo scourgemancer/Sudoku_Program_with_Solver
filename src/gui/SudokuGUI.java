@@ -115,10 +115,10 @@ public class SudokuGUI extends Application implements Observer{
                 case 9:
                     break;*/
                 default:
-                    Image whiteImg = new Image(getClass().getResourceAsStream("resources/white.png"));
-                    ImageView whiteIcon = new ImageView(whiteImg);
-                    this.setGraphic(whiteIcon);
-                    setButtonBackground(this, "white.png");
+                    //Image whiteImg = new Image(getClass().getResourceAsStream("resources/white.png"));
+                    //ImageView whiteIcon = new ImageView(whiteImg);
+                    //this.setGraphic(whiteIcon);
+                    //setButtonBackground(this, "white.png");
             }
             this.setOnAction(e -> this.pressed());
         }
@@ -321,6 +321,7 @@ public class SudokuGUI extends Application implements Observer{
         BorderPane.setMargin( options, new Insets(
                 ( stage.getHeight() - squareDim - title.getFitHeight() ) / 8, 0, 0, 0 ) );
 
+        stage.setTitle( "Sudoku" );
         stage.setScene(scene);
     }
 
@@ -397,6 +398,7 @@ public class SudokuGUI extends Application implements Observer{
         options.getChildren().addAll( back, select );
         difficulties.getChildren().addAll( superEasy, easy, normal, hard, extreme, options );
 
+        stage.setTitle( "Sudoku" );
         stage.setScene( scene );
     }
 
@@ -427,11 +429,11 @@ public class SudokuGUI extends Application implements Observer{
             }
         }
         this.grid = puzzle;
-        Image img = new Image( getClass().getResourceAsStream("resources/gameFrame.png") );
-        BackgroundImage BI = new BackgroundImage(img,
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-                new BackgroundSize( stage.getWidth(), stage.getWidth(), false, false, false, true ) );
-        puzzle.setBackground( new Background(BI) );
+        //Image img = new Image( getClass().getResourceAsStream("resources/gameFrame.png") );
+        //BackgroundImage BI = new BackgroundImage(img,
+        //        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+        //        new BackgroundSize( stage.getWidth(), stage.getWidth(), false, false, false, true ) );
+        //puzzle.setBackground( new Background(BI) );
 
         Button undo = new Button("Undo");
         Button redo = new Button("Redo");
@@ -466,7 +468,7 @@ public class SudokuGUI extends Application implements Observer{
         Scene scene = new Scene(page);
         setBackground( page );
 
-        switch(model.filename){
+        switch( model.filename.substring(0, model.filename.length() - 4).toLowerCase() ){
             case "super_easy":
                 stage.setTitle( stage.getTitle() + " - Super Easy Puzzle #" + model.lineNumber);
                 break;
