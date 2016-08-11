@@ -128,26 +128,9 @@ public class SudokuGUI extends Application implements Observer{
         }
     }
 
-    /**
-     * A private utility function for setting the background
-     * of a button to an image in the resources subdirectory.
-     * @param button the button who's background will be set
-     * @param bgImgName the name of the image file to be used as a background
-     */
-    private void setButtonBackground(Button button, String bgImgName){//
-        BackgroundImage backgroundImage = new BackgroundImage(
-                new Image( getClass().getResourceAsStream("resources/" + bgImgName) ),
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                new BackgroundSize(100, 100, true, true, true, true) );
-        Background background = new Background(backgroundImage);
-        button.setBackground(background); //todo - remove this function and it's dependents
-    }
-
     /** Utility function to set the background for all of the pages */
-    private void setBackground( Region region ){
-        Image img = new Image( getClass().getResourceAsStream("resources/light.jpg") );
+    private void setBackground( Region region, String image ){
+        Image img = new Image( getClass().getResourceAsStream("resources/" + image) );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
@@ -245,7 +228,7 @@ public class SudokuGUI extends Application implements Observer{
     private void setMenuScreen(Stage stage){
         BorderPane window = new BorderPane();
         Scene scene = new Scene( window );
-        setBackground( window );
+        setBackground( window, "light.jpg" );
 
         Image titleImage = new Image( getClass().getResourceAsStream("resources/sudoku_title.png") );
         ImageView title = new ImageView( titleImage );
@@ -343,7 +326,7 @@ public class SudokuGUI extends Application implements Observer{
         difficulties.setAlignment( Pos.CENTER );
         StackPane holder = new StackPane( difficulties );
         Scene scene = new Scene( holder );
-        setBackground( holder );
+        setBackground( holder, "light.jpg" );
 
         Button superEasy = new Button("Super Easy");
         Button easy = new Button("Easy");
@@ -466,7 +449,7 @@ public class SudokuGUI extends Application implements Observer{
 
         VBox page = new VBox( status, puzzle, features, functions );
         Scene scene = new Scene(page);
-        setBackground( page );
+        setBackground( page, "light.jpg" );
 
         switch( model.filename.substring(0, model.filename.length() - 4).toLowerCase() ){
             case "super_easy":
@@ -504,13 +487,13 @@ public class SudokuGUI extends Application implements Observer{
         status.setText(model.textout);
         if(recentError){
             recentError = false;
-            setButtonBackground(puzzle.get(errorPos[0]).get(errorPos[1]), "white.png");
+            setBackground(puzzle.get(errorPos[0]).get(errorPos[1]), "white.png");
         }
 //todo - get this to work
         if(model.textout.contains("Error")){
             recentError = true;
             System.arraycopy(model.pos, 0, this.errorPos, 0, 2);
-            setButtonBackground(puzzle.get(errorPos[0]).get(errorPos[1]), "red.png");
+            setBackground(puzzle.get(errorPos[0]).get(errorPos[1]), "red.png");
         }
     }
 
