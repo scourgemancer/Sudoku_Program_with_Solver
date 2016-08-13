@@ -487,13 +487,13 @@ public class SudokuGUI extends Application implements Observer{
         status.setText(model.textout);
         if(recentError){
             recentError = false;
-            setBackground(puzzle.get(errorPos[0]).get(errorPos[1]), "white.png");
+            //setBackground(puzzle.get(errorPos[0]).get(errorPos[1]), "white.png"); - image no longer exists
         }
 //todo - get this to work
         if(model.textout.contains("Error")){
             recentError = true;
             System.arraycopy(model.pos, 0, this.errorPos, 0, 2);
-            setBackground(puzzle.get(errorPos[0]).get(errorPos[1]), "red.png");
+            //setBackground(puzzle.get(errorPos[0]).get(errorPos[1]), "red.png"); - image no longer exists
         }
     }
 
