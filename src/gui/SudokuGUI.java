@@ -210,7 +210,7 @@ public class SudokuGUI extends Application implements Observer{
 
     /** Animates the surrounding frame to move between two difficulty selections */
     private void animateSelection( Node target, Node frame, Stage stage ){
-        TranslateTransition animation = new TranslateTransition( Duration.millis(550), frame );
+        TranslateTransition animation = new TranslateTransition( Duration.millis(450), frame );
         animation.setInterpolator( Interpolator.EASE_IN );
         //centers the difficulties with and without 'y' in them within the frame properly
         if( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() < stage.getHeight() * 0.4 ){
@@ -412,9 +412,9 @@ public class SudokuGUI extends Application implements Observer{
         }
         this.grid = puzzle;
         Image img = new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") );
-        BackgroundImage BI = new BackgroundImage(img,
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-                new BackgroundSize( stage.getWidth(), stage.getWidth(), false, false, false, true ) );
+        BackgroundImage BI = new BackgroundImage( img,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize( stage.getWidth(), 100, false, true, true, false ) );
         puzzle.setBackground( new Background(BI) );
 
         Button undo = new Button("Undo");
