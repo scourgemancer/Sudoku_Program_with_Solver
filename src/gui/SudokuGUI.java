@@ -411,11 +411,11 @@ public class SudokuGUI extends Application implements Observer{
             }
         }
         this.grid = puzzle;
-        //Image img = new Image( getClass().getResourceAsStream("resources/gameFrame.png") );
-        //BackgroundImage BI = new BackgroundImage(img,
-        //        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-        //        new BackgroundSize( stage.getWidth(), stage.getWidth(), false, false, false, true ) );
-        //puzzle.setBackground( new Background(BI) );
+        Image img = new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") );
+        BackgroundImage BI = new BackgroundImage(img,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                new BackgroundSize( stage.getWidth(), stage.getWidth(), false, false, false, true ) );
+        puzzle.setBackground( new Background(BI) );
 
         Button undo = new Button("Undo");
         Button redo = new Button("Redo");
