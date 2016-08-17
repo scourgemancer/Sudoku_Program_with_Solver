@@ -392,9 +392,7 @@ public class SudokuGUI extends Application implements Observer{
 
     /** Sets up the sudoku game's stage once a file and linenumber are selected */
     private void setGameScreen(Stage stage){
-        this.errorPos = new int[2];
-        this.errorPos[0] = 0;
-        this.errorPos[1] = 0;
+        this.errorPos = new int[] {0,0};
 
         Text status = new Text( difficulty.substring(0, 1).toUpperCase() + difficulty.substring(1) + " selected");
         this.status = status;
@@ -422,6 +420,11 @@ public class SudokuGUI extends Application implements Observer{
         Button check = new Button("Check");
         Button hint = new Button("Hint");
         Button solve = new Button("Solve");
+        //add the functionality of the buttons
+        undo.setOnAction(e -> model.undo());
+        redo.setOnAction(e -> model.redo());
+        //todo - the check button's functionality
+        hint.setOnAction(e -> this.model.getHint());
         solve.setOnAction(e -> {
             try {
                 model.solve(true);
@@ -430,19 +433,13 @@ public class SudokuGUI extends Application implements Observer{
         HBox features = new HBox( undo, redo, check, hint, solve );
 
         Button restart = new Button("Restart");
-        restart.setOnAction(e -> {
-            //todo - do this
-            this.model.textout = difficulty + " has been reset";
-            this.model.announceChange();
-        });
-        Button newGame = new Button("New Game");
-        newGame.setOnAction(e -> {
-            //todo - do this
-            //todo - also change the window title
-            this.model.textout = ""; //todo - make this be something
-            this.model.announceChange();
-        });
+        Button newDifficulty = new Button("Change Difficulty");
+        Button newGame = new Button("New Puzzle");
         Button menu = new Button("Menu");
+        //add the functionality of the buttons
+        restart.setOnAction(e -> setGameScreen( stage ));
+        newDifficulty.setOnAction(e -> setDifficultySelectionScreen( stage ));
+        newGame.setOnAction(e -> setGameScreen( stage ));
         menu.setOnAction(e -> setMenuScreen(stage));
         HBox functions = new HBox( restart, newGame, menu );
 
