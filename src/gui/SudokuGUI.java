@@ -245,7 +245,8 @@ public class SudokuGUI extends Application implements Observer{
         options.setVgap( stage.getWidth() / 110.0 );
 
         //the sizes for each of the option buttons
-        double width = squareDim * (340.0 / 456.0) / 3.1;
+        //todo double width = squareDim * (340.0 / 456.0) / 3.1;
+        double width = squareDim * (340.0 / 456.0) / 3.12;
         double height = squareDim * ( (297.0 / 402.0) / 3.1 ) - (stage.getHeight() / 100)*3 + 2;
 
         //blank squares
@@ -433,12 +434,10 @@ public class SudokuGUI extends Application implements Observer{
         HBox features = new HBox( undo, redo, check, hint, solve );
 
         Button restart = new Button("Restart");
-        Button newDifficulty = new Button("Change Difficulty");
         Button newGame = new Button("New Puzzle");
         Button menu = new Button("Menu");
         //add the functionality of the buttons
         restart.setOnAction(e -> setGameScreen( stage ));
-        newDifficulty.setOnAction(e -> setDifficultySelectionScreen( stage ));
         newGame.setOnAction(e -> setGameScreen( stage ));
         menu.setOnAction(e -> setMenuScreen(stage));
         HBox functions = new HBox( restart, newGame, menu );
