@@ -246,7 +246,7 @@ public class SudokuGUI extends Application implements Observer{
 
         //the sizes for each of the option buttons
         //todo double width = squareDim * (340.0 / 456.0) / 3.1;
-        double width = squareDim * (340.0 / 456.0) / 3.12;
+        double width = squareDim * (340.0 / 456.0) / 3.119;
         double height = squareDim * ( (297.0 / 402.0) / 3.1 ) - (stage.getHeight() / 100)*3 + 2;
 
         //blank squares
@@ -395,8 +395,7 @@ public class SudokuGUI extends Application implements Observer{
     private void setGameScreen(Stage stage){
         this.errorPos = new int[] {0,0};
 
-        Text status = new Text( difficulty.substring(0, 1).toUpperCase() + difficulty.substring(1) + " selected");
-        this.status = status;
+        this.status = new Text( difficulty.substring(0, 1).toUpperCase() + difficulty.substring(1) + " selected");
 
         TilePane puzzle = new TilePane();
         puzzle.setPrefColumns(9);
