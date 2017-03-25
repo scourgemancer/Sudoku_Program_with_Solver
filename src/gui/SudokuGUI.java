@@ -274,7 +274,7 @@ public class SudokuGUI extends Application implements Observer{
         styleOptionButton( start, width, stage );
         setSize( start, width, height );
 
-        Button donate = new Button("Donate"); //TODO - Allow for GooglePay, Bitcoin, Dogecoin, etc
+        Button donate = new Button("Support"); //TODO - Allow for GooglePay, Bitcoin, Dogecoin, etc
         donate.setOnAction(e -> getHostServices().showDocument( "https://www.paypal.me/TimGeary" ) );
         styleOptionButton( donate, width, stage );
         setSize( donate, width, height );
