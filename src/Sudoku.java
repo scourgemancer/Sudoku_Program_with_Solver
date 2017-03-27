@@ -38,19 +38,15 @@ public class Sudoku{
         }else{
             usageError();
         }
-
-        //now the program either launches the GUI or creates the PTUI to pass control to
-        try{
+        try{    //now the program either launches the GUI or creates the PTUI to pass control to
             switch(view){
-                case GUI:
-                    //this launches the GUI
+                case GUI:   //this launches the GUI
                     Application.launch(SudokuGUI.class);
                     break;
                 case PTUI:
                     SudokuPTUI ptui = new SudokuPTUI();
                     ControllerPTUI ctrlr = new ControllerPTUI(ptui.getModel());
-                    //now pass control to the run method of the controller
-                    ctrlr.run();
+                    ctrlr.run();    //now pass control to the run method of the controller
                     break;
                 case UNKNOWN:
                     usageError();
