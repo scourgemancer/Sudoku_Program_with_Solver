@@ -66,8 +66,7 @@ public class ControllerPTUI{
                         model.setHelpMsg();
                         break;
                     case 's': //solve
-                        //todo - model.solve(true);
-                        model.backtrack(true);
+                        model.solve(true);
                         break;
                     case 'c': //clue
                         model.getHint();
