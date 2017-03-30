@@ -16,7 +16,7 @@ public class AverageFasterTimes{
 
         //find the average time to solve all 10000 super easy problems
         double superEasyTime = 0;
-        double bestSuperEasy = 100000000000000000000.0;
+        double bestSuperEasy = Double.MAX_VALUE;
         double worstSuperEasy = 0;
         System.out.println("Super easy:");
         for(int line=1; line < 10001; line++){
@@ -36,7 +36,7 @@ public class AverageFasterTimes{
 
         //find the average time to solve all 10000 easy problems
         double easyTime = 0;
-        double bestEasy = 100000000000000000000000.0;
+        double bestEasy = Double.MAX_VALUE;
         double worstEasy = 0;
         System.out.println("Easy:");
         for(int line=1; line < 10001; line++){
@@ -56,7 +56,7 @@ public class AverageFasterTimes{
 
         //find the average time to solve all 10000 normal problems
         double normalTime = 0;
-        double bestNormal = 10000000000000.0;
+        double bestNormal = Double.MAX_VALUE;
         double worstNormal = 0;
         System.out.println("Normal:");
         for(int line=1; line < 10001; line++){
@@ -76,7 +76,7 @@ public class AverageFasterTimes{
 
         //find the average time to solve all 10000 hard problems
         double hardTime = 0;
-        double bestHard = 1000000000000000000.0;
+        double bestHard = Double.MAX_VALUE;
         double worstHard = 0;
         System.out.println("Hard:");
         for(int line=1; line < 10001; line++){
@@ -96,7 +96,7 @@ public class AverageFasterTimes{
 
         //find the average time to solve all 10000 extreme problems
         double extremeTime = 0;
-        double bestExtreme = 100000000000000000000000000000.0;
+        double bestExtreme = Double.MAX_VALUE;
         double worstExtreme = 0;
         System.out.println("Extreme:");
         for(int line=1; line < 10001; line++){ //strap yourselves in folks
