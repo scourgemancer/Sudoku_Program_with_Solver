@@ -427,11 +427,11 @@ public class SudokuConfig implements Configuration{
         }
 
         //check for zeroes above the last placed position
-        for(int r=0; r < pos[0]; r++){//todo - this shouldn't be necessary
+        /**for(int r=0; r < pos[0]; r++){//todo - this shouldn't be necessary
             for(int c=0; c < 9; c++){
                 if(puzzle[r][c] == 0) return false;
             }
-        }
+        }*/
 
         return true;
     }

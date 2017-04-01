@@ -29,6 +29,7 @@ public class AverageTimeFinder{
             }
             double start = System.currentTimeMillis();
 
+            System.out.println("entered" + line);//todo remove
             Configuration init = new SudokuConfig("super_easy.txt", line);
             Backtracker bt = new Backtracker();
             Optional<Configuration> sol = bt.solve(init);
