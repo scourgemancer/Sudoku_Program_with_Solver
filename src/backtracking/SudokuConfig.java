@@ -18,7 +18,6 @@ public class SudokuConfig implements Configuration{
     //states
     private int[] pos;
     public int[][] puzzle;
-    //private ArrayList<ArrayList<HashSet<Integer>>> possibilities;
 
     /**
      * Constructs a new SudokuConfig from a provided filename
@@ -274,85 +273,6 @@ public class SudokuConfig implements Configuration{
         return errorSpot;
     }
 
-    /**
-     * Fills in any spaces on the sudoku that harbor hints from partially
-     * completed rows, columns, inner squares, or a combination thereof.
-     * It does so by giving each space all nine possibilities and whittles
-     * those down using available information and fills them if they yield
-     * only one possibility. Makes the brute force attempt slightly intelligent.
-     */
-   public void optimize(){
-        //initialize the possibilities 2d array
-        ArrayList<ArrayList<HashSet<Integer>>> possibilities = new ArrayList<>();
-        for(int r=0; r < 9; r++){
-            possibilities.add( r, new ArrayList<>() );
-            for(int c=0; c < 9; c++){
-                possibilities.get(r).add( c, new HashSet<>() );
-                if(puzzle[r][c] == 0){
-                    for (int i = 1; i < 10; i++) {
-                        possibilities.get(r).get(c).add(i);
-                    }
-                }else{
-                    possibilities.get(r).get(c).add(puzzle[r][c]);
-                }
-            }
-        }
-
-        //begin whittling down possibilities for each space
-        boolean optimized;
-        do{//keep looping if numbers were added from the last loop since they could provide more clues
-            optimized = false;
-            for(int r=0; r < 9; r++){
-                for(int c=0; c < 9; c++){
-                    if(possibilities.get(r).get(c).size() > 1){//isn't already decided
-                        for(int i=0; i < 9; i++){//check the row
-                            possibilities.get(r).get(c).remove(puzzle[r][i]);
-                        }
-                        for(int i=0; i < 9; i++){//check the column
-                            possibilities.get(r).get(c).remove(puzzle[i][c]);
-                        }
-                        possibilities.get(r).get(c).removeAll(getInnerSquare(r, c));//check the inner square
-
-                        if(possibilities.get(r).get(c).size() == 1) {//only one possibility, so fill it
-                            optimized = true;
-                            for(int i=0; i < 9; i++)
-                                if(possibilities.get(r).get(c).contains(i)) puzzle[r][c] = i;
-                        }
-                    }
-                }
-            }
-        }while(optimized);
-        do{//check if the space is the only option for a value in their row/col/square
-            optimized = false;
-            for(int r=0; r < 9; r++){
-                for(int c=0; c < 9; c++){
-                    if(possibilities.get(r).get(c).size() > 1){
-                        HashSet<Integer> copy = new HashSet<>( possibilities.get(r).get(c) );
-                        for(int i=0; i < 9; i++){//check the row
-                            copy.removeAll(possibilities.get(r).get(i));
-                        }
-                        for(int i=0; i < 9; i++){//check the column
-                            copy.removeAll(possibilities.get(i).get(c));
-                        }
-                        //todo - check the inner square
-
-                        if(copy.size() == 1) {//only one possibility, so fill it
-                            optimized = true;
-                            for(int i=0; i < 9; i++){
-                                possibilities.get(r).get(c).clear();
-                                possibilities.get(r).get(c).addAll(copy);
-                                if(copy.contains(i)){
-                                    puzzle[r][c] = i;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }while(optimized);
-        //this.possibilities = possibilities;
-    }
-
     @Override
     public ArrayList<Configuration> getSuccessors(){
         ArrayList<Configuration> successors = new ArrayList<>();
@@ -394,12 +314,6 @@ public class SudokuConfig implements Configuration{
                 SudokuConfig addNine = new SudokuConfig(this);
                 addNine.puzzle[pos[0]][pos[1]] = 9;
                 successors.add(addNine);
-                /** //this is for when attempting optimization of backtracking
-                for(Integer number : possibilities.get(pos[0]).get(pos[1])){
-                    SudokuConfig addNum = new SudokuConfig(this);
-                    addNum.puzzle[pos[0]][pos[1]] = number;
-                    successors.add(addNum);
-                }*/
             default:
                 SudokuConfig skip = new SudokuConfig(this);
                 successors.add(skip);
@@ -426,11 +340,11 @@ public class SudokuConfig implements Configuration{
         }
 
         //check for zeroes above the last placed position
-        /**for(int r=0; r < pos[0]; r++){//todo - this shouldn't be necessary
+        for(int r=0; r < pos[0]; r++){//todo - this shouldn't be necessary
             for(int c=0; c < 9; c++){
                 if(puzzle[r][c] == 0) return false;
             }
-        }*/
+        }
 
         return true;
     }
