@@ -350,14 +350,9 @@ public class SudokuConfig implements Configuration{
     }
 
     @Override
-    public boolean isGoal(){ //must be valid, so just check if it's filled
-        for(int r=0; r < 9; r++){
-            for(int c=0; c < 9; c++){
-                if(puzzle[r][c] == 0){
-                    return false;
-                }
-            }
-        }
-        return true;
+    public boolean isGoal(){
+        //must be valid, so just check if the last filled square was the last box in the Sudoku
+        if(pos[0]==8 && pos[1]==8) return true;
+        return false;
     }
 }
