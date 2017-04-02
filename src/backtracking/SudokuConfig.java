@@ -355,7 +355,6 @@ public class SudokuConfig implements Configuration{
 
     @Override
     public ArrayList<Configuration> getSuccessors(){
-        //optimize(); //this was the optimal place to put this without restructuring anything
         ArrayList<Configuration> successors = new ArrayList<>();
         pos[1]++;
         if(pos[1] >= 9){
