@@ -27,9 +27,10 @@ public class AverageTimeFinder{
                 System.out.println("\t\t" + bestSuperEasy + " seconds is best so far");
                 System.out.println("\t\t" + worstSuperEasy + " seconds is worst so far");
             }
+            if(line%100==0)System.out.println("entered" + line);//todo remove
+
             double start = System.currentTimeMillis();
 
-            if(line%100==0)System.out.println("entered" + line);//todo remove
             Configuration init = new SudokuConfig("super_easy.txt", line);
             Backtracker bt = new Backtracker();
             Optional<Configuration> sol = bt.solve(init);
