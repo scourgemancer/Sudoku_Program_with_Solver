@@ -18,8 +18,10 @@ public class Backtracker{
         if(config.isGoal()){
             return Optional.of(config);
         }else{
+            //todo - try adding an optimize step here
+            //todo - maybe even combine isGoal with optimize if I need to check for zeroes again
             for(Configuration child : config.getSuccessors()){
-                if(child.isValid()){
+                if(child.isValid()){    //todo - try threading for each valid successor
                     Optional<Configuration> sol = solve(child);
                     if(sol.isPresent()){
                         return sol;

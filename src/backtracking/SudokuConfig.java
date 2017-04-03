@@ -3,11 +3,11 @@ package backtracking;
 import model.SudokuModel;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
+import java.util.ArrayList;
+import java.io.FileNotFoundException;
 
 /**
  * The class represents a single configuration of a sudoku puzzle
@@ -275,6 +275,13 @@ public class SudokuConfig implements Configuration{
 
     @Override
     public ArrayList<Configuration> getSuccessors(){
+        //todo - maybe I could try having successors be for the square with the fewest possibilities, not just next
+        //todo - maybe even try doing what I do, have a list of possibilities for each square and whittle down, it
+        //todo -            might even help the above todo, just check each pre-made list && not compute (compare)
+        //todo - maybe even keep track of how many of each number has been used and focus on the most used, or least
+        //todo - maybe construct another function to get the possible values for a square, decide if optimize is
+        //todo -            necessary then or if they can work together
+        //todo - I believe that I can auto-fill squares by checking inner square and r+c while in the isValid section
         ArrayList<Configuration> successors = new ArrayList<>();
         pos[1]++;
         if(pos[1] >= 9){
@@ -285,38 +292,37 @@ public class SudokuConfig implements Configuration{
             return successors;
         }
 
-        switch (puzzle[pos[0]][pos[1]]) {
-            case 0:
-                SudokuConfig addOne = new SudokuConfig(this);
-                addOne.puzzle[pos[0]][pos[1]] = 1;
-                successors.add(addOne);
-                SudokuConfig addTwo = new SudokuConfig(this);
-                addTwo.puzzle[pos[0]][pos[1]] = 2;
-                successors.add(addTwo);
-                SudokuConfig addThree = new SudokuConfig(this);
-                addThree.puzzle[pos[0]][pos[1]] = 3;
-                successors.add(addThree);
-                SudokuConfig addFour = new SudokuConfig(this);
-                addFour.puzzle[pos[0]][pos[1]] = 4;
-                successors.add(addFour);
-                SudokuConfig addFive = new SudokuConfig(this);
-                addFive.puzzle[pos[0]][pos[1]] = 5;
-                successors.add(addFive);
-                SudokuConfig addSix = new SudokuConfig(this);
-                addSix.puzzle[pos[0]][pos[1]] = 6;
-                successors.add(addSix);
-                SudokuConfig addSeven = new SudokuConfig(this);
-                addSeven.puzzle[pos[0]][pos[1]] = 7;
-                successors.add(addSeven);
-                SudokuConfig addEight = new SudokuConfig(this);
-                addEight.puzzle[pos[0]][pos[1]] = 8;
-                successors.add(addEight);
-                SudokuConfig addNine = new SudokuConfig(this);
-                addNine.puzzle[pos[0]][pos[1]] = 9;
-                successors.add(addNine);
-            default:
-                SudokuConfig skip = new SudokuConfig(this);
-                successors.add(skip);
+        if(puzzle[pos[0]][pos[1]] != 0){ //check if the square has already been filled in
+            SudokuConfig skip = new SudokuConfig(this);
+            successors.add(skip);
+        }else{ //otherwise we need to make a child for each digit //todo - try to optimize by not pursuing invalid nums
+            SudokuConfig addOne = new SudokuConfig(this);
+            addOne.puzzle[pos[0]][pos[1]] = 1;
+            successors.add(addOne);
+            SudokuConfig addTwo = new SudokuConfig(this);
+            addTwo.puzzle[pos[0]][pos[1]] = 2;
+            successors.add(addTwo);
+            SudokuConfig addThree = new SudokuConfig(this);
+            addThree.puzzle[pos[0]][pos[1]] = 3;
+            successors.add(addThree);
+            SudokuConfig addFour = new SudokuConfig(this);
+            addFour.puzzle[pos[0]][pos[1]] = 4;
+            successors.add(addFour);
+            SudokuConfig addFive = new SudokuConfig(this);
+            addFive.puzzle[pos[0]][pos[1]] = 5;
+            successors.add(addFive);
+            SudokuConfig addSix = new SudokuConfig(this);
+            addSix.puzzle[pos[0]][pos[1]] = 6;
+            successors.add(addSix);
+            SudokuConfig addSeven = new SudokuConfig(this);
+            addSeven.puzzle[pos[0]][pos[1]] = 7;
+            successors.add(addSeven);
+            SudokuConfig addEight = new SudokuConfig(this);
+            addEight.puzzle[pos[0]][pos[1]] = 8;
+            successors.add(addEight);
+            SudokuConfig addNine = new SudokuConfig(this);
+            addNine.puzzle[pos[0]][pos[1]] = 9;
+            successors.add(addNine);
         }
         return successors;
     }

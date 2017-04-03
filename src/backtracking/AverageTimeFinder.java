@@ -27,7 +27,6 @@ public class AverageTimeFinder{
                 System.out.println("\t\t" + bestSuperEasy + " seconds is best so far");
                 System.out.println("\t\t" + worstSuperEasy + " seconds is worst so far");
             }
-            if(line%100==0)System.out.println("entered" + line);//todo remove
 
             double start = System.currentTimeMillis();
 
@@ -122,8 +121,8 @@ public class AverageTimeFinder{
         double worstHard = 0;
         System.out.println("Hard:");
         for(int line=1; line < 10001; line++){
-            if(line%100 == 0 && line != 10000){
-                System.out.println("\t" + line / 100 + "% done");
+            if(line%500 == 0 && line != 10000){
+                System.out.println("\t" + line / 500 + "% done");
                 System.out.println("\t\t" + hardTime / line + " seconds each so far");
                 System.out.println("\t\t" + bestHard + " seconds is best so far");
                 System.out.println("\t\t" + worstHard + " seconds is worst so far");
