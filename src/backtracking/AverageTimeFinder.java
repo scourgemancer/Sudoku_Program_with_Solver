@@ -12,173 +12,107 @@ import java.util.Optional;
  * @author Timothy Geary
  */
 public class AverageTimeFinder{
+
+    private static int totNumUnderHalfSec = 0;
+    private static int totNumUnderSec = 0;
+    private static int totNumUnderTwoSecs = 0;
+    private static int totNumUnderFiveSecs = 0;
+    private static int totNumUnderTenSecs = 0;
+    private static int totNumUnderTwentySecs =0;
+    private static int totNumUnderThirtySecs = 0;
+    private static int totNumUnderMin = 0;
+    private static int totNumOverMin = 0;
+
+    public static void timeSolvingFor(String difficulty) throws FileNotFoundException{
+        int numUnderHalfSec = 0;
+        int numUnderSec = 0;
+        int numUnderTwoSecs = 0;
+        int numUnderFiveSecs = 0;
+        int numUnderTenSecs = 0;
+        int numUnderTwentySecs =0;
+        int numUnderThirtySecs = 0;
+        int numUnderMin = 0;
+        int numOverMin = 0;
+        double avgTime = 0;
+        double bestTime = Double.MAX_VALUE;
+        double worstTime = 0;
+        System.out.println("\n" + difficulty.substring(0, 1).toUpperCase() + difficulty.substring(1) + ":");
+        for(int line=1; line < 10001; line++){
+            if(line%1000==0 && line != 10000 ||
+                        (difficulty.equals("extreme") && line%100==0 && line%1000!=0 && line!=10000)){
+                System.out.println("\t" + line / 100 + "% done");
+                System.out.println("\t\t" + avgTime / line + " seconds each so far");
+                System.out.println("\t\t" + bestTime + " seconds is best so far");
+                System.out.println("\t\t" + worstTime + " seconds is worst so far");
+            }
+
+            double start = System.currentTimeMillis();
+
+            Configuration init = new SudokuConfig(difficulty + ".txt", line);
+            Backtracker bt = new Backtracker();
+            Optional<Configuration> sol = bt.solve(init);
+            if(!sol.isPresent()){
+                System.out.println("There was no solution found at line number: " + line);
+                return;
+            }
+
+            double timing = (System.currentTimeMillis() - start) / 1000.0;
+            avgTime += timing;
+            if(timing < bestTime) bestTime = timing;
+            if(timing > worstTime) worstTime = timing;
+            if(timing < 0.5){     numUnderHalfSec++;      totNumUnderHalfSec++; }
+            else if(timing < 1){  numUnderSec++;          totNumUnderSec++;}
+            else if(timing < 2){  numUnderTwoSecs++;      totNumUnderTwoSecs++;}
+            else if(timing < 5){  numUnderFiveSecs++;     totNumUnderFiveSecs++;}
+            else if(timing < 10){ numUnderTenSecs++;      totNumUnderTenSecs++;}
+            else if(timing < 20){ numUnderTwentySecs++;   totNumUnderTwentySecs++;}
+            else if(timing < 30){ numUnderThirtySecs++;   totNumUnderThirtySecs++;}
+            else if(timing < 60){ numUnderMin++;          totNumUnderMin++;}
+            else{                 numOverMin++;           totNumOverMin++;}
+        }
+
+        System.out.println("\n" + difficulty.substring(0, 1).toUpperCase() + difficulty.substring(1) + ":");
+        System.out.println("\tBest:\t\t" + bestTime + " seconds");
+        System.out.println("\tAverage:\t" + avgTime/10000 + " seconds");
+        System.out.println("\tWorst:\t\t" + worstTime + " seconds\n");
+        System.out.println("\tUnder half of a second: " + numUnderHalfSec);
+        if(numUnderSec > 0){     System.out.println("\tUnder a second:         " + numUnderSec);
+        if(numUnderTwoSecs>0){   System.out.println("\tUnder two seconds:      " + numUnderTwoSecs);
+        if(numUnderFiveSecs>0){  System.out.println("\tUnder five seconds:     " + numUnderFiveSecs);
+        if(numUnderTenSecs>0){   System.out.println("\tUnder ten seconds:      " + numUnderTenSecs);
+        if(numUnderTwentySecs>0){System.out.println("\tUnder twenty seconds:   " + numUnderTwentySecs);
+        if(numUnderThirtySecs>0){System.out.println("\tUnder half of a minute: " + numUnderThirtySecs);
+        if(numUnderMin>0){       System.out.println("\tUnder a minute:         " + numUnderMin);
+        if(numOverMin>0){        System.out.println("\tOver a minute or more:  " + numOverMin);
+        }}}}}}}}
+    }
+
     public static void main(String[] args) throws FileNotFoundException{
-        System.out.println("Average times:\n");
+        System.out.println("Average times:");
+        double timingBegin = System.currentTimeMillis();
 
-        //find the average time to solve all 10000 super easy problems
-        double superEasyTime = 0;
-        double bestSuperEasy = Double.MAX_VALUE;
-        double worstSuperEasy = 0;
-        System.out.println("Super easy:");
-        for(int line=1; line < 10001; line++){
-            if(line%1000 == 0 && line != 10000){
-                System.out.println("\t" + line / 100 + "% done");
-                System.out.println("\t\t" + superEasyTime / line + " seconds each so far");
-                System.out.println("\t\t" + bestSuperEasy + " seconds is best so far");
-                System.out.println("\t\t" + worstSuperEasy + " seconds is worst so far");
-            }
+        timeSolvingFor("super_easy");
+        timeSolvingFor("easy");
+        timeSolvingFor("normal");
+        timeSolvingFor("hard");
+        timeSolvingFor("extreme");
 
-            double start = System.currentTimeMillis();
-
-            Configuration init = new SudokuConfig("super_easy.txt", line);
-            Backtracker bt = new Backtracker();
-            Optional<Configuration> sol = bt.solve(init);
-            if(!sol.isPresent()){
-                System.out.println("There was no solution found at line number: " + line);
-                return;
-            }
-
-            double timing = (System.currentTimeMillis() - start) / 1000.0;
-            superEasyTime += timing;
-            if(timing < bestSuperEasy) bestSuperEasy = timing;
-            if(timing > worstSuperEasy) worstSuperEasy = timing;
-        }
-
-        System.out.println("\nSuper easy:");
-        System.out.println("\tBest:\t\t" + bestSuperEasy + " seconds");
-        System.out.println("\tAverage:\t" + superEasyTime/10000 + " seconds");
-        System.out.println("\tWorst:\t\t" + worstSuperEasy + " seconds\n");
-
-        //find the average time to solve all 10000 easy problems
-        double easyTime = 0;
-        double bestEasy = Double.MAX_VALUE;
-        double worstEasy = 0;
-        System.out.println("Easy:");
-        for(int line=1; line < 10001; line++){
-            if(line%1000 == 0 && line != 10000){
-                System.out.println("\t" + line / 100 + "% done");
-                System.out.println("\t\t" + easyTime / line + " seconds each so far");
-                System.out.println("\t\t" + bestEasy + " seconds is best so far");
-                System.out.println("\t\t" + worstEasy + " seconds is worst so far");
-            }
-            double start = System.currentTimeMillis();
-
-            Configuration init = new SudokuConfig("easy.txt", line);
-            Backtracker bt = new Backtracker();
-            Optional<Configuration> sol = bt.solve(init);
-            if(!sol.isPresent()){
-                System.out.println("There was no solution found at line number: " + line);
-                return;
-            }
-
-            double timing = (System.currentTimeMillis() - start) / 1000.0;
-            easyTime += timing;
-            if(timing < bestEasy) bestEasy = timing;
-            if(timing > worstEasy) worstEasy = timing;
-        }
-
-        System.out.println("\nEasy:");
-        System.out.println("\tBest:\t\t" + bestEasy + " seconds");
-        System.out.println("\tAverage:\t" + easyTime/10000 + " seconds");
-        System.out.println("\tWorst:\t\t" + worstEasy + " seconds\n");
-
-        //find the average time to solve all 10000 normal problems
-        double normalTime = 0;
-        double bestNormal = Double.MAX_VALUE;
-        double worstNormal = 0;
-        System.out.println("Normal:");
-        for(int line=1; line < 10001; line++){
-            if(line%1000 == 0 && line != 10000){
-                System.out.println("\t" + line / 100 + "% done");
-                System.out.println("\t\t" + normalTime / line + " seconds each so far");
-                System.out.println("\t\t" + bestNormal + " seconds is best so far");
-                System.out.println("\t\t" + worstNormal + " seconds is worst so far");
-            }
-            double start = System.currentTimeMillis();
-
-            Configuration init = new SudokuConfig("normal.txt", line);
-            Backtracker bt = new Backtracker();
-            Optional<Configuration> sol = bt.solve(init);
-            if(!sol.isPresent()){
-                System.out.println("There was no solution found at line number: " + line);
-                return;
-            }
-
-            double timing = (System.currentTimeMillis() - start) / 1000.0;
-            normalTime += timing;
-            if(timing < bestNormal) bestNormal = timing;
-            if(timing > worstNormal) worstNormal = timing;
-        }
-
-        System.out.println("\nNormal:");
-        System.out.println("\tBest:\t\t" + bestNormal + " seconds");
-        System.out.println("\tAverage:\t" + normalTime/10000 + " seconds");
-        System.out.println("\tWorst:\t\t" + worstNormal + " seconds\n");
-
-        //find the average time to solve all 10000 hard problems
-        double hardTime = 0;
-        double bestHard = Double.MAX_VALUE;
-        double worstHard = 0;
-        System.out.println("Hard:");
-        for(int line=1; line < 10001; line++){
-            if(line%500 == 0 && line != 10000){
-                System.out.println("\t" + line / 500 + "% done");
-                System.out.println("\t\t" + hardTime / line + " seconds each so far");
-                System.out.println("\t\t" + bestHard + " seconds is best so far");
-                System.out.println("\t\t" + worstHard + " seconds is worst so far");
-            }
-            double start = System.currentTimeMillis();
-
-            Configuration init = new SudokuConfig("hard.txt", line);
-            Backtracker bt = new Backtracker();
-            Optional<Configuration> sol = bt.solve(init);
-            if(!sol.isPresent()){
-                System.out.println("There was no solution found at line number: " + line);
-                return;
-            }
-
-            double timing = (System.currentTimeMillis() - start) / 1000.0;
-            hardTime += timing;
-            if(timing < bestHard) bestHard = timing;
-            if(timing > worstHard) worstHard = timing;
-        }
-
-        System.out.println("\nHard:");
-        System.out.println("\tBest:\t\t" + bestHard + " seconds");
-        System.out.println("\tAverage:\t" + hardTime/10000 + " seconds");
-        System.out.println("\tWorst:\t\t" + worstHard + " seconds\n");
-
-        //find the average time to solve all 10000 extreme problems
-        double extremeTime = 0;
-        double bestExtreme = Double.MAX_VALUE;
-        double worstExtreme = 0;
-        System.out.println("Extreme:");
-        for(int line=1; line < 10001; line++){ //strap yourselves in folks
-            if(line%100 == 0 && line != 10000) {
-                System.out.println("\t" + line / 100 + "% done");
-                System.out.println("\t\t" + extremeTime / line + " seconds each so far");
-                System.out.println("\t\t" + bestExtreme + " seconds is best so far");
-                System.out.println("\t\t" + worstExtreme + " seconds is worst so far");
-            }
-            double start = System.currentTimeMillis();
-
-            Configuration init = new SudokuConfig("extreme.txt", line);
-            Backtracker bt = new Backtracker();
-            Optional<Configuration> sol = bt.solve(init);
-            if(!sol.isPresent()){
-                System.out.println("There was no solution found at line number: " + line);
-                return;
-            }
-
-            double timing = (System.currentTimeMillis() - start) / 1000.0;
-            extremeTime += timing;
-            if(timing < bestExtreme) bestExtreme = timing;
-            if(timing > worstExtreme) worstExtreme = timing;
-        }
-
-        System.out.println("\nExtreme:");
-        System.out.println("\tBest:\t\t" + bestExtreme + " seconds");
-        System.out.println("\tAverage:\t" + extremeTime/10000 + " seconds");
-        System.out.println("\tWorst:\t\t" + worstExtreme + " seconds\n");
+        double overallTime = System.currentTimeMillis() - timingBegin;
+        int hours = (int)(((overallTime/1000)/60)/60);
+        int minutes =(int)((overallTime/1000)/60)%60;
+        int seconds = (int)(overallTime/1000)%60;
+        int milli = (int)(overallTime%1000);
+        System.out.println("\nOverall time for all puzzles: " + hours + ":" + minutes + ":" + seconds + ":" + milli);
+        System.out.println("Each puzzle took about " + ((overallTime / 1000) / 50000) + " seconds on average");
+        System.out.println("Under half of a second: " + totNumUnderHalfSec);
+        if(totNumUnderSec > 0){     System.out.println("\tUnder a second:         " + totNumUnderSec);
+        if(totNumUnderTwoSecs>0){   System.out.println("\tUnder two seconds:      " + totNumUnderTwoSecs);
+        if(totNumUnderFiveSecs>0){  System.out.println("\tUnder five seconds:     " + totNumUnderFiveSecs);
+        if(totNumUnderTenSecs>0){   System.out.println("\tUnder ten seconds:      " + totNumUnderTenSecs);
+        if(totNumUnderTwentySecs>0){System.out.println("\tUnder twenty seconds:   " + totNumUnderTwentySecs);
+        if(totNumUnderThirtySecs>0){System.out.println("\tUnder half of a minute: " + totNumUnderThirtySecs);
+        if(totNumUnderMin>0){       System.out.println("\tUnder a minute:         " + totNumUnderMin);
+        if(totNumOverMin>0){        System.out.println("\tOver a minute or more:  " + totNumOverMin + "\n");
+        }}}}}}}}
     }
 }
