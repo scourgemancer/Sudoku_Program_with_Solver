@@ -37,11 +37,9 @@ import java.util.Observer;
 //todo - combine isGoal and isValid into Check and it says how many are left if isValid but not isGoal
 //todo - have the given numbers be grayed out and not be instantiated as the private class (make a gray.png)
 //todo - also have the option of solving the user's own puzzles they input themselves (backtrack for these)
-//todo - have an option to submit an answer and set off fireworks if it's correct
 //todo - allow scrawling small ints as personal reminders, 1 in top left, 9 bottom right, 4 middle left style
-//todo - play fireworks from ensemble upon successful solving, one firework if solved was used
+//todo - play fireworks from ensemble upon successful solving, one firework if solved was used (option for it in options)
 //todo - remember to reset the stage's title after playing a game
-//todo - allow user to input their own puzzles
 //todo: undo redo check hint solve, then restart newGame home; check is isValid and isGoal restart can keep calling undo
 
 /**

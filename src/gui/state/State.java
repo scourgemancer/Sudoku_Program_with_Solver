@@ -8,5 +8,6 @@ import gui.SudokuGUI;
  * @author Timothy Geary
  */
 public interface State{
+    /** Called when the app changes state, and is passed the Stage to set and the name of the page it's changing to */
     void nextPage(SudokuGUI gui);
 }
