@@ -245,7 +245,7 @@ public class SudokuGUI extends Application implements Observer{
         options.setVgap( stage.getWidth() / 110.0 );
 
         //the sizes for each of the option buttons
-        //todo double width = squareDim * (340.0 / 456.0) / 3.1;
+        //todo double width = squareDim * (340.0 / 456.0) / 3.1;    FIGURE OUT WHAT THIS MEANS
         double width = squareDim * (340.0 / 456.0) / 3.119;
         double height = squareDim * ( (297.0 / 402.0) / 3.1 ) - (stage.getHeight() / 100)*3 + 2;
 
@@ -310,12 +310,12 @@ public class SudokuGUI extends Application implements Observer{
 
     /** Sets up the help stage */
     private void setHelpScreen(Stage stage){
-        //todo
+        //todo - a screen that provides instructions on how to play Sudoku and on how to use the app
     }
 
     /** Sets up the about stage */
     private void setAboutScreen(Stage stage){
-        //todo
+        //todo - screen with info on who I am, what the project is, and legal information
     }
 
     /** Sets up a stage to select a difficulty and set a filename based on that */
@@ -387,7 +387,7 @@ public class SudokuGUI extends Application implements Observer{
 
     /** Sets up a stage to select a specific sudoku puzzle from the selected difficulty */
     private void setPuzzleSelectionScreen(Stage stage){
-        //todo
+        //todo - screen cycles through all of the puzzles of a selected difficulty, allowing the user to choose one
         setGameScreen(stage);
     }
 
@@ -423,7 +423,7 @@ public class SudokuGUI extends Application implements Observer{
         //add the functionality of the buttons
         undo.setOnAction(e -> model.undo());
         redo.setOnAction(e -> model.redo());
-        //todo - the check button's functionality
+        //todo - setOnAction for the check button
         hint.setOnAction(e -> this.model.getHint());
         solve.setOnAction(e -> {
             try {
@@ -483,7 +483,7 @@ public class SudokuGUI extends Application implements Observer{
             recentError = false;
             //setBackground(puzzle.get(errorPos[0]).get(errorPos[1]), "white.png"); - image no longer exists
         }
-//todo - get this to work
+//todo - remember how this is used and upadte it to function appropriately
         if(model.textout.contains("Error")){
             recentError = true;
             System.arraycopy(model.pos, 0, this.errorPos, 0, 2);
