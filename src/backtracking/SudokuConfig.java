@@ -48,9 +48,7 @@ public class SudokuConfig implements Configuration{
     /** Constructs a Sudokuconfig from an existing model */
     public SudokuConfig(SudokuModel other){
         this.puzzle = new int[81];
-        for(int r=0; r < 9; r++){
-            System.arraycopy(other.puzzle[r], 0, this.puzzle[r], 0, 81);
-        }
+        System.arraycopy(other.puzzle, 0, this.puzzle, 0, 81);
         pos = new int[2];
         pos[0] = 0;
         pos[1] = 0;
@@ -62,9 +60,7 @@ public class SudokuConfig implements Configuration{
         this.pos = new int[2];
         System.arraycopy(other.pos, 0, this.pos, 0, 2);
         this.puzzle = new int[81];
-        for(int r=0; r < 9; r++){
-            System.arraycopy(other.puzzle[r], 0, this.puzzle[r], 0, 81);
-        }
+        System.arraycopy(other.puzzle, 0, this.puzzle, 0, 81);
     }
 
     /**
