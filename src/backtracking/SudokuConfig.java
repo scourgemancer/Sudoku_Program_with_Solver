@@ -17,7 +17,7 @@ import java.io.FileNotFoundException;
 public class SudokuConfig implements Configuration{
     //states
     private int[] pos;
-    public int[][] puzzle;
+    public int[] puzzle;
 
     /**
      * Constructs a new SudokuConfig from a provided filename
@@ -26,7 +26,7 @@ public class SudokuConfig implements Configuration{
      */
     public SudokuConfig(String filename, int lineNumber) throws FileNotFoundException{
         Scanner in = new Scanner( new File("puzzles/" + filename) );
-        puzzle = new int[9][9];
+        puzzle = new int[81];
 
         for(int i=0; i < lineNumber-1; i++){
             in.nextLine();
@@ -35,7 +35,7 @@ public class SudokuConfig implements Configuration{
         String problemLine = in.nextLine();
         for(int r = 0; r < 9; r++){
             for(int c = 0; c < 9; c++){
-                puzzle[r][c] = Character.getNumericValue( problemLine.charAt(r*9 + c) );
+                puzzle[r*9+c] = Character.getNumericValue( problemLine.charAt(r*9 + c) );
             }
         }
 
@@ -47,9 +47,9 @@ public class SudokuConfig implements Configuration{
 
     /** Constructs a Sudokuconfig from an existing model */
     public SudokuConfig(SudokuModel other){
-        this.puzzle = new int[9][9];
+        this.puzzle = new int[81];
         for(int r=0; r < 9; r++){
-            System.arraycopy(other.puzzle[r], 0, this.puzzle[r], 0, 9);
+            System.arraycopy(other.puzzle[r], 0, this.puzzle[r], 0, 81);
         }
         pos = new int[2];
         pos[0] = 0;
@@ -61,9 +61,9 @@ public class SudokuConfig implements Configuration{
     public SudokuConfig(SudokuConfig other){
         this.pos = new int[2];
         System.arraycopy(other.pos, 0, this.pos, 0, 2);
-        this.puzzle = new int[9][9];
+        this.puzzle = new int[81];
         for(int r=0; r < 9; r++){
-            System.arraycopy(other.puzzle[r], 0, this.puzzle[r], 0, 9);
+            System.arraycopy(other.puzzle[r], 0, this.puzzle[r], 0, 81);
         }
     }
 
@@ -80,19 +80,19 @@ public class SudokuConfig implements Configuration{
             if(c < 3){//upper left corner
                 for(int i = 0; i < 3; i++){
                     for(int j = 0; j < 3; j++){
-                        neighbors.add(puzzle[i][j]);
+                        neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else if(c < 6){//upper middle
                 for(int i = 0; i < 3; i++){
                     for(int j = 3; j < 6; j++){
-                        neighbors.add(puzzle[i][j]);
+                        neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else{//upper right corner
                 for(int i = 0; i < 3; i++){
                     for(int j = 6; j < 9; j++){
-                        neighbors.add(puzzle[i][j]);
+                        neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }
@@ -100,19 +100,19 @@ public class SudokuConfig implements Configuration{
             if(c < 3){//middle left
                 for(int i = 3; i < 6; i++){
                     for(int j = 0; j < 3; j++){
-                        neighbors.add(puzzle[i][j]);
+                        neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else if(c < 6){//middle center, the eye of sauron
                 for(int i = 3; i < 6; i++){
                     for(int j = 3; j < 6; j++){
-                        neighbors.add(puzzle[i][j]);
+                        neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else{//middle right
                 for(int i = 3; i < 6; i++){
                     for(int j = 6; j < 9; j++){
-                        neighbors.add(puzzle[i][j]);
+                        neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }
@@ -120,19 +120,19 @@ public class SudokuConfig implements Configuration{
             if(c < 3){//bottom left
                 for(int i = 6; i < 9; i++){
                     for(int j = 0; j < 3; j++){
-                        neighbors.add(puzzle[i][j]);
+                        neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else if(c < 6){//bottom center
                 for(int i = 6; i < 9; i++){
                     for(int j = 3; j < 6; j++){
-                        neighbors.add(puzzle[i][j]);
+                        neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else{//bottom right, finally done
                 for(int i = 6; i < 9; i++){
                     for(int j = 6; j < 9; j++){
-                        neighbors.add(puzzle[i][j]);
+                        neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }
@@ -156,36 +156,36 @@ public class SudokuConfig implements Configuration{
             if(c < 3){//upper left corner
                 for(int i = 0; i < 3; i++){
                     for(int j = 0; j < 3; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+                        if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                            if(puzzle[i*9+j] != 0) neighbors.add(puzzle[i*9+j]);
                         }
                     }
                 }
             }else if(c < 6){//upper middle
                 for(int i = 0; i < 3; i++){
                     for(int j = 3; j < 6; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+                        if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                            if(puzzle[i*9+j] != 0) neighbors.add(puzzle[i*9+j]);
                         }
                     }
                 }
             }else{//upper right corner
                 for(int i = 0; i < 3; i++){
                     for(int j = 6; j < 9; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+                        if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                            if(puzzle[i*9+j] != 0) neighbors.add(puzzle[i*9+j]);
                         }
                     }
                 }
@@ -194,36 +194,36 @@ public class SudokuConfig implements Configuration{
             if(c < 3){//middle left
                 for(int i = 3; i < 6; i++){
                     for(int j = 0; j < 3; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+                        if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                            if(puzzle[i*9+j] != 0) neighbors.add(puzzle[i*9+j]);
                         }
                     }
                 }
             }else if(c < 6){//middle center, the eye of sauron
                 for(int i = 3; i < 6; i++){
                     for(int j = 3; j < 6; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+                        if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                            if(puzzle[i*9+j] != 0) neighbors.add(puzzle[i*9+j]);
                         }
                     }
                 }
             }else{//middle right
                 for(int i = 3; i < 6; i++){
                     for(int j = 6; j < 9; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+                        if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                            if(puzzle[i*9+j] != 0) neighbors.add(puzzle[i*9+j]);
                         }
                     }
                 }
@@ -232,36 +232,36 @@ public class SudokuConfig implements Configuration{
             if(c < 3){//bottom left
                 for(int i = 6; i < 9; i++){
                     for(int j = 0; j < 3; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+                        if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            if (puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                            if (puzzle[i*9+j] != 0) neighbors.add(puzzle[i*9+j]);
                         }
                     }
                 }
             }else if(c < 6){//bottom center
                 for(int i = 6; i < 9; i++){
                     for(int j = 3; j < 6; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+                        if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                            if(puzzle[i*9+j] != 0) neighbors.add(puzzle[i*9+j]);
                         }
                     }
                 }
             }else{//bottom right, finally done
                 for(int i = 6; i < 9; i++){
                     for(int j = 6; j < 9; j++){
-                        if(neighbors.contains(puzzle[i][j])){
+                        if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
                             return errorSpot;
                         }else{
-                            if(puzzle[i][j] != 0) neighbors.add(puzzle[i][j]);
+                            if(puzzle[i*9+j] != 0) neighbors.add(puzzle[i*9+j]);
                         }
                     }
                 }
@@ -292,36 +292,36 @@ public class SudokuConfig implements Configuration{
             return successors;
         }
 
-        if(puzzle[pos[0]][pos[1]] != 0){ //check if the square has already been filled in
+        if(puzzle[pos[0]*9+pos[1]] != 0){ //check if the square has already been filled in
             SudokuConfig skip = new SudokuConfig(this);
             successors.add(skip);
         }else{ //otherwise we need to make a child for each digit //todo - try to optimize by not pursuing invalid nums
             SudokuConfig addOne = new SudokuConfig(this);
-            addOne.puzzle[pos[0]][pos[1]] = 1;
+            addOne.puzzle[pos[0]*9+pos[1]] = 1;
             successors.add(addOne);
             SudokuConfig addTwo = new SudokuConfig(this);
-            addTwo.puzzle[pos[0]][pos[1]] = 2;
+            addTwo.puzzle[pos[0]*9+pos[1]] = 2;
             successors.add(addTwo);
             SudokuConfig addThree = new SudokuConfig(this);
-            addThree.puzzle[pos[0]][pos[1]] = 3;
+            addThree.puzzle[pos[0]*9+pos[1]] = 3;
             successors.add(addThree);
             SudokuConfig addFour = new SudokuConfig(this);
-            addFour.puzzle[pos[0]][pos[1]] = 4;
+            addFour.puzzle[pos[0]*9+pos[1]] = 4;
             successors.add(addFour);
             SudokuConfig addFive = new SudokuConfig(this);
-            addFive.puzzle[pos[0]][pos[1]] = 5;
+            addFive.puzzle[pos[0]*9+pos[1]] = 5;
             successors.add(addFive);
             SudokuConfig addSix = new SudokuConfig(this);
-            addSix.puzzle[pos[0]][pos[1]] = 6;
+            addSix.puzzle[pos[0]*9+pos[1]] = 6;
             successors.add(addSix);
             SudokuConfig addSeven = new SudokuConfig(this);
-            addSeven.puzzle[pos[0]][pos[1]] = 7;
+            addSeven.puzzle[pos[0]*9+pos[1]] = 7;
             successors.add(addSeven);
             SudokuConfig addEight = new SudokuConfig(this);
-            addEight.puzzle[pos[0]][pos[1]] = 8;
+            addEight.puzzle[pos[0]*9+pos[1]] = 8;
             successors.add(addEight);
             SudokuConfig addNine = new SudokuConfig(this);
-            addNine.puzzle[pos[0]][pos[1]] = 9;
+            addNine.puzzle[pos[0]*9+pos[1]] = 9;
             successors.add(addNine);
         }
         return successors;
@@ -334,21 +334,21 @@ public class SudokuConfig implements Configuration{
         //check column for unique elements
         Set<Integer> col = new HashSet<>();
         for(int r=0; r < 9; r++){
-            if(col.contains(puzzle[r][pos[1]])) return false;
-            if(puzzle[r][pos[1]] != 0) col.add(puzzle[r][pos[1]]);
+            if(col.contains(puzzle[r*9+pos[1]])) return false;
+            if(puzzle[r*9+pos[1]] != 0) col.add(puzzle[r*9+pos[1]]);
         }
 
         //check row for unique elements
         Set<Integer> row = new HashSet<>();
         for(int c=0; c < 9; c++){
-            if(row.contains(puzzle[pos[0]][c])) return false;
-            if(puzzle[pos[0]][c] != 0) row.add(puzzle[pos[0]][c]);
+            if(row.contains(puzzle[pos[0]*9+c])) return false;
+            if(puzzle[pos[0]*9+c] != 0) row.add(puzzle[pos[0]*9+c]);
         }
 
         //check for zeroes above the last placed position
         for(int r=0; r < pos[0]; r++){//todo - this shouldn't be necessary
             for(int c=0; c < 9; c++){
-                if(puzzle[r][c] == 0) return false;
+                if(puzzle[r*9+c] == 0) return false;
             }
         }
 
