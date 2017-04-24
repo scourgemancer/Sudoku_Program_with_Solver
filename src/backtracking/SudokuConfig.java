@@ -16,7 +16,7 @@ import java.io.FileNotFoundException;
  */
 public class SudokuConfig implements Configuration{
     //states
-    private int[] pos;
+    private int pos;
     public int[] puzzle;
 
     /**
@@ -40,25 +40,20 @@ public class SudokuConfig implements Configuration{
         }
 
         in.close();
-        pos = new int[2];
-        pos[0] = 0;
-        pos[1] = -1;
+        pos = -1;
     }
 
     /** Constructs a Sudokuconfig from an existing model */
     public SudokuConfig(SudokuModel other){
         this.puzzle = new int[81];
         System.arraycopy(other.puzzle, 0, this.puzzle, 0, 81);
-        pos = new int[2];
-        pos[0] = 0;
-        pos[1] = 0;
+        pos = 0;
     }
 
 
     /** Constructs a SudokuConfig that's a copy of an existing SudokuConfig */
     public SudokuConfig(SudokuConfig other){
-        this.pos = new int[2];
-        System.arraycopy(other.pos, 0, this.pos, 0, 2);
+        this.pos = other.pos;
         this.puzzle = new int[81];
         System.arraycopy(other.puzzle, 0, this.puzzle, 0, 81);
     }
@@ -69,8 +64,10 @@ public class SudokuConfig implements Configuration{
      * @param c the column of the point being observed
      * @return a hashset of the integers already in the inner square
      */
-    private HashSet<Integer> getInnerSquare( int r, int c){
+    private HashSet<Integer> getInnerSquare( int p ){
         HashSet<Integer> neighbors = new HashSet<>();
+        int r = p/9;
+        int c = p%9;
 
         if(r < 3){//top three squares
             if(c < 3){//upper left corner
@@ -144,9 +141,11 @@ public class SudokuConfig implements Configuration{
      * @param c the column of the examined spot
      * @return array of two ints representing the (r, c) of the error, if there is one
      */
-    private int[] checkInnerSquare(int r, int c) {
+    private int[] checkInnerSquare(int p) {
         Set<Integer> neighbors = new HashSet<>();
         int[] errorSpot = new int[2];
+        int r = p/9;
+        int c = p%8;
 
         if(r < 3){//top three squares
             if(c < 3){//upper left corner
@@ -279,74 +278,45 @@ public class SudokuConfig implements Configuration{
         //todo -            necessary then or if they can work together
         //todo - I believe that I can auto-fill squares by checking inner square and r+c while in the isValid section
         ArrayList<Configuration> successors = new ArrayList<>();
-        pos[1]++;
-        if(pos[1] >= 9){
-            pos[1] = 0;
-            pos[0]++;
-        }
-        if(pos[0] >= 9){
+        pos++;
+        if(pos > 80){
             return successors;
         }
 
-        if(puzzle[pos[0]*9+pos[1]] != 0){ //check if the square has already been filled in
+        if(puzzle[pos] != 0){ //check if the square has already been filled in
             SudokuConfig skip = new SudokuConfig(this);
             successors.add(skip);
         }else{ //otherwise we need to make a child for each digit //todo - try to optimize by not pursuing invalid nums
-            SudokuConfig addOne = new SudokuConfig(this);
-            addOne.puzzle[pos[0]*9+pos[1]] = 1;
-            successors.add(addOne);
-            SudokuConfig addTwo = new SudokuConfig(this);
-            addTwo.puzzle[pos[0]*9+pos[1]] = 2;
-            successors.add(addTwo);
-            SudokuConfig addThree = new SudokuConfig(this);
-            addThree.puzzle[pos[0]*9+pos[1]] = 3;
-            successors.add(addThree);
-            SudokuConfig addFour = new SudokuConfig(this);
-            addFour.puzzle[pos[0]*9+pos[1]] = 4;
-            successors.add(addFour);
-            SudokuConfig addFive = new SudokuConfig(this);
-            addFive.puzzle[pos[0]*9+pos[1]] = 5;
-            successors.add(addFive);
-            SudokuConfig addSix = new SudokuConfig(this);
-            addSix.puzzle[pos[0]*9+pos[1]] = 6;
-            successors.add(addSix);
-            SudokuConfig addSeven = new SudokuConfig(this);
-            addSeven.puzzle[pos[0]*9+pos[1]] = 7;
-            successors.add(addSeven);
-            SudokuConfig addEight = new SudokuConfig(this);
-            addEight.puzzle[pos[0]*9+pos[1]] = 8;
-            successors.add(addEight);
-            SudokuConfig addNine = new SudokuConfig(this);
-            addNine.puzzle[pos[0]*9+pos[1]] = 9;
-            successors.add(addNine);
+            for(int i=1; i<10; i++){
+                SudokuConfig nextNum = new SudokuConfig(this);
+                nextNum.puzzle[pos] = i;
+                successors.add( nextNum );
+            }
         }
         return successors;
     }
 
     @Override
     public boolean isValid(){
-        if(checkInnerSquare(pos[0], pos[1])[0] != -1) return false;
+        if(checkInnerSquare(pos)[0] != -1) return false;
 
         //check column for unique elements
         Set<Integer> col = new HashSet<>();
-        for(int r=0; r < 9; r++){
-            if(col.contains(puzzle[r*9+pos[1]])) return false;
-            if(puzzle[r*9+pos[1]] != 0) col.add(puzzle[r*9+pos[1]]);
+        for(int r=pos/9, i=0; i<9; i++){
+            if(col.contains(puzzle[r*9+i])) return false;
+            if(puzzle[r*9+i] != 0) col.add(puzzle[r*9+i]);
         }
 
         //check row for unique elements
         Set<Integer> row = new HashSet<>();
-        for(int c=0; c < 9; c++){
-            if(row.contains(puzzle[pos[0]*9+c])) return false;
-            if(puzzle[pos[0]*9+c] != 0) row.add(puzzle[pos[0]*9+c]);
+        for(int c=pos%9; c < 81; c=c+9){
+            if(row.contains(puzzle[c])) return false;
+            if(puzzle[c] != 0) row.add(puzzle[c]);
         }
 
         //check for zeroes above the last placed position
-        for(int r=0; r < pos[0]; r++){//todo - this shouldn't be necessary
-            for(int c=0; c < 9; c++){
-                if(puzzle[r*9+c] == 0) return false;
-            }
-        }
+        for(int i=0; i < pos; i++) //todo - this shouldn't be necessary
+            if(puzzle[i]==0) return false;
 
         return true;
     }
@@ -354,7 +324,7 @@ public class SudokuConfig implements Configuration{
     @Override
     public boolean isGoal(){
         //must be valid, so just check if the last filled square was the last box in the Sudoku
-        if(pos[0]==8 && pos[1]==8) return true;
+        if(pos==82) return true;
         return false;
     }
 }
