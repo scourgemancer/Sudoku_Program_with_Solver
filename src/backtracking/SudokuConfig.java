@@ -306,17 +306,29 @@ public class SudokuConfig implements Configuration{
         if(checkInnerSquare(pos[0], pos[1])[0] != -1) return false;
 
         //check column for unique elements
-        Set<Integer> col = new HashSet<>();
+        boolean[] col = new boolean[9];
         for(int r=0; r < 9; r++){
-            if(col.contains(puzzle[r*9+pos[1]])) return false;
-            if(puzzle[r*9+pos[1]] != 0) col.add(puzzle[r*9+pos[1]]);
+            int num = puzzle[ r*9+pos[1] ]-1;
+            if(num != -1){
+                if(col[num]){
+                    return false;
+                }else{
+                    col[num] = true;
+                }
+            }
         }
 
         //check row for unique elements
-        Set<Integer> row = new HashSet<>();
+        boolean[] row = new boolean[9];
         for(int c=0; c < 9; c++){
-            if(row.contains(puzzle[pos[0]*9+c])) return false;
-            if(puzzle[pos[0]*9+c] != 0) row.add(puzzle[pos[0]*9+c]);
+            int num = puzzle[ pos[0]*9+c ]-1;
+            if(num != -1){
+                if(row[num]){
+                    return false;
+                }else{
+                    row[num] = true;
+                }
+            }
         }
 
         return true;

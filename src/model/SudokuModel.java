@@ -446,7 +446,13 @@ public class SudokuModel extends Observable{
             }else{
                 try{
                     SudokuConfig copy = new SudokuConfig(filename, lineNumber);
-                    int[][] solved = FasterSolver.solveBoard(copy.puzzle);
+                    int[][] copyNew = new int[9][9];
+                    for(int r=0; r<9; r++){
+                        for(int c=0; c<9; c++){
+                            copyNew[r][c] = copy.puzzle[r*9+c];
+                        }
+                    }
+                    int[][] solved = FasterSolver.solveBoard( copyNew );
                     Boolean found = false;
                     int ro = -1;
                     int co = -1;
@@ -503,10 +509,10 @@ public class SudokuModel extends Observable{
                 while(hints > 0){
                     for(int r = 0; r < 9; r++){
                         for(int c = 0; c < 9; c++){
-                            if(solution.puzzle[r][c] != 0 && puzzle[r][c] == 0){
+                            if(solution.puzzle[r*9+c] != 0 && puzzle[r][c] == 0){
                                 ro = r;
                                 co = c;
-                                num = solution.puzzle[r][c];
+                                num = solution.puzzle[r*9+c];
                                 found = true;
                                 hints--;
                                 break;
