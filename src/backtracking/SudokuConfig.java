@@ -16,8 +16,8 @@ import java.io.FileNotFoundException;
  */
 public class SudokuConfig implements Configuration{
     //states
-    private int[] pos;
-    public int[] puzzle;
+    private byte[] pos;
+    public byte[] puzzle;
 
     /**
      * Constructs a new SudokuConfig from a provided filename
@@ -26,7 +26,7 @@ public class SudokuConfig implements Configuration{
      */
     public SudokuConfig(String filename, int lineNumber) throws FileNotFoundException{
         Scanner in = new Scanner( new File("puzzles/" + filename) );
-        puzzle = new int[81];
+        puzzle = new byte[81];
 
         for(int i=0; i < lineNumber-1; i++){
             in.nextLine();
@@ -35,21 +35,21 @@ public class SudokuConfig implements Configuration{
         String problemLine = in.nextLine();
         for(int r = 0; r < 9; r++){
             for(int c = 0; c < 9; c++){
-                puzzle[r*9+c] = Character.getNumericValue( problemLine.charAt(r*9 + c) );
+                puzzle[r*9+c] = (byte)Character.getNumericValue( problemLine.charAt(r*9 + c) );
             }
         }
 
         in.close();
-        pos = new int[2];
+        pos = new byte[2];
         pos[0] = 0;
         pos[1] = -1;
     }
 
     /** Constructs a Sudokuconfig from an existing model */
     public SudokuConfig(SudokuModel other){
-        this.puzzle = new int[81];
+        this.puzzle = new byte[81];
         System.arraycopy(other.puzzle, 0, this.puzzle, 0, 81);
-        pos = new int[2];
+        pos = new byte[2];
         pos[0] = 0;
         pos[1] = 0;
     }
@@ -57,9 +57,9 @@ public class SudokuConfig implements Configuration{
 
     /** Constructs a SudokuConfig that's a copy of an existing SudokuConfig */
     public SudokuConfig(SudokuConfig other){
-        this.pos = new int[2];
+        this.pos = new byte[2];
         System.arraycopy(other.pos, 0, this.pos, 0, 2);
-        this.puzzle = new int[81];
+        this.puzzle = new byte[81];
         System.arraycopy(other.puzzle, 0, this.puzzle, 0, 81);
     }
 
@@ -67,67 +67,67 @@ public class SudokuConfig implements Configuration{
      * Finds the numbers already within an inner square contiaining the given (r, c) point
      * @param r the row of the point being observed
      * @param c the column of the point being observed
-     * @return a hashset of the integers already in the inner square
+     * @return a hashset of the bytes already in the inner square
      */
-    private HashSet<Integer> getInnerSquare( int r, int c){
-        HashSet<Integer> neighbors = new HashSet<>();
+    private HashSet<Byte> getInnerSquare( byte r, byte c){
+        HashSet<Byte> neighbors = new HashSet<>();
 
         if(r < 3){//top three squares
             if(c < 3){//upper left corner
-                for(int i = 0; i < 3; i++){
-                    for(int j = 0; j < 3; j++){
+                for(byte i = 0; i < 3; i++){
+                    for(byte j = 0; j < 3; j++){
                         neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else if(c < 6){//upper middle
-                for(int i = 0; i < 3; i++){
-                    for(int j = 3; j < 6; j++){
+                for(byte i = 0; i < 3; i++){
+                    for(byte j = 3; j < 6; j++){
                         neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else{//upper right corner
-                for(int i = 0; i < 3; i++){
-                    for(int j = 6; j < 9; j++){
+                for(byte i = 0; i < 3; i++){
+                    for(byte j = 6; j < 9; j++){
                         neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }
         }else if(r < 6){//center
             if(c < 3){//middle left
-                for(int i = 3; i < 6; i++){
-                    for(int j = 0; j < 3; j++){
+                for(byte i = 3; i < 6; i++){
+                    for(byte j = 0; j < 3; j++){
                         neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else if(c < 6){//middle center, the eye of sauron
-                for(int i = 3; i < 6; i++){
-                    for(int j = 3; j < 6; j++){
+                for(byte i = 3; i < 6; i++){
+                    for(byte j = 3; j < 6; j++){
                         neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else{//middle right
-                for(int i = 3; i < 6; i++){
-                    for(int j = 6; j < 9; j++){
+                for(byte i = 3; i < 6; i++){
+                    for(byte j = 6; j < 9; j++){
                         neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }
         }else{//bottom three squares
             if(c < 3){//bottom left
-                for(int i = 6; i < 9; i++){
-                    for(int j = 0; j < 3; j++){
+                for(byte i = 6; i < 9; i++){
+                    for(byte j = 0; j < 3; j++){
                         neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else if(c < 6){//bottom center
-                for(int i = 6; i < 9; i++){
-                    for(int j = 3; j < 6; j++){
+                for(byte i = 6; i < 9; i++){
+                    for(byte j = 3; j < 6; j++){
                         neighbors.add(puzzle[i*9+j]);
                     }
                 }
             }else{//bottom right, finally done
-                for(int i = 6; i < 9; i++){
-                    for(int j = 6; j < 9; j++){
+                for(byte i = 6; i < 9; i++){
+                    for(byte j = 6; j < 9; j++){
                         neighbors.add(puzzle[i*9+j]);
                     }
                 }
@@ -142,16 +142,16 @@ public class SudokuConfig implements Configuration{
      * first duplicate number therein, or [-1, -1] if there are no duplicates.
      * @param r the row of the examined spot
      * @param c the column of the examined spot
-     * @return array of two ints representing the (r, c) of the error, if there is one
+     * @return array of two bytes representing the (r, c) of the error, if there is one
      */
-    private int[] checkInnerSquare(int r, int c) {
-        Set<Integer> neighbors = new HashSet<>();
-        int[] errorSpot = new int[2];
+    private byte[] checkInnerSquare(byte r, byte c) {
+        Set<Byte> neighbors = new HashSet<>();
+        byte[] errorSpot = new byte[2];
 
         if(r < 3){//top three squares
             if(c < 3){//upper left corner
-                for(int i = 0; i < 3; i++){
-                    for(int j = 0; j < 3; j++){
+                for(byte i = 0; i < 3; i++){
+                    for(byte j = 0; j < 3; j++){
                         if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
@@ -162,8 +162,8 @@ public class SudokuConfig implements Configuration{
                     }
                 }
             }else if(c < 6){//upper middle
-                for(int i = 0; i < 3; i++){
-                    for(int j = 3; j < 6; j++){
+                for(byte i = 0; i < 3; i++){
+                    for(byte j = 3; j < 6; j++){
                         if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
@@ -174,8 +174,8 @@ public class SudokuConfig implements Configuration{
                     }
                 }
             }else{//upper right corner
-                for(int i = 0; i < 3; i++){
-                    for(int j = 6; j < 9; j++){
+                for(byte i = 0; i < 3; i++){
+                    for(byte j = 6; j < 9; j++){
                         if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
@@ -188,8 +188,8 @@ public class SudokuConfig implements Configuration{
             }
         }else if(r < 6){//center
             if(c < 3){//middle left
-                for(int i = 3; i < 6; i++){
-                    for(int j = 0; j < 3; j++){
+                for(byte i = 3; i < 6; i++){
+                    for(byte j = 0; j < 3; j++){
                         if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
@@ -200,8 +200,8 @@ public class SudokuConfig implements Configuration{
                     }
                 }
             }else if(c < 6){//middle center, the eye of sauron
-                for(int i = 3; i < 6; i++){
-                    for(int j = 3; j < 6; j++){
+                for(byte i = 3; i < 6; i++){
+                    for(byte j = 3; j < 6; j++){
                         if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
@@ -212,8 +212,8 @@ public class SudokuConfig implements Configuration{
                     }
                 }
             }else{//middle right
-                for(int i = 3; i < 6; i++){
-                    for(int j = 6; j < 9; j++){
+                for(byte i = 3; i < 6; i++){
+                    for(byte j = 6; j < 9; j++){
                         if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
@@ -226,8 +226,8 @@ public class SudokuConfig implements Configuration{
             }
         }else{//bottom three squares
             if(c < 3){//bottom left
-                for(int i = 6; i < 9; i++){
-                    for(int j = 0; j < 3; j++){
+                for(byte i = 6; i < 9; i++){
+                    for(byte j = 0; j < 3; j++){
                         if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
@@ -238,8 +238,8 @@ public class SudokuConfig implements Configuration{
                     }
                 }
             }else if(c < 6){//bottom center
-                for(int i = 6; i < 9; i++){
-                    for(int j = 3; j < 6; j++){
+                for(byte i = 6; i < 9; i++){
+                    for(byte j = 3; j < 6; j++){
                         if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
@@ -250,8 +250,8 @@ public class SudokuConfig implements Configuration{
                     }
                 }
             }else{//bottom right, finally done
-                for(int i = 6; i < 9; i++){
-                    for(int j = 6; j < 9; j++){
+                for(byte i = 6; i < 9; i++){
+                    for(byte j = 6; j < 9; j++){
                         if(neighbors.contains(puzzle[i*9+j])){
                             errorSpot[0] = i;
                             errorSpot[1] = j;
@@ -292,7 +292,7 @@ public class SudokuConfig implements Configuration{
             SudokuConfig skip = new SudokuConfig(this);
             successors.add(skip);
         }else{ //otherwise we need to make a child for each digit //todo - try to optimize by not pursuing invalid nums
-            for(int i=1; i<10; i++){
+            for(byte i=1; i<10; i++){
                 SudokuConfig addI = new SudokuConfig(this);
                 addI.puzzle[pos[0] * 9 + pos[1]] = i;
                 successors.add(addI);
@@ -307,7 +307,7 @@ public class SudokuConfig implements Configuration{
 
         //check column for unique elements
         boolean[] col = new boolean[9];
-        for(int r=0; r < 9; r++){
+        for(byte r=0; r < 9; r++){
             int num = puzzle[ r*9+pos[1] ]-1;
             if(num != -1){
                 if(col[num]){
@@ -320,7 +320,7 @@ public class SudokuConfig implements Configuration{
 
         //check row for unique elements
         boolean[] row = new boolean[9];
-        for(int c=0; c < 9; c++){
+        for(byte c=0; c < 9; c++){
             int num = puzzle[ pos[0]*9+c ]-1;
             if(num != -1){
                 if(row[num]){
