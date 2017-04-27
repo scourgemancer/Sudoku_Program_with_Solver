@@ -8,26 +8,24 @@ import java.util.Optional;
  * configuration and return a solution, provided that one exists.
  * @author Timothy Geary
  */
-public class Backtracker{
+public class MultiThreadedBacktracker{
+    public static volatile Optional solution;
+
     /**
      * Finds a solution to the provided configuration, if one exists.
      * @param config A valid configuration
      * @return A solution config, or null if there is no solution
      */
     public Optional<Configuration> solve(Configuration config){
-        if(config.isGoal()){
-            return Optional.of(config);
-        }else{
-            //todo - experiment w/ an optimize step here
-            for(Configuration child : config.getSuccessors()){
-                if(child.isValid()){
-                    Optional<Configuration> sol = solve(child);
-                    if(sol.isPresent()){
-                        return sol;
-                    }
-                }
-            }
+        solution = Optional.empty();
+        ConfigThread solving = new ConfigThread( config, solution );
+        solving.start();
+        try{ solving.join();
+        }catch(InterruptedException ie){ System.out.println(ie.getMessage()); }
+        while(solving.isAlive()){
+            try{ solving.join();
+            }catch(InterruptedException ie){ System.out.println(ie.getMessage()); }
         }
-        return Optional.empty();
+        return solution;
     }
 }
