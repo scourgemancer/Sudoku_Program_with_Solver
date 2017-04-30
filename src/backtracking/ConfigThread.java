@@ -2,6 +2,8 @@ package backtracking;
 
 import java.util.Optional;
 
+import static java.util.Optional.of;
+
 /**
  * This is a thread that starts with a Sudoku Configuration and starts
  * a new thread for each valid successor of its configuration, with a
@@ -9,29 +11,27 @@ import java.util.Optional;
  * @author Timothy Geary
  */
 public class ConfigThread extends Thread{
-    public static volatile Optional sol;
+    private static volatile Optional<ConfigThread> sol;
 
-    public Configuration config;
+    private Configuration config;
 
-    public ConfigThread(Configuration configuration, Optional solution){ config = configuration; sol = solution; }
-    public ConfigThread(Configuration child){ config = child; }
+    private ConfigThread(Configuration child){ config = child; }
+    public ConfigThread(Configuration configuration, Optional<ConfigThread> solution){
+        config = configuration;
+        sol = solution;
+    }
 
     public void run(){
         if(sol.isPresent()){ return; } //If a solution has been found, end all other threads still looking
         //todo - experiment w/ an optimize step here
-        ConfigThread[] threads = new ConfigThread[9];
-        byte i = 0;
         for(Configuration child : config.getSuccessors()){
-            if(child.isGoal()){ MultiThreadedBacktracker.solution = Optional.of(child); return; }
-            if(child.isValid()){
+            if(child.isGoal()){
+                //sol = Optional<ConfigThread>.of(child);
+                sol.notify();
+            }else if(child.isValid()){
                 ConfigThread childThread = new ConfigThread(child);
                 childThread.start();
-                threads[i] = childThread;
-            }i++;
-        }
-        for(ConfigThread thread : threads){
-            try{ if(thread != null) thread.join(); }
-            catch(InterruptedException ie){ System.out.println(ie.getMessage()); }
+            }
         }
     }
 }
