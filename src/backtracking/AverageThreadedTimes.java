@@ -55,7 +55,7 @@ public class AverageThreadedTimes{
 
             Configuration init = new SudokuConfig(difficulty + ".txt", line);
             MultiThreadedBacktracker bt = new MultiThreadedBacktracker();
-            Optional<ConfigThread> sol =  bt.solve(init);
+            Optional<Configuration> sol =  bt.solve(init);
             if(!sol.isPresent()){
                 System.out.println("There was no solution found at line number: " + line);
                 return;

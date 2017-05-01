@@ -9,19 +9,20 @@ import java.util.Optional;
  * @author Timothy Geary
  */
 public class MultiThreadedBacktracker{
-    public static volatile Optional<ConfigThread> solution;
+    public static volatile Optional<Configuration> solution;
 
     /**
      * Finds a solution to the provided configuration, if one exists.
      * @param config A valid configuration
      * @return A solution config, or null if there is no solution
      */
-    public Optional<ConfigThread> solve(Configuration config){
+    public Optional<Configuration> solve(Configuration config){
         solution = Optional.empty();
         ConfigThread solving = new ConfigThread( config, solution );
         solving.start();
-        try{ solution.wait();
+        try{ synchronized(solution){ while(!solution.isPresent()) solution.wait(); }
         }catch(InterruptedException ie){ System.out.println(ie.getMessage()); }
+        System.out.println("yay");//todo
         return solution;
     }
 }

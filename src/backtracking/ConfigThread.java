@@ -11,12 +11,12 @@ import static java.util.Optional.of;
  * @author Timothy Geary
  */
 public class ConfigThread extends Thread{
-    private static volatile Optional<ConfigThread> sol;
+    private static volatile Optional<Configuration> sol;
 
     private Configuration config;
 
     private ConfigThread(Configuration child){ config = child; }
-    public ConfigThread(Configuration configuration, Optional<ConfigThread> solution){
+    public ConfigThread(Configuration configuration, Optional<Configuration> solution){
         config = configuration;
         sol = solution;
     }
@@ -26,8 +26,8 @@ public class ConfigThread extends Thread{
         //todo - experiment w/ an optimize step here
         for(Configuration child : config.getSuccessors()){
             if(child.isGoal()){
-                //sol = Optional<ConfigThread>.of(child);
-                sol.notify();
+                sol = Optional.ofNullable(child);
+                synchronized(sol){ sol.notify(); }
             }else if(child.isValid()){
                 ConfigThread childThread = new ConfigThread(child);
                 childThread.start();
