@@ -126,8 +126,8 @@ public class SudokuGUI extends Application implements Observer{
     }
 
     /** Utility function to set the background for all of the pages */
-    private void setBackground( Region region, String image ){
-        Image img = new Image( getClass().getResourceAsStream("resources/" + image) );
+    private static void setBackground( Region region, String image ){
+        Image img = new Image( "resources/" + image );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
@@ -135,14 +135,14 @@ public class SudokuGUI extends Application implements Observer{
     }
 
     /** Utility function to set the size of a region */
-    private void setSize( Region reg, double width, double height ){
+    private static void setSize( Region reg, double width, double height ){
         reg.setMaxSize( width, height );
         reg.setMinSize( width, height );
         reg.setPrefSize( width, height );
     }
 
     /** Sets the mouse to close its hand over the region */
-    private void setMouseHover(Node node, Stage stage ){
+    private static void setMouseHover(Node node, Stage stage ){
         node.setOnMouseEntered(e -> {
             Platform.runLater(new Runnable() {
                 @Override
