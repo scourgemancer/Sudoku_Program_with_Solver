@@ -7,7 +7,7 @@ import gui.SudokuGUI;
  * The difficulty selection page asks the user to select the difficulty that they want their puzzle to be
  * @author Timothy Geary
  */
-public class DifficultySelectionState implements State{
+public class DifficultySelectionState extends State{
     @Override
     public void nextPage(SudokuGUI gui) {
 

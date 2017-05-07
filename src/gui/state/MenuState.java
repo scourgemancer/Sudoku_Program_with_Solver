@@ -7,7 +7,7 @@ import gui.SudokuGUI;
  * The menu page just presents options for the user to move onto using the program
  * @author Timothy Geary
  */
-public class MenuState implements State{
+public class MenuState extends State{
     @Override
     public void nextPage(SudokuGUI gui) {
 

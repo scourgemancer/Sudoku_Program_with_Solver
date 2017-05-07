@@ -7,7 +7,7 @@ import gui.SudokuGUI;
  * The help page describes how to use the program and how to play Sudoku
  * @author Timothy Geary
  */
-public class HelpState implements State{
+public class HelpState extends State{
     @Override
     public void nextPage(SudokuGUI gui) {
 
