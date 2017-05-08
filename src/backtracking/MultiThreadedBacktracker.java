@@ -22,6 +22,7 @@ public class MultiThreadedBacktracker{
         solving.start();
         try{ synchronized(solution){ while(!solution.isPresent()) solution.wait(); }
         }catch(InterruptedException ie){ System.out.println(ie.getMessage()); }
+        System.out.println("yay");//todo
         return solution;
     }
 }
