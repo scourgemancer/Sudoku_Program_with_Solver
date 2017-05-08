@@ -9,7 +9,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 /**
- * The State interface that's used by SudokuGUI to implement the State design pattern
+ * Used by SudokuGUI to implement the State design pattern and provides common functionality
  * Each implementing class represents a different type of page that the user can be on in the GUI
  * @author Timothy Geary
  */
