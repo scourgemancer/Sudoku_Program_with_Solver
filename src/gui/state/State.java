@@ -14,8 +14,14 @@ import javafx.stage.Stage;
  * @author Timothy Geary
  */
 public abstract class State{
+	/** This is called in the nextPage method to actually set up the new page */
+	public void setPage( SudokuGUI gui, Stage stage ){}
+
+	/** Called when the app changes state, and is passed the Stage to set and the name of the page it's changing to */
+	public void nextPage( SudokuGUI gui ){}
+
     /** Utility function to set the background for all of the pages */
-    private void setBackground(Region region, String image ){
+    private void setBackground( Region region, String image ){
         Image img = new Image( getClass().getResourceAsStream("resources/" + image) );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
@@ -31,7 +37,7 @@ public abstract class State{
     }
 
     /** Sets the mouse to close its hand over the region */
-    private void setMouseHover(Node node, Stage stage ){
+    private void setMouseHover( Node node, Stage stage ){
         node.setOnMouseEntered(e -> {
             Platform.runLater(new Runnable() {
                 @Override
@@ -49,7 +55,4 @@ public abstract class State{
             });
         });
     }
-
-    /** Called when the app changes state, and is passed the Stage to set and the name of the page it's changing to */
-    public void nextPage(SudokuGUI gui){};
 }
