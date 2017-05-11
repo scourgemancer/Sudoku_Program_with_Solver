@@ -1,5 +1,6 @@
 package gui;
 
+import gui.state.State;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -67,6 +68,12 @@ public class SudokuGUI extends Application implements Observer{
 
     /** The tilepane that holds the buttons */
     private TilePane grid;
+
+	/** The current state(page) that the gui is on **/
+	private State currentState;
+
+	/** A setter for the currentState variable **/
+	public void setState( State newState ){ currentState = newState; }
 
     /** A private class for the buttons */
     private class numButton extends Button{
