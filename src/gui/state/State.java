@@ -18,10 +18,10 @@ public abstract class State{
 	abstract public void setPage( SudokuGUI gui, Stage stage );
 
 	/** Called when the app changes state, and is passed the Stage to set and the name of the page it's changing to */
-	public void nextPage( SudokuGUI gui ){} //todo - make this default to just the menu page
+	public void nextPage( SudokuGUI gui, String name ){} //todo - make this default to just the menu page
 
     /** Utility function to set the background for all of the pages */
-    private void setBackground( Region region, String image ){
+    public void setBackground( Region region, String image ){
         Image img = new Image( getClass().getResourceAsStream("resources/" + image) );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
@@ -30,14 +30,14 @@ public abstract class State{
     }
 
     /** Utility function to set the size of a region */
-    private void setSize( Region reg, double width, double height ){
+    public void setSize( Region reg, double width, double height ){
         reg.setMaxSize( width, height );
         reg.setMinSize( width, height );
         reg.setPrefSize( width, height );
     }
 
     /** Sets the mouse to close its hand over the region */
-    private void setMouseHover( Node node, Stage stage ){
+    public void setMouseHover( Node node, Stage stage ){
         node.setOnMouseEntered(e -> {
             Platform.runLater(new Runnable() {
                 @Override

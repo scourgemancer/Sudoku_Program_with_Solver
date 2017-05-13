@@ -228,6 +228,9 @@ public class SudokuGUI extends Application implements Observer{
         animation.play();
     }
 
+    /** A utility function that attempts to open a given url in the default web browser **/
+    public void openWebpage( String url ){ getHostServices().showDocument( url ); }
+
     /** Sets up the starting menu stage */
     private void setMenuScreen(Stage stage){
         BorderPane window = new BorderPane();
