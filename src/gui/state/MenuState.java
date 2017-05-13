@@ -105,8 +105,8 @@ public class MenuState extends State{
 		styleOptionButton( start, width, stage );
 		setSize( start, width, height );
 
-		Button donate = new Button("Support"); //TODO - Allow for GooglePay, Bitcoin, Dogecoin, etc
-		donate.setOnAction(e -> gui.openWebpage( "https://www.paypal.me/TimGeary" ) );
+		Button donate = new Button("Support");
+		donate.setOnAction(e -> nextPage(gui, "donate") );
 		styleOptionButton( donate, width, stage );
 		setSize( donate, width, height );
 
