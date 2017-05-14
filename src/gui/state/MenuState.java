@@ -106,7 +106,7 @@ public class MenuState extends State{
 		setSize( start, width, height );
 
 		Button donate = new Button("Support");
-		donate.setOnAction(e -> nextPage(gui, "donate") );
+		donate.setOnAction(e -> gui.openWebpage( "https://www.paypal.me/TimGeary" ) );
 		styleOptionButton( donate, width, stage );
 		setSize( donate, width, height );
 
