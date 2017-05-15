@@ -1,6 +1,7 @@
 package gui.state;
 
 import gui.SudokuGUI;
+import javafx.stage.Stage;
 
 /**
  * This class sets up the GUI's puzzle selection page using the State pattern
@@ -9,7 +10,12 @@ import gui.SudokuGUI;
  */
 public class PuzzleSelectionState extends State{
     @Override
-    public void nextPage(SudokuGUI gui) {
+    public void setPage(SudokuGUI gui, Stage stage){
+
+    }
+
+    @Override
+    public void nextPage(SudokuGUI gui, String name){
 
     }
 }
