@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 public class PuzzleSelectionState extends State{
     @Override
     public void setPage(SudokuGUI gui, Stage stage){
-
+        nextPage(gui, "game");
     }
 
     @Override
