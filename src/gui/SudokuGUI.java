@@ -51,7 +51,7 @@ import java.util.Observer;
  */
 public class SudokuGUI extends Application implements Observer{
     /** The UI's connection to the model */
-    private SudokuModel model;
+    public SudokuModel model;
 
     /** The label for the update method */
     private Text status;
@@ -60,7 +60,7 @@ public class SudokuGUI extends Application implements Observer{
     private ArrayList< ArrayList<numButton> > puzzle;
 
     /** The selected difficulty formatted as a filename */
-    private String difficulty;
+    public String difficulty;
 
     /** Lets the update function know if there's error highlighting to undo */
     private boolean recentError;
