@@ -11,8 +11,9 @@ import javafx.stage.Stage;
 public class DonateState extends State{
     @Override
 	public void setPage(SudokuGUI gui, Stage stage){ //TODO - Allow for GooglePay, Bitcoin, Dogecoin, etc
-		//gui.openWebpage( "https://www.paypal.me/TimGeary" );
-    	//todo - figure out if this just opens the webpage or has an in-gui selection screen
+        gui.openWebpage( "https://www.paypal.me/TimGeary" );
+    	nextPage( gui, "menu" );
+        //todo - figure out if this just opens the webpage or has an in-gui selection screen
 	}
 
     @Override
