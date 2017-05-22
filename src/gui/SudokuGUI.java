@@ -1,5 +1,6 @@
 package gui;
 
+import gui.state.MenuState;
 import gui.state.State;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
@@ -478,7 +479,7 @@ public class SudokuGUI extends Application implements Observer{
     public void start(Stage stage) throws Exception{
         stage.setHeight( Screen.getMainScreen().getHeight() * 7 / 8 );
         stage.setWidth( Screen.getMainScreen().getWidth() / 2 );
-        setMenuScreen(stage);
+        setState( new MenuState( this, stage ) );
         stage.setTitle("Sudoku");
         stage.getIcons().add( new Image( getClass().getResourceAsStream("resources/icon.png") ) );
         stage.show();

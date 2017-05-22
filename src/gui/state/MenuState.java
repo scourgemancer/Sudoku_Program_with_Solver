@@ -143,4 +143,6 @@ public class MenuState extends State{
     public void nextPage(SudokuGUI gui, String name){
 		//todo - finish implementation
     }
+
+	public MenuState( SudokuGUI gui, Stage stage ){ setPage( gui, stage ); }
 }

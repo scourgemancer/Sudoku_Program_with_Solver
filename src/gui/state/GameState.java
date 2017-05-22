@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class GameState extends State{
     /** The UI's connection to the model */
-    public SudokuModel model;
+    private SudokuModel model;
 
     /** The label for the update method */
     private Text status;
