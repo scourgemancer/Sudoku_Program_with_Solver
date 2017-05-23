@@ -91,17 +91,17 @@ public class MenuState extends State{
 		setSize( option8, width, height );
 
 		Button about = new Button("About");
-		about.setOnAction(e -> nextPage(gui, "about"));
+		about.setOnAction(e -> nextPage(gui, stage, "about"));
 		styleOptionButton( about, width, stage );
 		setSize( about, width, height );
 
 		Button help = new Button("Help");
-		help.setOnAction(e -> nextPage(gui, "help"));
+		help.setOnAction(e -> nextPage(gui, stage, "help"));
 		styleOptionButton( help, width, stage );
 		setSize( help, width, height );
 
 		Button start = new Button("Play");
-		start.setOnAction(e -> nextPage(gui, "difficulty"));
+		start.setOnAction(e -> nextPage(gui, stage, "difficulty"));
 		styleOptionButton( start, width, stage );
 		setSize( start, width, height );
 
@@ -140,7 +140,7 @@ public class MenuState extends State{
 	}
 
     @Override
-    public void nextPage(SudokuGUI gui, String name){
+    public void nextPage(SudokuGUI gui, Stage stage, String name){
 		//todo - finish implementation
     }
 

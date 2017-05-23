@@ -12,12 +12,12 @@ public class DonateState extends State{
     @Override
 	public void setPage(SudokuGUI gui, Stage stage){ //TODO - Allow for GooglePay, Bitcoin, Dogecoin, etc
         gui.openWebpage( "https://www.paypal.me/TimGeary" );
-    	nextPage( gui, "menu" );
+    	nextPage( gui, stage, "menu" );
         //todo - figure out if this just opens the webpage or has an in-gui selection screen
 	}
 
     @Override
-    public void nextPage(SudokuGUI gui, String name){
+    public void nextPage(SudokuGUI gui, Stage stage, String name){
 		//todo - decide how to implement
     }
 }

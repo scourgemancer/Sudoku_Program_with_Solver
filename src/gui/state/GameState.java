@@ -140,9 +140,9 @@ public class GameState extends State{
         Button newGame = new Button("New Puzzle");
         Button menu = new Button("Menu");
         //add the functionality of the buttons
-        restart.setOnAction(e -> nextPage( gui, "game" ));
-        newGame.setOnAction(e -> nextPage( gui, "difficulty" ));
-        menu.setOnAction(e -> nextPage( gui, "menu" ));
+        restart.setOnAction(e -> nextPage( gui, stage, "game" ));
+        newGame.setOnAction(e -> nextPage( gui, stage, "difficulty" ));
+        menu.setOnAction(e -> nextPage( gui, stage, "menu" ));
         HBox functions = new HBox( restart, newGame, menu );
 
         VBox page = new VBox( status, puzzle, features, functions );
@@ -171,7 +171,7 @@ public class GameState extends State{
     }
 
     @Override
-    public void nextPage(SudokuGUI gui, String name){
+    public void nextPage(SudokuGUI gui, Stage stage, String name){
 
     }
 }

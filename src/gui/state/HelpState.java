@@ -15,7 +15,7 @@ public class HelpState extends State{
     }
 
     @Override
-    public void nextPage(SudokuGUI gui, String name){
+    public void nextPage(SudokuGUI gui, Stage stage, String name){
 
     }
 }

@@ -18,7 +18,7 @@ public abstract class State{
 	abstract public void setPage( SudokuGUI gui, Stage stage );
 
 	/** Called when the app changes state, and is passed the Stage to set and the name of the page it's changing to */
-	public void nextPage( SudokuGUI gui, String name ){} //todo - make this default to just the menu page
+	public void nextPage( SudokuGUI gui, Stage stage, String name ){ gui.setState( new MenuState( gui, stage ) ); }
 
     /** Utility function to set the background for all of the pages */
     public void setBackground( Region region, String image ){
