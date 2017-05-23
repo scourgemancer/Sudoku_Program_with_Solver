@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 public class HelpState extends State{
     @Override
     public void setPage(SudokuGUI gui, Stage stage){
-
+        nextPage( gui, stage, "menu" ); //todo - actually construct this page
     }
 
     @Override
