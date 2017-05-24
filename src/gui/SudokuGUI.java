@@ -51,6 +51,9 @@ import java.util.Observer;
  * @author Timothy Geary
  */
 public class SudokuGUI extends Application implements Observer{
+    /** Used by the States to set their respective pages */
+    public Stage stage;
+
     /** The UI's connection to the model */
     public SudokuModel model;
 
@@ -74,7 +77,10 @@ public class SudokuGUI extends Application implements Observer{
 	private State currentState;
 
 	/** A setter for the currentState variable **/
-	public void setState( State newState ){ currentState = newState; }
+	public void setState( State newState ){
+		currentState = newState;
+		newState.setPage( this );
+	}
 
     /** A private class for the buttons */
     private class numButton extends Button{
@@ -475,11 +481,11 @@ public class SudokuGUI extends Application implements Observer{
         stage.setScene(scene);
     }
 
-    @Override
-    public void start(Stage stage) throws Exception{
+    @Override public void start(Stage stage) throws Exception{
+    	this.stage = stage;
         stage.setHeight( Screen.getMainScreen().getHeight() * 7 / 8 );
         stage.setWidth( Screen.getMainScreen().getWidth() / 2 );
-        setState( new MenuState( this, stage ) );
+        setState( new MenuState( ) );
         stage.setTitle("Sudoku");
         stage.getIcons().add( new Image( getClass().getResourceAsStream("resources/icon.png") ) );
         stage.show();

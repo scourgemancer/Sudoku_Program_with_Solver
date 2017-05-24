@@ -95,7 +95,7 @@ public class GameState extends State{
     }
 
     @Override
-    public void setPage(SudokuGUI gui, Stage stage){
+    public void setPage(SudokuGUI gui){
         errorPos = new int[] {0,0};
 
         //todo - move difficulty into the sudoku model
@@ -116,7 +116,7 @@ public class GameState extends State{
         Image img = new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") );
         BackgroundImage BI = new BackgroundImage( img,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                new BackgroundSize( stage.getWidth(), 100, false, true, true, false ) );
+                new BackgroundSize( gui.stage.getWidth(), 100, false, true, true, false ) );
         puzzle.setBackground( new Background(BI) );
 
         Button undo = new Button("Undo");
@@ -140,9 +140,9 @@ public class GameState extends State{
         Button newGame = new Button("New Puzzle");
         Button menu = new Button("Menu");
         //add the functionality of the buttons
-        restart.setOnAction(e -> nextPage( gui, stage, "game" ));
-        newGame.setOnAction(e -> nextPage( gui, stage, "difficulty" ));
-        menu.setOnAction(e -> nextPage( gui, stage, "menu" ));
+        restart.setOnAction(e -> nextPage( gui, "game" ));
+        newGame.setOnAction(e -> nextPage( gui, "difficulty" ));
+        menu.setOnAction(e -> nextPage( gui, "menu" ));
         HBox functions = new HBox( restart, newGame, menu );
 
         VBox page = new VBox( status, puzzle, features, functions );
@@ -151,27 +151,27 @@ public class GameState extends State{
 
         switch( model.filename.substring(0, model.filename.length() - 4).toLowerCase() ){
             case "super_easy":
-                stage.setTitle( stage.getTitle() + " - Super Easy Puzzle #" + model.lineNumber);
+                gui.stage.setTitle( gui.stage.getTitle() + " - Super Easy Puzzle #" + model.lineNumber);
                 break;
             case "easy":
-                stage.setTitle("Easy Sudoku puzzle #" + model.lineNumber);
+                gui.stage.setTitle("Easy Sudoku puzzle #" + model.lineNumber);
                 break;
             case "normal":
-                stage.setTitle("Normal Sudoku puzzle #" + model.lineNumber);
+                gui.stage.setTitle("Normal Sudoku puzzle #" + model.lineNumber);
                 break;
             case "hard":
-                stage.setTitle("Hard Sudoku puzzle #" + model.lineNumber);
+                gui.stage.setTitle("Hard Sudoku puzzle #" + model.lineNumber);
                 break;
             case "extreme":
-                stage.setTitle("I'm sorry, it's Sudoku puzzle #" + model.lineNumber + ", good luck");
+                gui.stage.setTitle("I'm sorry, it's Sudoku puzzle #" + model.lineNumber + ", good luck");
                 break;
         }
 
-        stage.setScene(scene);
+        gui.stage.setScene(scene);
     }
 
     @Override
-    public void nextPage(SudokuGUI gui, Stage stage, String name){
+    public void nextPage(SudokuGUI gui, String name){
 
     }
 }

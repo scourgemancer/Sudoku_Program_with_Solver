@@ -55,7 +55,7 @@ public class MenuState extends State{
 	}
 
     @Override
-	public void setPage(SudokuGUI gui, Stage stage){
+	public void setPage(SudokuGUI gui){
 		BorderPane window = new BorderPane();
 		Scene scene = new Scene( window );
 		setBackground( window, "light.jpg" );
@@ -63,22 +63,22 @@ public class MenuState extends State{
 		Image titleImage = new Image( getClass().getResourceAsStream("resources/sudoku_title.png") );
 		ImageView title = new ImageView( titleImage );
 		title.setPreserveRatio( true );
-		title.setFitWidth( 2.0 * stage.getWidth() / 3.0 );
-		BorderPane.setMargin( title, new Insets( 0.05 * stage.getHeight(), 0, 0, 0 ) );
+		title.setFitWidth( 2.0 * gui.stage.getWidth() / 3.0 );
+		BorderPane.setMargin( title, new Insets( 0.05 * gui.stage.getHeight(), 0, 0, 0 ) );
 		window.setTop( title );
 		BorderPane.setAlignment( title, Pos.CENTER );
 
 		TilePane options = new TilePane();
 		options.setPrefColumns( 3 );
-		double squareDim = ( stage.getHeight() - title.getFitHeight() ) * (35.0/48.0);
+		double squareDim = ( gui.stage.getHeight() - title.getFitHeight() ) * (35.0/48.0);
 		setSize( options, squareDim, squareDim );
-		options.setHgap( stage.getHeight() / 110.0 );
-		options.setVgap( stage.getWidth() / 110.0 );
+		options.setHgap( gui.stage.getHeight() / 110.0 );
+		options.setVgap( gui.stage.getWidth() / 110.0 );
 
 		//the sizes for each of the option buttons
 		//todo double width = squareDim * (340.0 / 456.0) / 3.1;       FIGURE OUT WHAT THIS MEANS
 		double width = squareDim * (340.0 / 456.0) / 3.119;
-		double height = squareDim * ( (297.0 / 402.0) / 3.1 ) - (stage.getHeight() / 100)*3 + 2;
+		double height = squareDim * ( (297.0 / 402.0) / 3.1 ) - (gui.stage.getHeight() / 100)*3 + 2;
 
 		//blank squares
 		Label option2 = new Label();
@@ -91,28 +91,28 @@ public class MenuState extends State{
 		setSize( option8, width, height );
 
 		Button about = new Button("About");
-		about.setOnAction(e -> nextPage(gui, stage, "about"));
-		styleOptionButton( about, width, stage );
+		about.setOnAction(e -> nextPage(gui, "about"));
+		styleOptionButton( about, width, gui.stage );
 		setSize( about, width, height );
 
 		Button help = new Button("Help");
-		help.setOnAction(e -> nextPage(gui, stage, "help"));
-		styleOptionButton( help, width, stage );
+		help.setOnAction(e -> nextPage(gui, "help"));
+		styleOptionButton( help, width, gui.stage );
 		setSize( help, width, height );
 
 		Button start = new Button("Play");
-		start.setOnAction(e -> nextPage(gui, stage, "difficulty"));
-		styleOptionButton( start, width, stage );
+		start.setOnAction(e -> nextPage(gui, "difficulty"));
+		styleOptionButton( start, width, gui.stage );
 		setSize( start, width, height );
 
 		Button donate = new Button("Support");
 		donate.setOnAction(e -> gui.openWebpage( "https://www.paypal.me/TimGeary" ) );
-		styleOptionButton( donate, width, stage );
+		styleOptionButton( donate, width, gui.stage );
 		setSize( donate, width, height );
 
 		Button quit = new Button("Quit");
 		quit.setOnAction(e -> Platform.exit());
-		styleOptionButton( quit, width, stage );
+		styleOptionButton( quit, width, gui.stage );
 		setSize( quit, width, height );
 
 		Image image = new Image( getClass().getResourceAsStream("resources/frame.png") );
@@ -133,16 +133,14 @@ public class MenuState extends State{
 		window.setBottom( options );
 		BorderPane.setAlignment( options, Pos.CENTER );
 		BorderPane.setMargin( options, new Insets(
-				( stage.getHeight() - squareDim - title.getFitHeight() ) / 8, 0, 0, 0 ) );
+				( gui.stage.getHeight() - squareDim - title.getFitHeight() ) / 8, 0, 0, 0 ) );
 
-		stage.setTitle( "Sudoku" );
-		stage.setScene(scene);
+		gui.stage.setTitle( "Sudoku" );
+		gui.stage.setScene(scene);
 	}
 
     @Override
-    public void nextPage(SudokuGUI gui, Stage stage, String name){
+    public void nextPage(SudokuGUI gui, String name){
 		//todo - finish implementation
     }
-
-	public MenuState( SudokuGUI gui, Stage stage ){ setPage( gui, stage ); }
 }

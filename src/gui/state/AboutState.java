@@ -10,13 +10,13 @@ import javafx.stage.Stage;
  */
 public class AboutState extends State{
     @Override
-    public void setPage(SudokuGUI gui, Stage stage){
-        nextPage( gui, stage, "menu" );
+    public void setPage(SudokuGUI gui){
+        nextPage( gui, "menu" );
         //todo - implement this page
     }
 
     @Override
-    public void nextPage(SudokuGUI gui, Stage stage, String name){
+    public void nextPage(SudokuGUI gui, String name){
 
     }
 }
