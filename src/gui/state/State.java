@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 /**
  * Used by SudokuGUI to implement the State design pattern and provides common functionality
  * Each implementing class represents a different type of page that the user can be on in the GUI
@@ -22,7 +24,7 @@ public abstract class State{
 
     /** Utility function to set the background for all of the pages */
     public void setBackground( Region region, String image ){
-        Image img = new Image( getClass().getResourceAsStream("/resources/" + image) );
+        Image img = new Image( new File("/resources/" + image).toURI().toString() );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );

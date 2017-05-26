@@ -27,6 +27,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -79,7 +80,7 @@ public class SudokuGUI extends Application implements Observer{
 	/** A setter for the currentState variable **/
 	public void setState( State newState ){
 		currentState = newState;
-		newState.setPage( this );
+		currentState.setPage( this );
 	}
 
     /** A private class for the buttons */
@@ -487,7 +488,7 @@ public class SudokuGUI extends Application implements Observer{
         stage.setWidth( Screen.getMainScreen().getWidth() / 2 );
         setState( new MenuState( ) );
         stage.setTitle("Sudoku");
-        stage.getIcons().add( new Image( getClass().getResourceAsStream("resources/icon.png") ) );
+        stage.getIcons().add( new Image( new File("/resources/icon.png").toURI().toString() ) );
         stage.show();
     }
 
