@@ -22,7 +22,7 @@ public abstract class State{
 
     /** Utility function to set the background for all of the pages */
     public void setBackground( Region region, String image ){
-        Image img = new Image( getClass().getResourceAsStream("resources/" + image) );
+        Image img = new Image( getClass().getResourceAsStream("/resources/" + image) );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
@@ -38,21 +38,7 @@ public abstract class State{
 
     /** Sets the mouse to close its hand over the region */
     public void setMouseHover( Node node, Stage stage ){
-        node.setOnMouseEntered(e -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    stage.getScene().setCursor( Cursor.HAND );
-                }
-            });
-        });
-        node.setOnMouseExited(e -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    stage.getScene().setCursor(Cursor.DEFAULT);
-                }
-            });
-        });
+        node.setOnMouseEntered(e -> stage.getScene().setCursor( Cursor.HAND ));
+        node.setOnMouseExited(e -> stage.getScene().setCursor(Cursor.DEFAULT));
     }
 }
