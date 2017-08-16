@@ -77,6 +77,9 @@ public class SudokuGUI extends Application implements Observer{
 	/** The current state(page) that the gui is on **/
 	private State currentState;
 
+	/** Screen variable */
+	Screen screen;
+
 	/** A setter for the currentState variable **/
 	public void setState( State newState ){
 		currentState = newState;
