@@ -161,22 +161,8 @@ public class SudokuGUI extends Application implements Observer{
 
     /** Sets the mouse to close its hand over the region */
     private void setMouseHover(Node node, Stage stage ){
-        node.setOnMouseEntered(e -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    stage.getScene().setCursor( Cursor.HAND );
-                }
-            });
-        });
-        node.setOnMouseExited(e -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    stage.getScene().setCursor(Cursor.DEFAULT);
-                }
-            });
-        });
+        node.setOnMouseEntered(e -> stage.getScene().setCursor( Cursor.HAND ));
+        node.setOnMouseExited(e -> stage.getScene().setCursor( Cursor.DEFAULT ));
     }
 
     /** Utility function to set the style of a main menu option button */
