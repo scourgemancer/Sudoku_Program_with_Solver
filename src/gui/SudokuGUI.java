@@ -53,10 +53,6 @@ import java.util.Observer;
  * @author Timothy Geary
  */
 public class SudokuGUI extends Application implements Observer{
-    /** Used by the States to set their respective pages */
-    public Stage stage;
-
-    /** The UI's connection to the model */
     public SudokuModel model;
 
     /** The label for the update method */
@@ -65,8 +61,7 @@ public class SudokuGUI extends Application implements Observer{
     /** A 2d button matrix for the update method */
     private ArrayList< ArrayList<gui.state.NumButton> > puzzle;
 
-    /** The selected difficulty formatted as a filename */
-    public String difficulty;
+    String difficulty;
 
     /** Lets the update function know if there's error highlighting to undo */
     private boolean recentError;
@@ -75,7 +70,6 @@ public class SudokuGUI extends Application implements Observer{
     /** The tilepane that holds the buttons */
     private TilePane grid;
 
-	/** The current state(page) that the gui is on **/
 	private State currentState;
 
 	/** A setter for the currentState variable **/
@@ -83,6 +77,9 @@ public class SudokuGUI extends Application implements Observer{
 		currentState = newState;
 		currentState.setPage( this );
 	}
+
+	Double height;
+	Double width;
 
     /** Animates the surrounding frame to move between two difficulty selections */
     private void animateSelection( Node target, Node frame, Stage stage ){
@@ -103,9 +100,10 @@ public class SudokuGUI extends Application implements Observer{
     public void openWebpage( String url ){ getHostServices().showDocument( url ); }
 
     @Override public void start(Stage stage) throws Exception{
-    	this.stage = stage;
-        stage.setHeight( Screen.getMainScreen().getHeight() * 7 / 8 );
-        stage.setWidth( Screen.getMainScreen().getWidth() / 2 );
+        height = (double) Screen.getMainScreen().getHeight() * 7 / 8;
+        stage.setHeight(height);
+        width = (double) Screen.getMainScreen().getWidth() / 2;
+        stage.setWidth(width);
         setState( new MenuState( ) );
         stage.setTitle("Sudoku");
         stage.getIcons().add( new Image( new File("/resources/icon.png").toURI().toString() ) );
