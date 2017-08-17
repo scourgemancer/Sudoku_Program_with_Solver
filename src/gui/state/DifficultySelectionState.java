@@ -25,7 +25,6 @@ import java.io.FileNotFoundException;
  * @author Timothy Geary
  */
 public class DifficultySelectionState extends State{
-    /** Utility function to set the style of a difficulty selection button */
     /** Animates the surrounding frame to move between two difficulty selections */
     private void animateSelection(Node target, Node frame, Stage stage ){
         TranslateTransition animation = new TranslateTransition( Duration.millis(450), frame );
@@ -41,6 +40,7 @@ public class DifficultySelectionState extends State{
         animation.play();
     }
 
+    /** Utility function to set the style of a difficulty selection button */
     private void styleDifficultyButton( Button button, String difficulty, Button target,
                                         Stage stage, ImageView frame, SudokuGUI gui ){
         button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
