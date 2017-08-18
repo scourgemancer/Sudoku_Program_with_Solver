@@ -1,35 +1,16 @@
 package gui;
 
-import gui.state.GameState;
-import gui.state.MenuState;
-import gui.state.State;
-import javafx.animation.Interpolator;
-import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
-
 import model.SudokuModel;
 
-import com.sun.glass.ui.Screen;
-
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.text.Font;
+import gui.state.State;
+import javafx.stage.Screen;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -55,13 +36,17 @@ import java.util.Observer;
 public class SudokuGUI extends Application implements Observer{
     public SudokuModel model;
 
+    public Stage stage;
+
+    private State currentState;
+
     /** The label for the update method */
     private Text status;
 
+    public String difficulty;
+
     /** A 2d button matrix for the update method */
     private ArrayList< ArrayList<gui.state.NumButton> > puzzle;
-
-    String difficulty;
 
     /** Lets the update function know if there's error highlighting to undo */
     private boolean recentError;
@@ -70,41 +55,21 @@ public class SudokuGUI extends Application implements Observer{
     /** The tilepane that holds the buttons */
     private TilePane grid;
 
-	private State currentState;
-
 	/** A setter for the currentState variable **/
 	public void setState( State newState ){
 		currentState = newState;
 		currentState.setPage( this );
 	}
 
-	Double height;
-	Double width;
-
-    /** Animates the surrounding frame to move between two difficulty selections */
-    private void animateSelection( Node target, Node frame, Stage stage ){
-        TranslateTransition animation = new TranslateTransition( Duration.millis(450), frame );
-        animation.setInterpolator( Interpolator.EASE_IN );
-        //centers the difficulties with and without 'y' in them within the frame properly
-        if( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() < stage.getHeight() * 0.4 ){
-            animation.setByY( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() -
-                    frame.localToScene( frame.getBoundsInLocal(), false ).getMaxY() + stage.getHeight() / 100 );
-        }else{
-            animation.setByY( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() -
-                    frame.localToScene( frame.getBoundsInLocal(), false ).getMaxY() + stage.getHeight() / 150 );
-        }
-        animation.play();
-    }
-
     /** A utility function that attempts to open a given url in the default web browser **/
     public void openWebpage( String url ){ getHostServices().showDocument( url ); }
 
-    @Override public void start(Stage stage) throws Exception{
-        height = (double) Screen.getMainScreen().getHeight() * 7 / 8;
-        stage.setHeight(height);
-        width = (double) Screen.getMainScreen().getWidth() / 2;
-        stage.setWidth(width);
-        setState( new MenuState( ) );
+    @Override
+    public void start(Stage stage) throws Exception{
+        stage.setHeight( Screen.getPrimary().getBounds().getHeight() * 7 / 8 );
+        stage.setWidth( Screen.getPrimary().getBounds().getWidth() / 2 );
+        this.stage = stage;
+        //setState( new MenuState( ) );
         stage.setTitle("Sudoku");
         stage.getIcons().add( new Image( new File("/resources/icon.png").toURI().toString() ) );
         stage.show();
