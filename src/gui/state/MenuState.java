@@ -81,10 +81,10 @@ public class MenuState extends State{
 		double height = squareDim * ( (297.0 / 402.0) / 3.1 ) - (gui.stage.getHeight() / 100)*3 + 2;
 
 		//blank squares
-		Label option2 = new Label();
-		Label option4 = new Label();
-		Label option6 = new Label();
-		Label option8 = new Label();
+		Label option2 = new Label("");
+		Label option4 = new Label("");
+		Label option6 = new Label("");
+		Label option8 = new Label("");
 		setSize( option2, width, height );
 		setSize( option4, width, height );
 		setSize( option6, width, height );

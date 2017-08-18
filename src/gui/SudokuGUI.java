@@ -1,5 +1,6 @@
 package gui;
 
+import gui.state.MenuState;
 import model.SudokuModel;
 
 import gui.state.State;
@@ -69,7 +70,7 @@ public class SudokuGUI extends Application implements Observer{
         stage.setHeight( Screen.getPrimary().getBounds().getHeight() * 7 / 8 );
         stage.setWidth( Screen.getPrimary().getBounds().getWidth() / 2 );
         this.stage = stage;
-        //setState( new MenuState( ) );
+        setState( new MenuState( ) );
         stage.setTitle("Sudoku");
         stage.getIcons().add( new Image( new File("/resources/icon.png").toURI().toString() ) );
         stage.show();
