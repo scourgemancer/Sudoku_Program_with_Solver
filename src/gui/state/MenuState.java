@@ -23,13 +23,13 @@ import javafx.stage.Stage;
 public class MenuState extends State{
 	/** Utility function to set the style of a main menu option button */
 	private void styleOptionButton( Button button, double width, Stage stage ){
-		if(button.getText().length() > 5){
+		/**if(button.getText().length() > 5){
 			button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 5 ) );
 		}else{
 			button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 4 ) );
 		}
 		button.setEllipsisString("");
-
+*/
 		//the rest is all for a 'hover-over' background color change
 		button.setBackground( new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)) );
 		button.setOnMouseEntered(e -> {
@@ -82,27 +82,27 @@ public class MenuState extends State{
 
 		Button about = new Button("About");
 		about.setOnAction(e -> nextPage(gui, "about"));
-		//styleOptionButton( about, width, gui.stage );
+		styleOptionButton( about, width, gui.stage );
 		setSize( about, width, height );
 
 		Button help = new Button("Help");
 		help.setOnAction(e -> nextPage(gui, "help"));
-		//styleOptionButton( help, width, gui.stage );
+		styleOptionButton( help, width, gui.stage );
 		setSize( help, width, height );
 
 		Button start = new Button("Play");
 		start.setOnAction(e -> nextPage(gui, "difficulty"));
-		//styleOptionButton( start, width, gui.stage );
+		styleOptionButton( start, width, gui.stage );
 		setSize( start, width, height );
 
 		Button donate = new Button("Support");
 		donate.setOnAction(e -> gui.openWebpage( "https://www.paypal.me/TimGeary" ) );
-		//styleOptionButton( donate, width, gui.stage );
+		styleOptionButton( donate, width, gui.stage );
 		setSize( donate, width, height );
 
 		Button quit = new Button("Quit");
 		quit.setOnAction(e -> Platform.exit());
-		//styleOptionButton( quit, width, gui.stage );
+		styleOptionButton( quit, width, gui.stage );
 		setSize( quit, width, height );
 
 		Image image = new Image( getClass().getResourceAsStream("resources/frame.png") );

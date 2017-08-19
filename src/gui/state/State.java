@@ -24,7 +24,7 @@ public abstract class State{
 
     /** Utility function to set the background for all of the pages */
     public void setBackground( Region region, String image ){
-        Image img = new Image( new File("/resources/" + image).toURI().toString() );
+        Image img = new Image( new File("resources/" + image).toURI().toString() );
         BackgroundImage BI = new BackgroundImage(img,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT );
