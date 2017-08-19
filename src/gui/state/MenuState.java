@@ -33,24 +33,14 @@ public class MenuState extends State{
 		//the rest is all for a 'hover-over' background color change
 		button.setBackground( new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)) );
 		button.setOnMouseEntered(e -> {
+            Platform.runLater(() -> stage.getScene().setCursor( Cursor.HAND ));
 			button.setBackground( new Background(
 					new BackgroundFill(Color.valueOf("#F4F9FF"), new CornerRadii(5.0), Insets.EMPTY)) );
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					stage.getScene().setCursor( Cursor.HAND );
-				}
-			});
 		});
 		button.setOnMouseExited(e -> {
+            Platform.runLater(() -> stage.getScene().setCursor(Cursor.DEFAULT));
 			button.setBackground(new Background(
 					new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					stage.getScene().setCursor(Cursor.DEFAULT);
-				}
-			});
 		});
 	}
 
