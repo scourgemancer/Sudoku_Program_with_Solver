@@ -92,27 +92,27 @@ public class MenuState extends State{
 
 		Button about = new Button("About");
 		about.setOnAction(e -> nextPage(gui, "about"));
-		styleOptionButton( about, width, gui.stage );
+		//styleOptionButton( about, width, gui.stage );
 		setSize( about, width, height );
 
 		Button help = new Button("Help");
 		help.setOnAction(e -> nextPage(gui, "help"));
-		styleOptionButton( help, width, gui.stage );
+		//styleOptionButton( help, width, gui.stage );
 		setSize( help, width, height );
 
 		Button start = new Button("Play");
 		start.setOnAction(e -> nextPage(gui, "difficulty"));
-		styleOptionButton( start, width, gui.stage );
+		//styleOptionButton( start, width, gui.stage );
 		setSize( start, width, height );
 
 		Button donate = new Button("Support");
 		donate.setOnAction(e -> gui.openWebpage( "https://www.paypal.me/TimGeary" ) );
-		styleOptionButton( donate, width, gui.stage );
+		//styleOptionButton( donate, width, gui.stage );
 		setSize( donate, width, height );
 
 		Button quit = new Button("Quit");
 		quit.setOnAction(e -> Platform.exit());
-		styleOptionButton( quit, width, gui.stage );
+		//styleOptionButton( quit, width, gui.stage );
 		setSize( quit, width, height );
 
 		Image image = new Image( getClass().getResourceAsStream("resources/frame.png") );
