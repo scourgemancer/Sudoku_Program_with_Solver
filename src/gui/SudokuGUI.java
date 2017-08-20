@@ -72,7 +72,7 @@ public class SudokuGUI extends Application implements Observer{
         this.stage = stage;
         setState( new MenuState( ) );
         stage.setTitle("Sudoku");
-        stage.getIcons().add( new Image( new File("/resources/icon.png").toURI().toString() ) );
+        stage.getIcons().add( new Image(getClass().getResourceAsStream("state/resources/icon.png")) );
         stage.show();
     }
 

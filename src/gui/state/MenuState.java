@@ -23,13 +23,13 @@ import javafx.stage.Stage;
 public class MenuState extends State{
 	/** Utility function to set the style of a main menu option button */
 	private void styleOptionButton( Button button, double width, Stage stage ){
-		/**if(button.getText().length() > 5){
-			button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 5 ) );
+		if(button.getText().length() > 5){
+			button.setFont( Font.loadFont( getClass().getResourceAsStream("resources/Indieflower.ttf"), width/5 ));
 		}else{
-			button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", width / 4 ) );
+            button.setFont( Font.loadFont( getClass().getResourceAsStream("resources/Indieflower.ttf"), width/4 ));
 		}
 		button.setEllipsisString("");
-*/
+
 		//the rest is all for a 'hover-over' background color change
 		button.setBackground( new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)) );
 		button.setOnMouseEntered(e -> {
