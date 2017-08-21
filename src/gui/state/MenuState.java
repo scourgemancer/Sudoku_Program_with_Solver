@@ -131,6 +131,11 @@ public class MenuState extends State{
 
     @Override
     public void nextPage(SudokuGUI gui, String name){
-		//todo - finish implementation
+		switch(name){
+			case "about":      gui.setState(new AboutState());               break;
+			case "help":       gui.setState(new HelpState());                break;
+			case "difficulty": gui.setState(new DifficultySelectionState()); break;
+			case "support":    gui.setState(new DonateState());              break;
+		}
     }
 }
