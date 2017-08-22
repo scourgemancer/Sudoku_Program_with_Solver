@@ -18,6 +18,8 @@ public class DonateState extends State{
 
     @Override
     public void nextPage(SudokuGUI gui, String name){
-		//todo - decide how to implement
+        switch(name){
+            case "game": gui.setState(new GameState()); break;
+        }
     }
 }

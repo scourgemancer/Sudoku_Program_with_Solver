@@ -11,11 +11,14 @@ import javafx.stage.Stage;
 public class HelpState extends State{
     @Override
     public void setPage(SudokuGUI gui){
-        nextPage( gui, "menu" ); //todo - actually construct this page
+        nextPage( gui, "menu" );
+        //todo - actually construct this page
     }
 
     @Override
     public void nextPage(SudokuGUI gui, String name){
-
+        switch(name){
+            case "game": gui.setState(new GameState()); break;
+        }
     }
 }

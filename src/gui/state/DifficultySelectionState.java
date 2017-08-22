@@ -121,7 +121,10 @@ public class DifficultySelectionState extends State{
     }
 
     @Override
-    public void nextPage(SudokuGUI gui, String name) {
-
+    public void nextPage(SudokuGUI gui, String name){
+        switch(name){
+            case "menu":            gui.setState(new MenuState());            break;
+            case "puzzleselection": gui.setState(new PuzzleSelectionState()); break;
+        }
     }
 }

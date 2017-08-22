@@ -16,6 +16,8 @@ public class PuzzleSelectionState extends State{
 
     @Override
     public void nextPage(SudokuGUI gui, String name){
-
+        switch(name){
+            case "game": gui.setState(new GameState()); break;
+        }
     }
 }
