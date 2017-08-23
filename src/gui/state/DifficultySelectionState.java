@@ -43,7 +43,7 @@ public class DifficultySelectionState extends State{
     /** Utility function to set the style of a difficulty selection button */
     private void styleDifficultyButton( Button button, String difficulty, Button target,
                                         Stage stage, ImageView frame, SudokuGUI gui ){
-        button.setFont( Font.loadFont("file:src/gui/resources/IndieFlower.ttf", 30) );
+        button.setFont( Font.loadFont( getClass().getResourceAsStream("resources/Indieflower.ttf"), gui.stage.getWidth()/64 ));
         button.setOnAction(e -> {
             gui.difficulty = difficulty;
             animateSelection( target, frame, stage );
