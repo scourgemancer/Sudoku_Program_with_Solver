@@ -27,7 +27,7 @@ import java.io.FileNotFoundException;
 public class DifficultySelectionState extends State{
     /** Animates the surrounding frame to move between two difficulty selections */
     private void animateSelection(Node target, Node frame, Stage stage ){
-        TranslateTransition animation = new TranslateTransition( Duration.millis(450), frame );
+        TranslateTransition animation = new TranslateTransition( Duration.millis(400), frame );
         animation.setInterpolator( Interpolator.EASE_IN );
         //centers the difficulties with and without 'y' in them within the frame properly
         if( target.localToScene( target.getBoundsInLocal(), false ).getMaxY() < stage.getHeight() * 0.4 ){
@@ -43,7 +43,7 @@ public class DifficultySelectionState extends State{
     /** Utility function to set the style of a difficulty selection button */
     private void styleDifficultyButton( Button button, String difficulty, Button target,
                                         Stage stage, ImageView frame, SudokuGUI gui ){
-        button.setFont( Font.loadFont( getClass().getResourceAsStream("resources/Indieflower.ttf"), gui.stage.getWidth()/64 ));
+        button.setFont( Font.loadFont( getClass().getResourceAsStream("resources/Indieflower.ttf"), gui.stage.getWidth()/23 ));
         button.setOnAction(e -> {
             gui.difficulty = difficulty;
             animateSelection( target, frame, stage );
@@ -90,14 +90,15 @@ public class DifficultySelectionState extends State{
         Image backImage = new Image( getClass().getResourceAsStream("resources/back.png") );
         ImageView back = new ImageView( backImage );
         back.setPreserveRatio( true );
-        back.setFitHeight( gui.stage.getHeight()/9 );
+        back.setFitHeight( gui.stage.getHeight()/7 );
         back.setPickOnBounds(true);
         setMouseHover( back, gui.stage );
         back.setOnMouseClicked(e -> nextPage( gui, "menu" ) );
 
         Button select = new Button("Select");
         setMouseHover( select, gui.stage );
-        setSize( select, gui.stage.getHeight()/8, gui.stage.getHeight()/8 );
+        setSize( select, gui.stage.getHeight()/6, gui.stage.getHeight()/6 );
+        select.setFont( Font.loadFont( getClass().getResourceAsStream("resources/Indieflower.ttf"), gui.stage.getWidth()/35 ));
         Image selectImage = new Image( getClass().getResourceAsStream("resources/frameSquarish.png") );
         select.setBackground( new Background( new BackgroundImage( selectImage, BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,

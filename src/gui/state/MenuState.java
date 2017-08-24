@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  */
 public class MenuState extends State{
 	/** Utility function to set the style of a main menu option button */
-	private void styleOptionButton( Button button, double width, Stage stage ){
+	private void styleOptionButton( Button button, double width, Stage stage ){ //todo - use sprites instead to look better
 		if(button.getText().length() > 5){
 			button.setFont( Font.loadFont( getClass().getResourceAsStream("resources/Indieflower.ttf"), width/5 ));
 		}else{
