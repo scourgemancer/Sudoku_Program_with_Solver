@@ -75,7 +75,7 @@ public class DifficultySelectionState extends State{
         frame.setFitHeight( gui.stage.getHeight()/9 );
         frame.setFitWidth( gui.stage.getHeight()/3 );
         gui.difficulty = "normal";
-        frame.setTranslateY( - gui.stage.getHeight() / 14 ); //this centers it on the normal difficulty
+        frame.setTranslateY( - gui.stage.getHeight() / 10.5 ); //this centers it on the normal difficulty
 
         styleDifficultyButton( superEasy, "super_easy", superEasy, gui.stage, frame, gui );
         styleDifficultyButton( easy, "easy", easy, gui.stage, frame, gui );
