@@ -18,19 +18,6 @@ import java.util.ArrayList;
  * @author Timothy Geary
  */
 public class GameState extends State{
-    /** The UI's connection to the model */
-    private SudokuModel model;
-
-    /** The label for the update method */
-    private Text status;
-
-    /** The selected difficulty formatted as a filename */
-    public String difficulty;
-
-    /** Lets the update function know if there's error highlighting to undo */
-    private boolean recentError;
-    private int[] errorPos;
-
     /** A 2d button matrix for the update method */
     private ArrayList< ArrayList<NumButton> > puzzle;
 
@@ -39,10 +26,10 @@ public class GameState extends State{
 
     @Override
     public void setPage(SudokuGUI gui){
-        errorPos = new int[] {0,0};
+        gui.errorPos = new int[] {0,0};
 
         //todo - move difficulty into the sudoku model
-        status = new Text( difficulty.substring(0, 1).toUpperCase() + difficulty.substring(1) + " selected");
+        gui.status = new Text( gui.difficulty.substring(0, 1).toUpperCase() + gui.difficulty.substring(1) + " selected");
 
         TilePane puzzle = new TilePane();
         puzzle.setPrefColumns(9);
@@ -50,7 +37,7 @@ public class GameState extends State{
         for(int r=0; r < 9; r++){
             this.puzzle.add( new ArrayList<>() );
             for(int c=0; c < 9; c++){
-                NumButton newButton = new NumButton(r, c, model.puzzle[r][c], model);
+                NumButton newButton = new NumButton(r, c, gui.model.puzzle[r][c], gui.model);
                 puzzle.getChildren().add( newButton );
                 this.puzzle.get(r).add(c, newButton);
             }
@@ -68,14 +55,14 @@ public class GameState extends State{
         Button hint = new Button("Hint");
         Button solve = new Button("Solve");
         //add the functionality of the buttons
-        undo.setOnAction(e -> model.undo());
-        redo.setOnAction(e -> model.redo());
+        undo.setOnAction(e -> gui.model.undo());
+        redo.setOnAction(e -> gui.model.redo());
         //todo - setOnAction() for the check button
-        hint.setOnAction(e -> this.model.getHint());
+        hint.setOnAction(e -> gui.model.getHint());
         solve.setOnAction(e -> {
             try {
-                model.solve(true);
-            }catch(FileNotFoundException fnfe){ model.textout = "The file was deleted"; }
+                gui.model.solve(true);
+            }catch(FileNotFoundException fnfe){ gui.model.textout = "The file was deleted"; }
         });
         HBox features = new HBox( undo, redo, check, hint, solve );
 
@@ -88,25 +75,25 @@ public class GameState extends State{
         menu.setOnAction(e -> nextPage( gui, "menu" ));
         HBox functions = new HBox( restart, newGame, menu );
 
-        VBox page = new VBox( status, puzzle, features, functions );
+        VBox page = new VBox( gui.status, puzzle, features, functions );
         Scene scene = new Scene(page);
         setBackground( page, "light.jpg" );
 
-        switch( model.filename.substring(0, model.filename.length() - 4).toLowerCase() ){
+        switch( gui.model.filename.substring(0, gui.model.filename.length() - 4).toLowerCase() ){
             case "super_easy":
-                gui.stage.setTitle( gui.stage.getTitle() + " - Super Easy Puzzle #" + model.lineNumber);
+                gui.stage.setTitle( gui.stage.getTitle() + " - Super Easy Puzzle #" + gui.model.lineNumber);
                 break;
             case "easy":
-                gui.stage.setTitle("Easy Sudoku puzzle #" + model.lineNumber);
+                gui.stage.setTitle("Easy Sudoku puzzle #" + gui.model.lineNumber);
                 break;
             case "normal":
-                gui.stage.setTitle("Normal Sudoku puzzle #" + model.lineNumber);
+                gui.stage.setTitle("Normal Sudoku puzzle #" + gui.model.lineNumber);
                 break;
             case "hard":
-                gui.stage.setTitle("Hard Sudoku puzzle #" + model.lineNumber);
+                gui.stage.setTitle("Hard Sudoku puzzle #" + gui.model.lineNumber);
                 break;
             case "extreme":
-                gui.stage.setTitle("I'm sorry, it's Sudoku puzzle #" + model.lineNumber + ", good luck");
+                gui.stage.setTitle("I'm sorry, it's Sudoku puzzle #" + gui.model.lineNumber + ", good luck");
                 break;
         }
 

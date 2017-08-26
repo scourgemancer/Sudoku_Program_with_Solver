@@ -42,19 +42,13 @@ public class SudokuGUI extends Application implements Observer{
     private State currentState;
 
     /** The label for the update method */
-    private Text status;
+    public Text status;
 
     public String difficulty;
 
-    /** A 2d button matrix for the update method */
-    private ArrayList< ArrayList<gui.state.NumButton> > puzzle;
-
     /** Lets the update function know if there's error highlighting to undo */
-    private boolean recentError;
-    private int[] errorPos;
-
-    /** The tilepane that holds the buttons */
-    private TilePane grid;
+    public boolean recentError;
+    public int[] errorPos;
 
 	/** A setter for the currentState variable **/
 	public void setState( State newState ){
