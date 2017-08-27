@@ -102,6 +102,10 @@ public class GameState extends State{
 
     @Override
     public void nextPage(SudokuGUI gui, String name){
-
+        switch(name){
+            case "menu":                gui.setState(new MenuState());                break;
+            case "difficultyselection": gui.setState(new DifficultySelectionState()); break;
+            case "puzzleselection":     gui.setState(new PuzzleSelectionState());     break;
+        }
     }
 }

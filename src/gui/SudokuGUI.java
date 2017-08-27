@@ -7,12 +7,9 @@ import gui.state.State;
 import javafx.stage.Screen;
 import javafx.application.Application;
 import javafx.scene.image.Image;
-import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
