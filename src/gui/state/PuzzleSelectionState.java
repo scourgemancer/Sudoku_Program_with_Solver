@@ -1,7 +1,6 @@
 package gui.state;
 
 import gui.SudokuGUI;
-import javafx.stage.Stage;
 
 /**
  * This class sets up the GUI's puzzle selection page using the State pattern

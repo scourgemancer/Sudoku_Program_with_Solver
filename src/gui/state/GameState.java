@@ -6,8 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import model.SudokuModel;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
