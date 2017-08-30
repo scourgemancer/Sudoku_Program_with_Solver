@@ -67,7 +67,7 @@ public class GameState extends State{
         Button menu = new Button("Menu");
 
         restart.setOnAction(e -> nextPage( gui, "game" ));
-        newGame.setOnAction(e -> nextPage( gui, "difficulty" ));
+        newGame.setOnAction(e -> nextPage( gui, "difficultyselection" ));
         menu.setOnAction(e -> nextPage( gui, "menu" ));
         HBox functions = new HBox( restart, newGame, menu );
 
