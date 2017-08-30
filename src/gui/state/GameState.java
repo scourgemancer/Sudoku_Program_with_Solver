@@ -26,7 +26,6 @@ public class GameState extends State{
     public void setPage(SudokuGUI gui){
         gui.errorPos = new int[] {0,0};
 
-        //todo - move difficulty into the sudoku model
         gui.status = new Text( gui.difficulty.substring(0, 1).toUpperCase() + gui.difficulty.substring(1) + " selected");
 
         grid = new TilePane();
@@ -51,7 +50,8 @@ public class GameState extends State{
         Button check = new Button("Check");
         Button hint = new Button("Hint");
         Button solve = new Button("Solve");
-        //add the functionality of the buttons
+        HBox features = new HBox( undo, redo, check, hint, solve );
+
         undo.setOnAction(e -> gui.model.undo());
         redo.setOnAction(e -> gui.model.redo());
         //todo - setOnAction() for the check button
@@ -61,12 +61,11 @@ public class GameState extends State{
                 gui.model.solve(true);
             }catch(FileNotFoundException fnfe){ gui.model.textout = "The file was deleted"; }
         });
-        HBox features = new HBox( undo, redo, check, hint, solve );
 
         Button restart = new Button("Restart");
         Button newGame = new Button("New Puzzle");
         Button menu = new Button("Menu");
-        //add the functionality of the buttons
+
         restart.setOnAction(e -> nextPage( gui, "game" ));
         newGame.setOnAction(e -> nextPage( gui, "difficulty" ));
         menu.setOnAction(e -> nextPage( gui, "menu" ));
