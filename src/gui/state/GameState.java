@@ -29,23 +29,22 @@ public class GameState extends State{
         //todo - move difficulty into the sudoku model
         gui.status = new Text( gui.difficulty.substring(0, 1).toUpperCase() + gui.difficulty.substring(1) + " selected");
 
-        TilePane puzzle = new TilePane();
-        puzzle.setPrefColumns(9);
-        this.puzzle = new ArrayList<>();
+        grid = new TilePane();
+        grid.setPrefColumns(9);
+        puzzle = new ArrayList<>();
         for(int r=0; r < 9; r++){
-            this.puzzle.add( new ArrayList<>() );
+            puzzle.add( new ArrayList<>() );
             for(int c=0; c < 9; c++){
                 NumButton newButton = new NumButton(r, c, gui.model.puzzle[r][c], gui.model);
-                puzzle.getChildren().add( newButton );
-                this.puzzle.get(r).add(c, newButton);
+                grid.getChildren().add( newButton );
+                puzzle.get(r).add(c, newButton);
             }
         }
-        this.grid = puzzle;
         Image img = new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") );
         BackgroundImage BI = new BackgroundImage( img,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 new BackgroundSize( gui.stage.getWidth(), 100, false, true, true, false ) );
-        puzzle.setBackground( new Background(BI) );
+        grid.setBackground( new Background(BI) );
 
         Button undo = new Button("Undo");
         Button redo = new Button("Redo");
@@ -73,7 +72,7 @@ public class GameState extends State{
         menu.setOnAction(e -> nextPage( gui, "menu" ));
         HBox functions = new HBox( restart, newGame, menu );
 
-        VBox page = new VBox( gui.status, puzzle, features, functions );
+        VBox page = new VBox( gui.status, grid, features, functions );
         Scene scene = new Scene(page);
         setBackground( page, "light.jpg" );
 
