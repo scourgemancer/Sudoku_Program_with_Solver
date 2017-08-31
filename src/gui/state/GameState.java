@@ -1,6 +1,7 @@
 package gui.state;
 
 import gui.SudokuGUI;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -30,11 +31,13 @@ public class GameState extends State{
 
         grid = new TilePane();
         grid.setPrefColumns(9);
+        TilePane.setMargin( grid, new Insets(0, gui.stage.getWidth()/12, 0, gui.stage.getWidth()/12));
         puzzle = new ArrayList<>();
         for(int r=0; r < 9; r++){
             puzzle.add( new ArrayList<>() );
             for(int c=0; c < 9; c++){
                 NumButton newButton = new NumButton(r, c, gui.model.puzzle[r][c], gui.model);
+                setSize( newButton, gui.stage.getWidth()/12, gui.stage.getWidth()/12 );
                 grid.getChildren().add( newButton );
                 puzzle.get(r).add(c, newButton);
             }
