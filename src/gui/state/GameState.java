@@ -48,6 +48,7 @@ public class GameState extends State{
                 new BackgroundSize( gui.stage.getWidth(), 100, false, true, true, false ) );
         grid.setBackground( new Background(BI) );
         grid.setPadding(new Insets(gui.stage.getWidth()/25));
+        grid.setAlignment(Pos.CENTER);
 
         Button undo = new Button("Undo");
         Button redo = new Button("Redo");
