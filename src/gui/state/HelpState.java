@@ -10,14 +10,14 @@ import gui.SudokuGUI;
 public class HelpState extends State{
     @Override
     public void setPage(SudokuGUI gui){
-        nextPage( gui, "menu" );
+        nextPage( gui, Page.MENU );
         //todo - actually construct this page
     }
 
     @Override
-    public void nextPage(SudokuGUI gui, String name){
+    public void nextPage(SudokuGUI gui, Page name){
         switch(name){
-            case "game": gui.setState(new GameState()); break;
+            case MENU: gui.setState(new MenuState()); break;
         }
     }
 }

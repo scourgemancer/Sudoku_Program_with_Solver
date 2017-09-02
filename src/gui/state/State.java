@@ -16,11 +16,15 @@ import java.io.File;
  * @author Timothy Geary
  */
 public abstract class State{
-	/** This is called in the nextPage method to actually set up the new page */
+    enum Page{
+        MENU, DIFFICULTY, PUZZLE, GAME, DONATE, ABOUT, HELP
+    }
+
+    /** This is called in the nextPage method to actually set up the new page */
 	abstract public void setPage( SudokuGUI gui );
 
 	/** Called when the app changes state, and is passed the Stage to set and the name of the page it's changing to */
-	public void nextPage( SudokuGUI gui, String name ){ gui.setState( new MenuState() ); }
+	public void nextPage( SudokuGUI gui, Page name ){ gui.setState( new MenuState() ); }
 
     /** Utility function to set the background for all of the pages */
     public void setBackground( Region region, String image ){

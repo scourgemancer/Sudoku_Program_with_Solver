@@ -81,22 +81,22 @@ public class MenuState extends State{
 		setSize( option8, width, height );
 
 		Button about = new Button("About");
-		about.setOnAction(e -> nextPage(gui, "about"));
+		about.setOnAction(e -> nextPage(gui, Page.ABOUT));
 		styleOptionButton( about, width, gui.stage );
 		setSize( about, width, height );
 
 		Button help = new Button("Help");
-		help.setOnAction(e -> nextPage(gui, "help"));
+		help.setOnAction(e -> nextPage(gui, Page.HELP));
 		styleOptionButton( help, width, gui.stage );
 		setSize( help, width, height );
 
 		Button start = new Button("Play");
-		start.setOnAction(e -> nextPage(gui, "difficulty"));
+		start.setOnAction(e -> nextPage(gui, Page.DIFFICULTY));
 		styleOptionButton( start, width, gui.stage );
 		setSize( start, width, height );
 
 		Button donate = new Button("Support");
-		donate.setOnAction(e -> gui.openWebpage( "https://www.paypal.me/TimGeary" ) );
+		donate.setOnAction(e -> nextPage(gui, Page.DONATE) );
 		styleOptionButton( donate, width, gui.stage );
 		setSize( donate, width, height );
 
@@ -130,12 +130,12 @@ public class MenuState extends State{
 	}
 
     @Override
-    public void nextPage(SudokuGUI gui, String name){
+    public void nextPage(SudokuGUI gui, Page name){
 		switch(name){
-			case "about":      gui.setState(new AboutState());               break;
-			case "help":       gui.setState(new HelpState());                break;
-			case "difficulty": gui.setState(new DifficultySelectionState()); break;
-			case "support":    gui.setState(new DonateState());              break;
+			case ABOUT:      gui.setState(new AboutState());               break;
+			case HELP:       gui.setState(new HelpState());                break;
+			case DIFFICULTY: gui.setState(new DifficultySelectionState()); break;
+			case DONATE:     gui.setState(new DonateState());              break;
 		}
     }
 }

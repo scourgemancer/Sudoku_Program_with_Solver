@@ -93,7 +93,7 @@ public class DifficultySelectionState extends State{
         back.setFitHeight( gui.stage.getHeight()/7 );
         back.setPickOnBounds(true);
         setMouseHover( back, gui.stage );
-        back.setOnMouseClicked(e -> nextPage( gui, "menu" ) );
+        back.setOnMouseClicked(e -> nextPage( gui, Page.MENU ) );
 
         Button select = new Button("Select");
         setMouseHover( select, gui.stage );
@@ -111,7 +111,7 @@ public class DifficultySelectionState extends State{
                 System.exit(-1);
             }
             gui.model.addObserver(gui);
-            nextPage( gui, "puzzleselection" );
+            nextPage( gui, Page.PUZZLE );
         });
 
         options.getChildren().addAll( back, select );
@@ -122,10 +122,10 @@ public class DifficultySelectionState extends State{
     }
 
     @Override
-    public void nextPage(SudokuGUI gui, String name){
+    public void nextPage(SudokuGUI gui, Page name){
         switch(name){
-            case "menu":            gui.setState(new MenuState());            break;
-            case "puzzleselection": gui.setState(new PuzzleSelectionState()); break;
+            case MENU:   gui.setState(new MenuState());            break;
+            case PUZZLE: gui.setState(new PuzzleSelectionState()); break;
         }
     }
 }

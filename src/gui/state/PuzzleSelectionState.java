@@ -10,13 +10,13 @@ import gui.SudokuGUI;
 public class PuzzleSelectionState extends State{
     @Override
     public void setPage(SudokuGUI gui){
-        nextPage(gui, "game");
+        nextPage(gui, Page.GAME);
     }
 
     @Override
-    public void nextPage(SudokuGUI gui, String name){
+    public void nextPage(SudokuGUI gui, Page name){
         switch(name){
-            case "game": gui.setState(new GameState()); break;
+            case GAME: gui.setState(new GameState()); break;
         }
     }
 }
