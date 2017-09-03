@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
@@ -49,6 +50,7 @@ public class GameState extends State{
         grid.setBackground( new Background(BI) );
         grid.setPadding(new Insets(gui.stage.getWidth()/25));
         grid.setAlignment(Pos.CENTER);
+        grid.setBorder(new Border(new BorderStroke(Paint.valueOf("black"), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.THIN)));
 
         Button undo = new Button("Undo");
         Button redo = new Button("Redo");
@@ -80,7 +82,6 @@ public class GameState extends State{
         Scene scene = new Scene(page);
         setBackground( page, "light.jpg" );
         page.setAlignment(Pos.CENTER);
-        //todo - VBox.setMargin(grid, new Insets(0, gui.stage.getWidth()/3, 0, gui.stage.getWidth()/3));
 
         switch( gui.model.filename.substring(0, gui.model.filename.length() - 4).toLowerCase() ){
             case "super_easy":
