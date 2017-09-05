@@ -4,6 +4,7 @@ import gui.SudokuGUI;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -105,27 +106,32 @@ public class MenuState extends State{
 		styleOptionButton( quit, width, gui.stage );
 		setSize( quit, width, height );
 
-		Image image = new Image( getClass().getResourceAsStream("resources/frame.png") );
-		BackgroundImage optionsBackground = new BackgroundImage( image,
-				BackgroundRepeat.NO_REPEAT,
-				BackgroundRepeat.NO_REPEAT,
-				BackgroundPosition.DEFAULT,
-				new BackgroundSize( 100, 100, true, true, true, false ) );
-		options.setBackground( new Background( optionsBackground ) );
+		//Actually put all of the buttons together and add a background image behind them
+		StackPane optionsStack = new StackPane();
+
+        double spriteWidth = 457;
+        double spriteHeight = 4030;
+		ImageView optionsBackground = new ImageView( new Image( getClass().getResourceAsStream("resources/menuSprite.png") ) );
+		optionsBackground.setViewport(new Rectangle2D(0, 0, spriteWidth, spriteHeight/10));
 
 		options.setPadding( new Insets( //so the buttons don't go over the bamboo stalks
 				(51.0 / 402.0) * squareDim, //top
 				(57.0 / 456.0) * squareDim, //right
 				(52.0 / 402.0) * squareDim, //bottom
 				(59.0 / 456.0) * squareDim ) ); //left
-
 		options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
-		window.setBottom( options );
-		BorderPane.setAlignment( options, Pos.CENTER );
-		BorderPane.setMargin( options, new Insets(
+
+		optionsStack.getChildren().addAll( optionsBackground, options );
+		window.setBottom( optionsStack );
+		StackPane.setAlignment( options, Pos.CENTER );
+		StackPane.setMargin( options, new Insets(
 				( gui.stage.getHeight() - squareDim - title.getFitHeight() ) / 8, 0, 0, 0 ) );
 
-		gui.stage.setTitle( "Sudoku" );
+        optionsBackground.setFitWidth( width*3 + ((57.0 / 456.0) * squareDim) + ((59.0 / 456.0) * squareDim) );
+        optionsBackground.setFitHeight( height*3 + ((51.0 / 402.0) * squareDim) + ((52.0 / 402.0) * squareDim) );
+
+
+        gui.stage.setTitle( "Sudoku" );
 		gui.stage.setScene(scene);
 	}
 
