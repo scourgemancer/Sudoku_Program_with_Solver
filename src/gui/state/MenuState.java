@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -63,13 +64,10 @@ public class MenuState extends State{
 		options.setPrefColumns( 3 );
 		double squareDim = ( gui.stage.getHeight() - title.getFitHeight() ) * (35.0/48.0);
 		setSize( options, squareDim, squareDim );
-		options.setHgap( gui.stage.getHeight() / 110.0 );
-		options.setVgap( gui.stage.getWidth() / 110.0 );
 
 		//the sizes for each of the option buttons
-		//todo double width = squareDim * (340.0 / 456.0) / 3.1;       FIGURE OUT WHAT THIS MEANS
-		double width = squareDim * (340.0 / 456.0) / 3.119;
-		double height = squareDim * ( (297.0 / 402.0) / 3.1 ) - (gui.stage.getHeight() / 100)*3 + 2;
+		double width = squareDim * (341.0 / 456.0) / 3.119;
+		double height = squareDim * ( (298.0 / 402.0) / 2.72 ) - (gui.stage.getHeight() / 100)*3;
 
 		//blank squares
 		Label option2 = new Label("");
@@ -115,10 +113,10 @@ public class MenuState extends State{
 		optionsBackground.setViewport(new Rectangle2D(0, 0, spriteWidth, spriteHeight/10));
 
 		options.setPadding( new Insets( //so the buttons don't go over the bamboo stalks
-				(51.0 / 402.0) * squareDim, //top
+				(35.0 / 402.0) * squareDim, //top
 				(57.0 / 456.0) * squareDim, //right
 				(52.0 / 402.0) * squareDim, //bottom
-				(59.0 / 456.0) * squareDim ) ); //left
+				(65.0 / 456.0) * squareDim ) ); //left
 		options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
 
 		optionsStack.getChildren().addAll( optionsBackground, options );
@@ -130,8 +128,9 @@ public class MenuState extends State{
         optionsBackground.setFitWidth( width*3 + ((57.0 / 456.0) * squareDim) + ((59.0 / 456.0) * squareDim) );
         optionsBackground.setFitHeight( height*3 + ((51.0 / 402.0) * squareDim) + ((52.0 / 402.0) * squareDim) );
 
+        StackPane.setMargin(optionsBackground, new Insets(0, 0, gui.stage.getHeight()/15.2, 0));
 
-        gui.stage.setTitle( "Sudoku" );
+		gui.stage.setTitle( "Sudoku" );
 		gui.stage.setScene(scene);
 	}
 
