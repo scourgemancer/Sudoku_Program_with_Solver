@@ -23,8 +23,12 @@ import javafx.stage.Stage;
  * @author Timothy Geary
  */
 public class MenuState extends State{
+    private double spriteWidth;
+    private double spriteHeight;
+    private ImageView optionsBackground;
+
 	/** Utility function to set the style of a main menu option button */
-	private void styleOptionButton( Button button, double width, Stage stage ){ //todo - use sprites instead to look better
+	private void styleOptionButton( Button button, double width, int index, Stage stage ){
 		if(button.getText().length() > 5){
 			button.setFont( Font.loadFont( getClass().getResourceAsStream("resources/Indieflower.ttf"), width/5 ));
 		}else{
@@ -32,17 +36,15 @@ public class MenuState extends State{
 		}
 		button.setEllipsisString("");
 
-		//the rest is all for a 'hover-over' background color change
+		//the rest is all for a 'hover-over' background image and cursor change
 		button.setBackground( new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)) );
 		button.setOnMouseEntered(e -> {
             Platform.runLater(() -> stage.getScene().setCursor( Cursor.HAND ));
-			button.setBackground( new Background(
-					new BackgroundFill(Color.valueOf("#F4F9FF"), new CornerRadii(5.0), Insets.EMPTY)) );
-		});
+            optionsBackground.setViewport(new Rectangle2D(0, (spriteHeight/10)*(index), spriteWidth, spriteHeight/10));
+        });
 		button.setOnMouseExited(e -> {
             Platform.runLater(() -> stage.getScene().setCursor(Cursor.DEFAULT));
-			button.setBackground(new Background(
-					new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+            optionsBackground.setViewport(new Rectangle2D(0, 0, spriteWidth, spriteHeight/10));
 		});
 	}
 
@@ -81,35 +83,35 @@ public class MenuState extends State{
 
 		Button about = new Button("About");
 		about.setOnAction(e -> nextPage(gui, Page.ABOUT));
-		styleOptionButton( about, width, gui.stage );
+		styleOptionButton( about, width, 1, gui.stage );
 		setSize( about, width, height );
 
 		Button help = new Button("Help");
 		help.setOnAction(e -> nextPage(gui, Page.HELP));
-		styleOptionButton( help, width, gui.stage );
+		styleOptionButton( help, width, 3, gui.stage );
 		setSize( help, width, height );
 
 		Button start = new Button("Play");
 		start.setOnAction(e -> nextPage(gui, Page.DIFFICULTY));
-		styleOptionButton( start, width, gui.stage );
+		styleOptionButton( start, width, 5, gui.stage );
 		setSize( start, width, height );
 
 		Button donate = new Button("Support");
 		donate.setOnAction(e -> nextPage(gui, Page.DONATE) );
-		styleOptionButton( donate, width, gui.stage );
+		styleOptionButton( donate, width, 7, gui.stage );
 		setSize( donate, width, height );
 
 		Button quit = new Button("Quit");
 		quit.setOnAction(e -> Platform.exit());
-		styleOptionButton( quit, width, gui.stage );
+		styleOptionButton( quit, width, 9, gui.stage );
 		setSize( quit, width, height );
 
 		//Actually put all of the buttons together and add a background image behind them
 		StackPane optionsStack = new StackPane();
 
-        double spriteWidth = 457;
-        double spriteHeight = 4030;
-		ImageView optionsBackground = new ImageView( new Image( getClass().getResourceAsStream("resources/menuSprite.png") ) );
+        spriteWidth = 457;
+        spriteHeight = 4030;
+		optionsBackground = new ImageView( new Image( getClass().getResourceAsStream("resources/menuSprite.png") ) );
 		optionsBackground.setViewport(new Rectangle2D(0, 0, spriteWidth, spriteHeight/10));
 
 		options.setPadding( new Insets( //so the buttons don't go over the bamboo stalks
