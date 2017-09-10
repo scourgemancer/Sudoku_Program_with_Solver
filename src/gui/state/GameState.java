@@ -6,8 +6,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
@@ -23,7 +23,7 @@ public class GameState extends State{
     private ArrayList< ArrayList<NumButton> > puzzle;
 
     /** The tilepane that holds the buttons */
-    private TilePane grid;
+    private TilePane squares;
 
     @Override
     public void setPage(SudokuGUI gui){
@@ -31,27 +31,27 @@ public class GameState extends State{
 
         gui.status = new Text( gui.difficulty.substring(0, 1).toUpperCase() + gui.difficulty.substring(1) + " selected");
 
-        grid = new TilePane();
-        grid.setPrefColumns(9);
+        //Sets up the actual game's squares and background
+        squares = new TilePane();
+        squares.setPrefColumns(9);
         puzzle = new ArrayList<>();
         for(int r=0; r < 9; r++){
             puzzle.add( new ArrayList<>() );
             for(int c=0; c < 9; c++){
                 NumButton newButton = new NumButton(r, c, gui.model.puzzle[r][c], gui.model);
-                setSize( newButton, gui.stage.getWidth()/11, gui.stage.getWidth()/13 );
-                grid.getChildren().add( newButton );
+                setSize( newButton, gui.stage.getWidth()/15, gui.stage.getWidth()/13 );
+                squares.getChildren().add( newButton );
                 puzzle.get(r).add(c, newButton);
             }
         }
-        Image img = new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") );
-        BackgroundImage BI = new BackgroundImage( img,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                new BackgroundSize( gui.stage.getWidth(), 100, false, true, true, false ) );
-        grid.setBackground( new Background(BI) );
-        grid.setPadding(new Insets(gui.stage.getWidth()/25));
-        grid.setAlignment(Pos.CENTER);
-        grid.setBorder(new Border(new BorderStroke(Paint.valueOf("black"), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.THIN)));
+        squares.setPadding(new Insets(0, gui.stage.getWidth()/6, 0, gui.stage.getWidth()/6));
+        squares.setAlignment(Pos.CENTER);
 
+        ImageView background = new ImageView(new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") ));
+
+        StackPane sudokuSquare = new StackPane(background, squares);//todo - finish updating
+
+        //Creates the buttons at the bottom of the screen
         Button undo = new Button("Undo");
         Button redo = new Button("Redo");
         Button check = new Button("Check");
@@ -78,7 +78,8 @@ public class GameState extends State{
         menu.setOnAction(e -> nextPage( gui, Page.MENU ));
         HBox functions = new HBox( restart, newGame, menu );
 
-        VBox page = new VBox( gui.status, grid, features, functions );
+        //Adds everything together to complete the scene
+        VBox page = new VBox( gui.status, sudokuSquare, features, functions );
         Scene scene = new Scene(page);
         setBackground( page, "light.jpg" );
         page.setAlignment(Pos.CENTER);
