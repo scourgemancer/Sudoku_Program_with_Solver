@@ -48,6 +48,8 @@ public class GameState extends State{
         squares.setAlignment(Pos.CENTER);
 
         ImageView background = new ImageView(new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") ));
+        background.setPreserveRatio( true );
+        background.setFitWidth( 19.0 * gui.stage.getWidth() / 24.0 );
 
         StackPane sudokuSquare = new StackPane(background, squares);//todo - finish updating
 
