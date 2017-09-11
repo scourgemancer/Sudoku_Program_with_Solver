@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
@@ -29,9 +31,14 @@ public class GameState extends State{
     public void setPage(SudokuGUI gui){
         gui.errorPos = new int[] {0,0};
 
-        gui.status = new Text( gui.difficulty.substring(0, 1).toUpperCase() + gui.difficulty.substring(1) + " selected");
+        gui.status = new Text(gui.difficulty.substring(0, 1).toUpperCase() + gui.difficulty.substring(1) + " selected");
 
         //Sets up the actual game's squares and background
+        ImageView background = new ImageView(
+                new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") ));
+        background.setPreserveRatio( true );
+        background.setFitWidth( 19.0 * gui.stage.getWidth() / 24.0 );
+
         squares = new TilePane();
         squares.setPrefColumns(9);
         puzzle = new ArrayList<>();
@@ -39,17 +46,17 @@ public class GameState extends State{
             puzzle.add( new ArrayList<>() );
             for(int c=0; c < 9; c++){
                 NumButton newButton = new NumButton(r, c, gui.model.puzzle[r][c], gui.model);
-                setSize( newButton, gui.stage.getWidth()/15, gui.stage.getWidth()/13 );
+                setSize( newButton, gui.stage.getWidth()/12.5, gui.stage.getWidth()/12.5 );
+                newButton.setBackground( new Background(new BackgroundFill(Color.TRANSPARENT,
+                        CornerRadii.EMPTY, Insets.EMPTY)) );
+                newButton.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"),
+                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.THIN)));
                 squares.getChildren().add( newButton );
                 puzzle.get(r).add(c, newButton);
             }
         }
-        squares.setPadding(new Insets(0, gui.stage.getWidth()/6, 0, gui.stage.getWidth()/6));
+        squares.setPadding(new Insets(0, gui.stage.getWidth()/9, 0, gui.stage.getWidth()/9));
         squares.setAlignment(Pos.CENTER);
-
-        ImageView background = new ImageView(new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") ));
-        background.setPreserveRatio( true );
-        background.setFitWidth( 19.0 * gui.stage.getWidth() / 24.0 );
 
         StackPane sudokuSquare = new StackPane(background, squares);//todo - finish updating
 
