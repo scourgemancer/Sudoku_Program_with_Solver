@@ -58,7 +58,12 @@ public class GameState extends State{
         squares.setPadding(new Insets(0, gui.stage.getWidth()/9, 0, gui.stage.getWidth()/9));
         squares.setAlignment(Pos.CENTER);
 
-        StackPane sudokuSquare = new StackPane(background, squares);//todo - finish updating
+        ImageView gameBorder = new ImageView(
+                new Image( getClass().getResourceAsStream("resources/gameFrameBorder.png") ));
+        gameBorder.setPreserveRatio( true );
+        gameBorder.setFitWidth( 19.0 * gui.stage.getWidth() / 24.0 );
+
+        StackPane sudokuSquare = new StackPane(background, squares, gameBorder);
 
         //Creates the buttons at the bottom of the screen
         Button undo = new Button("Undo");
