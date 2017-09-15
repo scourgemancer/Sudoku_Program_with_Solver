@@ -34,10 +34,12 @@ public class GameState extends State{
         gui.status = new Text(gui.difficulty.substring(0, 1).toUpperCase() + gui.difficulty.substring(1) + " selected");
 
         //Sets up the actual game's squares and background
+        double gameWidth = (19.0/24.0) * gui.stage.getWidth();
+
         ImageView background = new ImageView(
                 new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") ));
         background.setPreserveRatio( true );
-        background.setFitWidth( 19.0 * gui.stage.getWidth() / 24.0 );
+        background.setFitWidth( gameWidth );
 
         squares = new TilePane();
         squares.setPrefColumns(9);
@@ -61,9 +63,10 @@ public class GameState extends State{
         ImageView gameBorder = new ImageView(
                 new Image( getClass().getResourceAsStream("resources/gameFrameBorder.png") ));
         gameBorder.setPreserveRatio( true );
-        gameBorder.setFitWidth( 19.0 * gui.stage.getWidth() / 24.0 );
+        gameBorder.setFitWidth( gameWidth );
 
         StackPane sudokuSquare = new StackPane(background, squares, gameBorder);
+
 
         //Creates the buttons at the bottom of the screen
         Button undo = new Button("Undo");
@@ -91,6 +94,7 @@ public class GameState extends State{
         newGame.setOnAction(e -> nextPage( gui, Page.DIFFICULTY ));
         menu.setOnAction(e -> nextPage( gui, Page.MENU ));
         HBox functions = new HBox( restart, newGame, menu );
+
 
         //Adds everything together to complete the scene
         VBox page = new VBox( gui.status, sudokuSquare, features, functions );
