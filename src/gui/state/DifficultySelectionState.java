@@ -55,13 +55,22 @@ public class DifficultySelectionState extends State{
 
     @Override
     public void setPage(SudokuGUI gui){
+        BorderPane window = new BorderPane();
+        Scene scene = new Scene(window);
+        setBackground( window, "light.jpg" );
+
+
         VBox difficulties = new VBox();
-        difficulties.setSpacing( gui.stage.getHeight() / 20 );
-        difficulties.setPadding( new Insets( gui.stage.getHeight()/45, 0, 0, 0 ) );
+        difficulties.setSpacing( gui.stage.getHeight() / 15 );
+        difficulties.setPadding( new Insets( 0, 0, gui.stage.getHeight()/25, 0 ) );
         difficulties.setAlignment( Pos.CENTER );
-        StackPane holder = new StackPane( difficulties );
-        Scene scene = new Scene( holder );
-        setBackground( holder, "light.jpg" );
+
+        Image frameImage = new Image( getClass().getResourceAsStream("resources/transparentFrame.png") );
+        ImageView frame = new ImageView( frameImage );
+        frame.setFitHeight( gui.stage.getHeight()/9 );
+        frame.setFitWidth( gui.stage.getHeight()/3 );
+        gui.difficulty = "normal";
+        frame.setTranslateY( - gui.stage.getHeight() / 55 ); //this centers it on the normal difficulty
 
         Button superEasy = new Button("Super Easy");
         Button easy = new Button("Easy");
@@ -69,31 +78,31 @@ public class DifficultySelectionState extends State{
         Button hard = new Button("Hard");
         Button extreme = new Button("Extreme");
 
-        Image frameImage = new Image( getClass().getResourceAsStream("resources/transparentFrame.png") );
-        ImageView frame = new ImageView( frameImage );
-        holder.getChildren().add( frame );
-        frame.setFitHeight( gui.stage.getHeight()/9 );
-        frame.setFitWidth( gui.stage.getHeight()/3 );
-        gui.difficulty = "normal";
-        frame.setTranslateY( - gui.stage.getHeight() / 10.5 ); //this centers it on the normal difficulty
-
         styleDifficultyButton( superEasy, "super_easy", superEasy, gui.stage, frame, gui );
         styleDifficultyButton( easy, "easy", easy, gui.stage, frame, gui );
         styleDifficultyButton( normal, "normal", normal, gui.stage, frame, gui );
         styleDifficultyButton( hard, "hard", hard, gui.stage, frame, gui );
         styleDifficultyButton( extreme, "extreme", extreme, gui.stage, frame, gui );
 
-        HBox options = new HBox();
-        options.setPadding( new Insets( 0, 0, 0, gui.stage.getWidth()/20 ) );
-        options.setSpacing( 5*gui.stage.getWidth()/8 );
+        difficulties.getChildren().addAll( superEasy, easy, normal, hard, extreme );
+        StackPane holder = new StackPane( difficulties );
+        holder.getChildren().add( frame );
+        window.setCenter( holder );
 
-        Image backImage = new Image( getClass().getResourceAsStream("resources/back.png") );
-        ImageView back = new ImageView( backImage );
-        back.setPreserveRatio( true );
-        back.setFitHeight( gui.stage.getHeight()/7 );
-        back.setPickOnBounds(true);
-        setMouseHover( back, gui.stage );
-        back.setOnMouseClicked(e -> nextPage( gui, Page.MENU ) );
+
+        Button menu = new Button("Menu");
+        setMouseHover( menu, gui.stage );
+        setSize( menu, gui.stage.getHeight()/6, gui.stage.getHeight()/6 );
+        menu.setFont( Font.loadFont( getClass().getResourceAsStream("resources/Indieflower.ttf"), gui.stage.getWidth()/35 ));
+        Image menuImage = new Image( getClass().getResourceAsStream("resources/frameSquarish.png") );
+        menu.setBackground( new Background( new BackgroundImage( menuImage, BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize( 100, 100, true, true, true, false ) ) ) );
+        menu.setOnAction(e -> nextPage( gui, Page.MENU ) );
+        window.setLeft( menu );
+        BorderPane.setAlignment( menu, Pos.BOTTOM_LEFT );
+        BorderPane.setMargin( menu, new Insets(0, 0, gui.stage.getHeight()/100, gui.stage.getWidth()/50) );
+
 
         Button select = new Button("Select");
         setMouseHover( select, gui.stage );
@@ -113,9 +122,10 @@ public class DifficultySelectionState extends State{
             gui.model.addObserver(gui);
             nextPage( gui, Page.PUZZLE );
         });
+        window.setRight( select );
+        BorderPane.setAlignment( select, Pos.BOTTOM_RIGHT );
+        BorderPane.setMargin( select, new Insets(0, gui.stage.getWidth()/50, gui.stage.getHeight()/100, 0 ));
 
-        options.getChildren().addAll( back, select );
-        difficulties.getChildren().addAll( superEasy, easy, normal, hard, extreme, options );
 
         gui.stage.setTitle( "Sudoku" );
         gui.stage.setScene( scene );
