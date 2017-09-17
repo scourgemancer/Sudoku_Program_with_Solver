@@ -58,9 +58,9 @@ public class MenuState extends State{
 		ImageView title = new ImageView( titleImage );
 		title.setPreserveRatio( true );
 		title.setFitWidth( 2.0 * gui.stage.getWidth() / 3.0 );
-		BorderPane.setMargin( title, new Insets( 0.05 * gui.stage.getHeight(), 0, 0, 0 ) );
+		BorderPane.setMargin( title, new Insets( gui.stage.getHeight()/38, 0, 0, 0 ) );
 		window.setTop( title );
-		BorderPane.setAlignment( title, Pos.CENTER );
+		BorderPane.setAlignment( title, Pos.TOP_CENTER );
 
 		TilePane options = new TilePane();
 		options.setPrefColumns( 3 );
@@ -113,28 +113,24 @@ public class MenuState extends State{
         spriteHeight = 4030;
 		optionsBackground = new ImageView( new Image( getClass().getResourceAsStream("resources/menuSprite.png") ) );
 		optionsBackground.setViewport(new Rectangle2D(0, 0, spriteWidth, spriteHeight/10));
+		optionsBackground.setFitWidth( width*3 + ((57.0 / 456.0) * squareDim) + ((59.0 / 456.0) * squareDim) );
+		optionsBackground.setFitHeight( height*3 + ((51.0 / 402.0) * squareDim) + ((52.0 / 402.0) * squareDim) );
 
 		options.setPadding( new Insets( //so the buttons don't go over the bamboo stalks
-				(35.0 / 402.0) * squareDim, //top
+				0,//(35.0 / 402.0) * squareDim, //top
 				(57.0 / 456.0) * squareDim, //right
-				(52.0 / 402.0) * squareDim, //bottom
+				0,//(52.0 / 402.0) * squareDim, //bottom
 				(65.0 / 456.0) * squareDim ) ); //left
 		options.getChildren().addAll( about, option2, help, option4, start, option6, donate, option8, quit );
 
 		optionsStack.getChildren().addAll( optionsBackground, options );
 		window.setBottom( optionsStack );
-		StackPane.setAlignment( options, Pos.CENTER );
-		StackPane.setMargin( options, new Insets(
-				( gui.stage.getHeight() - squareDim - title.getFitHeight() ) / 8, 0, 0, 0 ) );
-
-        optionsBackground.setFitWidth( width*3 + ((57.0 / 456.0) * squareDim) + ((59.0 / 456.0) * squareDim) );
-        optionsBackground.setFitHeight( height*3 + ((51.0 / 402.0) * squareDim) + ((52.0 / 402.0) * squareDim) );
-
-        StackPane.setMargin(optionsBackground, new Insets(0, 0, gui.stage.getHeight()/15.2, 0));
+        StackPane.setMargin(options, new Insets(gui.stage.getHeight()/8, 0, 0, 0));
+        StackPane.setMargin(optionsBackground, new Insets(0, 0, gui.stage.getHeight()/10, 0));
 
 		gui.stage.setTitle( "Sudoku" );
 		gui.stage.setScene(scene);
-	}
+    }
 
     @Override
     public void nextPage(SudokuGUI gui, Page name){
