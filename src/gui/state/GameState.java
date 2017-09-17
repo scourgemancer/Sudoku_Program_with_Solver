@@ -65,7 +65,8 @@ public class GameState extends State{
         gameBorder.setPreserveRatio( true );
         gameBorder.setFitWidth( gameWidth );
 
-        StackPane sudokuSquare = new StackPane(background, squares, gameBorder);
+        //todo - shifted order to help space squares: StackPane sudokuSquare = new StackPane(background, squares, gameBorder);
+        StackPane sudokuSquare = new StackPane(background, gameBorder, squares);
 
 
         //Creates the buttons at the bottom of the screen
