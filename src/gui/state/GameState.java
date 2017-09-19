@@ -67,6 +67,7 @@ public class GameState extends State{
 
         //todo - shifted order to help space squares: StackPane sudokuSquare = new StackPane(background, squares, gameBorder);
         StackPane sudokuSquare = new StackPane(background, gameBorder, squares);
+        setSize(sudokuSquare, (12*gui.stage.getWidth()/12.5), (10*gui.stage.getWidth()/12.5));
 
 
         //Creates the buttons at the bottom of the screen
