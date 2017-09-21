@@ -48,7 +48,7 @@ public class GameState extends State{
             puzzle.add( new ArrayList<>() );
             for(int c=0; c < 9; c++){
                 NumButton newButton = new NumButton(r, c, gui.model.puzzle[r][c], gui.model);
-                setSize( newButton, gui.stage.getWidth()/12.5, gui.stage.getWidth()/12.5 );
+                setSize( newButton, gui.stage.getWidth()/12.5, gui.stage.getWidth()/12 );
                 newButton.setBackground( new Background(new BackgroundFill(Color.TRANSPARENT,
                         CornerRadii.EMPTY, Insets.EMPTY)) );
                 newButton.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"),
