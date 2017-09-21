@@ -37,7 +37,7 @@ public class GameState extends State{
         double gameWidth = (19.0/24.0) * gui.stage.getWidth();
 
         ImageView background = new ImageView(
-                new Image( getClass().getResourceAsStream("resources/gameFrameNoLines.png") ));
+                new Image( getClass().getResourceAsStream("resources/gameFrameNoLinesResized.png") ));
         background.setPreserveRatio( true );
         background.setFitWidth( gameWidth );
 
@@ -61,7 +61,7 @@ public class GameState extends State{
         squares.setAlignment(Pos.CENTER);
 
         ImageView gameBorder = new ImageView(
-                new Image( getClass().getResourceAsStream("resources/gameFrameBorder.png") ));
+                new Image( getClass().getResourceAsStream("resources/gameFrameBorderResized.png") ));
         gameBorder.setPreserveRatio( true );
         gameBorder.setFitWidth( gameWidth );
 
