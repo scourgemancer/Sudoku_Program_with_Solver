@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.util.Observable;
 import java.util.Observer;
 
+//todo - Allow users to share completed games
 //todo - select puzzle before playing it, let them cycle through all 10000 and keep count
 //todo - original numbers are black and placed numbers are blue
 //todo - selecting a number option highlights all squares of that option (if all filled make the num option green)

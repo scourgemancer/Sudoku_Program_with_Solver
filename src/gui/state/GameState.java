@@ -24,9 +24,6 @@ public class GameState extends State{
     /** A 2d button matrix for the update method */
     private ArrayList< ArrayList<NumButton> > puzzle;
 
-    /** The tilepane that holds the buttons */
-    private TilePane squares;
-
     @Override
     public void setPage(SudokuGUI gui){
         gui.errorPos = new int[] {0,0};
@@ -41,11 +38,34 @@ public class GameState extends State{
         background.setPreserveRatio( true );
         background.setFitWidth( gameWidth );
 
-        squares = new TilePane();
-        squares.setPrefColumns(9);
+        TilePane innerSquares = new TilePane();
+        TilePane upperLeft = new TilePane();
+        TilePane upperCenter = new TilePane();
+        TilePane upperRight = new TilePane();
+        TilePane centerLeft = new TilePane();
+        TilePane center = new TilePane();
+        TilePane centerRight = new TilePane();
+        TilePane lowerLeft = new TilePane();
+        TilePane lowerCenter = new TilePane();
+        TilePane lowerRight = new TilePane();
+
+        innerSquares.setPrefColumns(3);
+        upperLeft.setPrefColumns(3);
+        upperCenter.setPrefColumns(3);
+        upperRight.setPrefColumns(3);
+        centerLeft.setPrefColumns(3);
+        center.setPrefColumns(3);
+        centerRight.setPrefColumns(3);
+        lowerLeft.setPrefColumns(3);
+        lowerCenter.setPrefColumns(3);
+        lowerRight.setPrefColumns(3);
+
+        innerSquares.getChildren().addAll( upperLeft, upperCenter, upperRight,
+                                           centerLeft,   center,   centerRight,
+                                           lowerLeft, lowerCenter, lowerRight );
         puzzle = new ArrayList<>();
         for(int r=0; r < 9; r++){
-            puzzle.add( new ArrayList<>() );
+            puzzle.add(new ArrayList<>());
             for(int c=0; c < 9; c++){
                 NumButton newButton = new NumButton(r, c, gui.model.puzzle[r][c], gui.model);
                 setSize( newButton, gui.stage.getWidth()/12.5, gui.stage.getWidth()/12 );
@@ -53,20 +73,44 @@ public class GameState extends State{
                         CornerRadii.EMPTY, Insets.EMPTY)) );
                 newButton.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"),
                         BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.THIN)));
-                squares.getChildren().add( newButton );
+                if(r < 3){//top three
+                    if(c < 3){
+                        upperLeft.getChildren().add( newButton );
+                    }else if(c < 6){
+                        upperCenter.getChildren().add( newButton );
+                    }else{
+                        upperRight.getChildren().add( newButton );
+                    }
+                }else if(r < 6){//center three
+                    if(c < 3){
+                        centerLeft.getChildren().add( newButton );
+                    }else if(c < 6){
+                        center.getChildren().add( newButton );
+                    }else{
+                        centerRight.getChildren().add( newButton );
+                    }
+                }else{//bottom three
+                    if(c < 3){
+                        lowerLeft.getChildren().add( newButton );
+                    }else if(c < 6){
+                        lowerCenter.getChildren().add( newButton );
+                    }else{
+                        lowerRight.getChildren().add( newButton );
+                    }
+                }
                 puzzle.get(r).add(c, newButton);
             }
         }
-        squares.setPadding(new Insets(0, gui.stage.getWidth()/9, 0, gui.stage.getWidth()/9));
-        squares.setAlignment(Pos.CENTER);
+        innerSquares.setPadding(new Insets(0, gui.stage.getWidth()/9, 0, gui.stage.getWidth()/9));
+        innerSquares.setAlignment(Pos.CENTER);
 
         ImageView gameBorder = new ImageView(
                 new Image( getClass().getResourceAsStream("resources/gameFrameBorderResized.png") ));
         gameBorder.setPreserveRatio( true );
         gameBorder.setFitWidth( gameWidth );
 
-        //todo - shifted order to help space squares: StackPane sudokuSquare = new StackPane(background, squares, gameBorder);
-        StackPane sudokuSquare = new StackPane(background, gameBorder, squares);
+        //todo - shifted order to help space squares: StackPane sudokuSquare = new StackPane(background, innerSquares, gameBorder);
+        StackPane sudokuSquare = new StackPane(background, gameBorder, innerSquares);
         setSize(sudokuSquare, (12*gui.stage.getWidth()/12.5), (10*gui.stage.getWidth()/12.5));
 
 
