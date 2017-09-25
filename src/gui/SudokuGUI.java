@@ -18,7 +18,7 @@ import java.util.Observer;
 //todo - select puzzle before playing it, let them cycle through all 10000 and keep count
 //todo - original numbers are black and placed numbers are blue
 //todo - selecting a number option highlights all squares of that option (if all filled make the num option green)
-//todo - highlighting a numbered square will make simliar numbered squares have yellow text and all boxes that matter to it get highlightedish
+//todo - highlighting a numbered square will make similar numbered squares have yellow text and all boxes that matter to it get highlightedish
 //todo - combine isGoal and isValid into Check and it says how many are left if isValid but not isGoal
 //todo - have the given numbers be grayed out and not be instantiated as the private class (make a gray.png)
 //todo - also have the option of solving the user's own puzzles they input themselves (backtrack for these)

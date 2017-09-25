@@ -102,8 +102,8 @@ public class GameState extends State{
             }
         }
         innerSquares.setPadding(new Insets(0, gui.stage.getWidth()/9, 0, gui.stage.getWidth()/9));
-        innerSquares.setHgap( gui.stage.getWidth()/100 );
-        innerSquares.setVgap( gui.stage.getHeight()/100 );
+        innerSquares.setHgap( gui.stage.getWidth()/71);
+        innerSquares.setVgap( gui.stage.getHeight()/85 );
         innerSquares.setAlignment(Pos.CENTER);
 
         ImageView gameBorder = new ImageView(
