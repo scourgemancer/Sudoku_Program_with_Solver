@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.util.Observable;
 import java.util.Observer;
 
+//todo - In about page: give players the option to turn on ads, or watch an ad, or pay money at paypal, bitcoin, dogecoin, ethereum
 //todo - Allow users to share completed games
 //todo - select puzzle before playing it, let them cycle through all 10000 and keep count
 //todo - original numbers are black and placed numbers are blue

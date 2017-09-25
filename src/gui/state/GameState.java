@@ -35,8 +35,8 @@ public class GameState extends State{
 
         ImageView background = new ImageView(
                 new Image( getClass().getResourceAsStream("resources/gameFrameNoLinesResized.png") ));
-        background.setPreserveRatio( true );
         background.setFitWidth( gameWidth );
+        background.setFitHeight( gameWidth );
 
         TilePane innerSquares = new TilePane();
         TilePane upperLeft = new TilePane();
@@ -68,7 +68,7 @@ public class GameState extends State{
             puzzle.add(new ArrayList<>());
             for(int c=0; c < 9; c++){
                 NumButton newButton = new NumButton(r, c, gui.model.puzzle[r][c], gui.model);
-                setSize( newButton, gui.stage.getWidth()/12.5, gui.stage.getWidth()/12 );
+                setSize( newButton, gui.stage.getWidth()/13.2, gui.stage.getWidth()/12.7 );
                 newButton.setBackground( new Background(new BackgroundFill(Color.TRANSPARENT,
                         CornerRadii.EMPTY, Insets.EMPTY)) );
                 newButton.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"),
@@ -102,12 +102,14 @@ public class GameState extends State{
             }
         }
         innerSquares.setPadding(new Insets(0, gui.stage.getWidth()/9, 0, gui.stage.getWidth()/9));
+        innerSquares.setHgap( gui.stage.getWidth()/100 );
+        innerSquares.setVgap( gui.stage.getHeight()/100 );
         innerSquares.setAlignment(Pos.CENTER);
 
         ImageView gameBorder = new ImageView(
                 new Image( getClass().getResourceAsStream("resources/gameFrameBorderResized.png") ));
-        gameBorder.setPreserveRatio( true );
         gameBorder.setFitWidth( gameWidth );
+        gameBorder.setFitHeight( gameWidth );
 
         //todo - shifted order to help space squares: StackPane sudokuSquare = new StackPane(background, innerSquares, gameBorder);
         StackPane sudokuSquare = new StackPane(background, gameBorder, innerSquares);
